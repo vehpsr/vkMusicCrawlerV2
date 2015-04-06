@@ -10,7 +10,7 @@
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>crawler-common</artifactId>
+    <artifactId>common</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
