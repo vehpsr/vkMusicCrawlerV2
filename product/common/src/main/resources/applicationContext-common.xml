@@ -46,25 +46,27 @@
     <tx:annotation-driven transaction-manager="txManager" />
 
     <bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-        <property name="sessionFactory" ref="crawlerSessionFactory" />
+        <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
     <bean id="txTemplate" class="org.springframework.transaction.support.TransactionTemplate">
         <property name="transactionManager" ref="txManager" />
     </bean>
 
-    <bean id="crawlerDataSource" parent="abstractDataSource">
+    <bean id="dataSource" parent="abstractDataSource">
         <property name="url" value="jdbc:mysql://${jdbc.host}:${jdbc.port}/${jdbc.db}?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8" />
         <property name="username" value="${jdbc.user}" />
         <property name="password" value="${jdbc.pass}" />
     </bean>
 
-    <bean id="crawlerSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-        <property name="dataSource" ref="crawlerDataSource" />
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
         <property name="hibernateProperties" ref="hibernateProperties" />
         <property name="annotatedClasses">
             <list>
                 <value>com.gans.vk.model.Song</value>
+                <value>com.gans.vk.model.User</value>
+                <value>com.gans.vk.model.Rating</value>
             </list>
         </property>
     </bean>
