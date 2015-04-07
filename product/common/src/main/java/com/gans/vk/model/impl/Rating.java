@@ -1,5 +1,7 @@
 package com.gans.vk.model.impl;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -9,15 +11,27 @@ import com.gans.vk.model.AbstractModel;
 public class Rating extends AbstractModel {
 
     private int _value;
-    @ManyToOne
+    private Date _date;
     private User _user;
-    @ManyToOne
     private Song _song;
 
+    public Rating() {
+        _date = new Date();
+    }
+
     public Rating(int value, User user, Song song) {
+        this();
         _value = value;
         _user = user;
         _song = song;
+    }
+
+    public Date getDate() {
+        return _date;
+    }
+
+    public void setDate(Date date) {
+        _date = date;
     }
 
     public int getValue() {
@@ -28,6 +42,7 @@ public class Rating extends AbstractModel {
         _value = value;
     }
 
+    @ManyToOne
     public User getUser() {
         return _user;
     }
@@ -36,6 +51,7 @@ public class Rating extends AbstractModel {
         _user = user;
     }
 
+    @ManyToOne
     public Song getSong() {
         return _song;
     }

@@ -17,9 +17,7 @@ public class User extends AbstractModel {
     private String _name;
     private String _url;
     private String _vkId;
-    @OneToMany(mappedBy="user")
     private Set<Rating> _ratings;
-    @ManyToMany
     private Set<Song> _songs;
 
     public User() {
@@ -27,6 +25,7 @@ public class User extends AbstractModel {
         _ratings = new HashSet<>();
     }
 
+    @OneToMany(mappedBy="user")
     public Set<Rating> getRatings() {
         return _ratings;
     }
@@ -63,6 +62,7 @@ public class User extends AbstractModel {
         _vkId = vkId;
     }
 
+    @ManyToMany
     public Set<Song> getSongs() {
         return _songs;
     }

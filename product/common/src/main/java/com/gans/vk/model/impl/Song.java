@@ -15,9 +15,7 @@ public class Song extends AbstractModel {
     private String _artist;
     private String _title;
     private String _url;
-    @OneToMany(mappedBy="song")
     private Set<Rating> _ratings;
-    @ManyToMany(mappedBy="songs")
     private Set<User> _users;
 
     public Song() {
@@ -32,6 +30,7 @@ public class Song extends AbstractModel {
         _url = url;
     }
 
+    @ManyToMany(mappedBy="songs")
     public Set<User> getUsers() {
         return _users;
     }
@@ -44,6 +43,7 @@ public class Song extends AbstractModel {
         _users.add(user);
     }
 
+    @OneToMany(mappedBy="song")
     public Set<Rating> getRatings() {
         return _ratings;
     }
