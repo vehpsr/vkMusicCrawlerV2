@@ -50,7 +50,7 @@
     </bean>
 
     <bean id="txTemplate" class="org.springframework.transaction.support.TransactionTemplate">
-        <property name="transactionManager" ref="crawlerTxManager" />
+        <property name="transactionManager" ref="txManager" />
     </bean>
 
     <bean id="crawlerDataSource" parent="abstractDataSource">
@@ -59,11 +59,12 @@
         <property name="password" value="${jdbc.pass}" />
     </bean>
 
-    <bean id="dashboardSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+    <bean id="crawlerSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
         <property name="dataSource" ref="crawlerDataSource" />
         <property name="hibernateProperties" ref="hibernateProperties" />
         <property name="annotatedClasses">
             <list>
+                <value>com.gans.vk.model.Song</value>
             </list>
         </property>
     </bean>
