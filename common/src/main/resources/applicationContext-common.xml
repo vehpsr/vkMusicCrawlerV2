@@ -2,12 +2,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:util="http://www.springframework.org/schema/util"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
     <context:annotation-config/>
@@ -39,6 +41,31 @@
         <property name="minEvictableIdleTimeMillis" value="${jdbc.connectionPool.minEvictableIdleTimeInMillis}"/>
         <property name="timeBetweenEvictionRunsMillis" value="${jdbc.connectionPool.timeBetweenEvictionRunsInMillis}"/>
         <property name="numTestsPerEvictionRun" value="${jdbc.connectionPool.numTestsPerEvictionRun}"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="txManager" />
+
+    <bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="crawlerSessionFactory" />
+    </bean>
+
+    <bean id="txTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="crawlerTxManager" />
+    </bean>
+
+    <bean id="crawlerDataSource" parent="abstractDataSource">
+        <property name="url" value="jdbc:mysql://${jdbc.host}:${jdbc.port}/${jdbc.db}?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8" />
+        <property name="username" value="${jdbc.user}" />
+        <property name="password" value="${jdbc.pass}" />
+    </bean>
+
+    <bean id="dashboardSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="crawlerDataSource" />
+        <property name="hibernateProperties" ref="hibernateProperties" />
+        <property name="annotatedClasses">
+            <list>
+            </list>
+        </property>
     </bean>
 
 </beans>
