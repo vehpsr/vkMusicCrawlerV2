@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <context:annotation-config/>
+
+    <bean class="com.gans.vk.config.CrawlerConfiguration"/>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="properties">
+            <bean factory-bean="com.gans.vk.config.CrawlerConfiguration" factory-method="getProperties"/>
+        </property>
+    </bean>
+
+    <bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <props>
+                <prop key="hibernate.dialect">${jdbc.dialect}</prop>
+                <prop key="hibernate.show_sql">${jdbc.showsql}</prop>
+                <prop key="hibernate.format_sql">${jdbc.formatsql}</prop>
+                <prop key="hibernate.use_sql_comments">${jdbc.usesqlcomments}</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="abstractDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" abstract="true">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="maxActive" value="${jdbc.connectionPool.size}"/>
+        <property name="maxIdle" value="${jdbc.connectionPool.size}"/>
+        <property name="maxWait" value="${jdbc.connectionPool.maxWaitInMillis}"/>
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.connectionPool.minEvictableIdleTimeInMillis}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${jdbc.connectionPool.timeBetweenEvictionRunsInMillis}"/>
+        <property name="numTestsPerEvictionRun" value="${jdbc.connectionPool.numTestsPerEvictionRun}"/>
+    </bean>
+
+</beans>

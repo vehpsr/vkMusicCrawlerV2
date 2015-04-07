@@ -10,7 +10,7 @@
 
     <properties>
         <jdk.version>1.7</jdk.version>
-        <spring-version>4.0.5</spring-version>
+        <spring-version>4.0.5.RELEASE</spring-version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -46,6 +46,11 @@
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
                 <version>3.6.3.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>5.1.13</version>
             </dependency>
             <dependency>
                 <groupId>commons-logging</groupId>
