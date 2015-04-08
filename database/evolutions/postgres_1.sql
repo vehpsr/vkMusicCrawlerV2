@@ -2,7 +2,7 @@ create table Song (
     id serial,
     artist varchar(40) not null,
     title varchar(60) not null,
-    url varchar(60) not null,
+    url varchar(160) not null,
     PRIMARY KEY (id),
     UNIQUE (url),
     UNIQUE (artist, title)
