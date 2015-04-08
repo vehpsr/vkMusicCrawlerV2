@@ -1,0 +1,62 @@
+.audiojs {
+    background: -moz-linear-gradient(center top , #444 0%, #555 50%, #444 51%, #444 100%) repeat scroll 0 0 #404040;
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+    font-family: monospace;
+    font-size: 12px;
+    height: 36px;
+    overflow: hidden;
+    width: 460px;
+}
+
+ol.audioList {
+    border-top: 1px solid #ccc;
+    color: #ccc;
+    font-size: 0.9em;
+    list-style: inside none decimal-leading-zero;
+    margin: 0;
+    padding: 0;
+    width: 460px;
+}
+
+ol.audioList li.playing:before {
+    color: #000;
+    content: "♬";
+    font-size: 13px;
+    height: 14px;
+    left: -24px;
+    line-height: 14px;
+    margin: 0;
+    padding: 3px;
+    position: absolute;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+    top: 9px;
+    width: 14px;
+}
+
+ol.audioList li.playing {
+    color: #aaa;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+ol.audioList li {
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    margin: 0;
+    padding: 9px 2px 10px;
+    position: relative;
+}
+
+ol.audioList li.playing a {
+    color: #000;
+}
+
+ol.audioList li a {
+    display: block;
+    padding: 0 0 0 20px;
+    text-indent: -3.3ex;
+}
+
+.audioList a {
+    color: #888;
+    text-decoration: none;
+}
