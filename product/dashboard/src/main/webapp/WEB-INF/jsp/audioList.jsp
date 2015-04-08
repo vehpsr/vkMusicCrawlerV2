@@ -9,14 +9,21 @@
     <script src="<c:url value='/resources/js/audiojs/audio.js'/>" type="text/javascript"></script>
 </head>
 <body>
-    <script src="<c:url value='/resources/js/dashboard/audioPlayer.js'/>" type="text/javascript"></script>
+    <script src="<c:url value='/resources/js/dashboard/audioList.js'/>" type="text/javascript"></script>
 
     <div id="wrapper">
         <audio></audio> <!-- audio player container -->
         <ol class="audioList">
             <c:forEach items="${songs}" var="song">
-                <li>
+                <li data-song-id="${song.id}">
                     <a data-src="${song.url}" href="#">${song.artist} - ${song.title}</a>
+                    <form class="stars" action="${pageContext.request.contextPath}/song/rate">
+                        <input type="radio" name="rating" id="star1" value="1">
+                        <input type="radio" name="rating" id="star2" value="2">
+                        <input type="radio" name="rating" id="star3" value="3">
+                        <input type="radio" name="rating" id="star4" value="4">
+                        <input type="radio" name="rating" id="star5" value="5">
+                    </form>
                 </li>
             </c:forEach>
         </ol>
