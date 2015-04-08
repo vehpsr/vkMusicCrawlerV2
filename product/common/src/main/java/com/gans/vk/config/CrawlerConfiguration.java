@@ -17,7 +17,7 @@ import org.springframework.web.context.ServletContextAware;
 public class CrawlerConfiguration implements ServletContextAware {
 
     private static final Log LOG = LogFactory.getLog(CrawlerConfiguration.class);
-    private static final String CONFIG_HOME_DIR_DEFAULT = "./src/main/resources";
+    private static final String CONFIG_HOME_DIR_DEFAULT = "../../metadata/config";
     private static final String LOCAL_CONFIG_DEFAULT = "C://local/config/vkCrawler";
 
     private Properties _properties;
