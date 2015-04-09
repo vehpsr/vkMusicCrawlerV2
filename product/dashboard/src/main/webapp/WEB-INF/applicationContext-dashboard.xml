@@ -8,4 +8,8 @@
 
     <import resource="classpath:applicationContext-common.xml"/>
 
+    <bean id="com.gans.vk.dashboard.session.SessionManager" class="com.gans.vk.dashboard.session.SessionManager">
+        <property name="userDao" ref="com.gans.vk.dao.UserDao" />
+        <property name="userUrl" value="${session.login.stub.userUrl}" />
+    </bean>
 </beans>

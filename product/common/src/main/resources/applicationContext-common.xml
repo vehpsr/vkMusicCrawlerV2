@@ -82,4 +82,17 @@
     <bean id="com.gans.vk.dao.SongDao" class="com.gans.vk.dao.impl.SongDaoImpl">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
+
+    <bean id="com.gans.vk.service.UserService" class="com.gans.vk.service.impl.UserServiceImpl">
+        <property name="userDao" ref="com.gans.vk.dao.UserDao" />
+    </bean>
+
+    <bean id="com.gans.vk.service.RatingService" class="com.gans.vk.service.impl.RatingServiceImpl">
+        <property name="ratingDao" ref="com.gans.vk.dao.RatingDao" />
+        <property name="songDao" ref="com.gans.vk.dao.SongDao" />
+    </bean>
+
+    <bean id="com.gans.vk.service.SongService" class="com.gans.vk.service.impl.SongServiceImpl">
+        <property name="songDao" ref="com.gans.vk.dao.SongDao" />
+    </bean>
 </beans>
