@@ -36,9 +36,9 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
                 "		FROM " +
                 "			Song song " +
                 "			JOIN Rating rating ON song.id = rating.song_id " +
-                "			JOIN Users user ON user.id = rating.user_id " +
+                "			JOIN Users u ON u.id = rating.user_id " +
                 "		WHERE " +
-                "			user.url = :userUrl" +
+                "			u.url = :userUrl" +
                 "	)";
 
         Collection<Song> songs = getHibernateTemplate().execute(new HibernateCallback<Collection<Song>>() {
