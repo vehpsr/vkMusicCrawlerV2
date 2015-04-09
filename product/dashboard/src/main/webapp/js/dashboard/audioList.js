@@ -56,4 +56,7 @@ $(function() {
 
         e.stopPropagation();
     });
+
+    // deselect all radio buttons
+    $('input[type="radio"]').prop('checked', false);
 });

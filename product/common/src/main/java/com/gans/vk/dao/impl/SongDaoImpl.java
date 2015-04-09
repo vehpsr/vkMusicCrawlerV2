@@ -23,7 +23,7 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Song> getAllUnratedSongs(final User user, int limit) {
+    public List<Song> getAllUnratedSongs(final User user, final int limit) {
         final String sql =
                 "SELECT " +
                 "	song.* " +
@@ -47,6 +47,7 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
                 SQLQuery query = session.createSQLQuery(sql);
                 query.setString("userUrl", user.getUrl());
                 query.addEntity("song", Song.class);
+                query.setFetchSize(limit);
                 return query.list();
             }
         });
