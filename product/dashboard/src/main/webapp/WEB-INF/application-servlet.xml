@@ -17,9 +17,14 @@
 
     <context:component-scan base-package="com.gans.vk.dashboard.controller" />
 
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-       <property name="prefix" value="/WEB-INF/jsp/" />
-       <property name="suffix" value=".jsp" />
+    <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/WEB-INF/ftl/" />
+    </bean>
+
+    <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="requestContextAttribute" value="rc"/>
+        <property name="prefix" value="" />
+        <property name="suffix" value=".ftl" />
     </bean>
 
     <mvc:resources mapping="/resources/js/**" location="/js/" />
