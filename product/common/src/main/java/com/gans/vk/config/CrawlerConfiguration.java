@@ -17,13 +17,15 @@ import org.springframework.web.context.ServletContextAware;
 public class CrawlerConfiguration implements ServletContextAware {
 
     private static final Log LOG = LogFactory.getLog(CrawlerConfiguration.class);
-    private static final String CONFIG_HOME_DIR_DEFAULT = "../../metadata/config";
-    private static final String LOCAL_CONFIG_DEFAULT = "C://local/config/vkCrawler";
+    private static final String CONFIG_HOME_DIR_PROPERTY = "com.gans.vk.config.home";
+    private static final String CONFIG_HOME_DIR_DEFAULT = "C://local/config/vkCrawler";
 
     private Properties _properties;
+    private ServletContext _servletContext;
 
     @Override
     public void setServletContext(ServletContext servletContext) {
+        _servletContext = servletContext;
     }
 
     public synchronized Properties getProperties() {
@@ -36,8 +38,8 @@ public class CrawlerConfiguration implements ServletContextAware {
     private Properties initProperties() {
         Properties properties = new Properties();
 
-        properties.putAll(readProperties(CONFIG_HOME_DIR_DEFAULT));
-        properties.putAll(readProperties(LOCAL_CONFIG_DEFAULT));
+        properties.putAll(readProperties(getHome()));
+        properties.putAll(readProperties(CONFIG_HOME_DIR_DEFAULT)); // override
 
         // trace
         for (String key : new TreeSet<String>(properties.stringPropertyNames())) {
@@ -48,6 +50,20 @@ public class CrawlerConfiguration implements ServletContextAware {
         properties.putAll(System.getProperties());
 
         return properties;
+    }
+
+    private String getHome() {
+        String home = System.getProperty(CONFIG_HOME_DIR_PROPERTY);
+        if (home == null) {
+            if (_servletContext != null) {
+                home = _servletContext.getInitParameter(CONFIG_HOME_DIR_PROPERTY);
+            }
+        }
+        if (home == null) {
+            LOG.warn(MessageFormat.format("Fail to find configuration home directory. To set config directory use {0} property. Using instead default {1}", CONFIG_HOME_DIR_PROPERTY, CONFIG_HOME_DIR_DEFAULT));
+            return CONFIG_HOME_DIR_DEFAULT;
+        }
+        return home;
     }
 
     private Properties readProperties(String dirPath) {
