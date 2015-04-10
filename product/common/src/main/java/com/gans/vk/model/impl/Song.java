@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.gans.vk.model.AbstractModel;
@@ -16,11 +15,9 @@ public class Song extends AbstractModel {
     private String _title;
     private String _url;
     private Set<Rating> _ratings;
-    private Set<User> _users;
 
     public Song() {
         _ratings = new HashSet<>();
-        _users = new HashSet<>();
     }
 
     public Song(String artist, String title, String url) {
@@ -28,19 +25,6 @@ public class Song extends AbstractModel {
         _artist = artist;
         _title = title;
         _url = url;
-    }
-
-    @ManyToMany(mappedBy="songs")
-    public Set<User> getUsers() {
-        return _users;
-    }
-
-    public void setUsers(Set<User> users) {
-        _users = users;
-    }
-
-    public void addUser(User user) {
-        _users.add(user);
     }
 
     @OneToMany(mappedBy="song")

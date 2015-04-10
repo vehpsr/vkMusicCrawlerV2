@@ -29,6 +29,7 @@
 
     <mvc:resources mapping="/resources/js/**" location="/js/" />
     <mvc:resources mapping="/resources/layout/*" location="/layout/" />
+    <mvc:resources mapping="/favicon/*" location="/" />
 
     <mvc:annotation-driven />
 

@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -18,10 +17,8 @@ public class User extends AbstractModel {
     private String _url;
     private String _vkId;
     private Set<Rating> _ratings;
-    private Set<Song> _songs;
 
     public User() {
-        _songs = new HashSet<>();
         _ratings = new HashSet<>();
     }
 
@@ -60,19 +57,6 @@ public class User extends AbstractModel {
 
     public void setVkId(String vkId) {
         _vkId = vkId;
-    }
-
-    @ManyToMany
-    public Set<Song> getSongs() {
-        return _songs;
-    }
-
-    public void setSongs(Set<Song> songs) {
-        _songs = songs;
-    }
-
-    public void addSong(Song song) {
-        _songs.add(song);
     }
 
 }

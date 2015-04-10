@@ -1,11 +1,10 @@
 create table Song (
     id bigint not null auto_increment,
-    artist varchar(40) not null,
-    title varchar(60) not null,
-    url varchar(160) not null,
+    artist varchar(50) not null,
+    title varchar(70) not null,
+    url varchar(200) not null,
     PRIMARY KEY (id),
-    UNIQUE (url),
-    UNIQUE (artist, title)
+    UNIQUE (url)
 );
 
 create table Users (
@@ -14,8 +13,7 @@ create table Users (
     url varchar(40) not null,
     vkId varchar(20) not null,
     PRIMARY KEY (id),
-    UNIQUE (url),
-    UNIQUE (vkId)
+    UNIQUE (url)
 );
 
 create table Rating (
@@ -30,15 +28,4 @@ create table Rating (
         REFERENCES Users(id),
     FOREIGN KEY (song_id)
         REFERENCES Song(id)
-);
-
-create table Users_Song (
-    songs_id bigint not null,
-    users_id bigint not null,
-	INDEX (songs_id),
-	INDEX (users_id),
-    FOREIGN KEY (songs_id)
-        REFERENCES Song(id),
-    FOREIGN KEY (users_id)
-        REFERENCES Users(id)
 );
