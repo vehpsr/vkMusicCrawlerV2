@@ -16,7 +16,7 @@
         <ol class="audioList">
             <#list songs as song>
                 <li data-song-id="${song.id}">
-                    <a data-src="${song.id}" href="#">${song.artist} - ${song.title}</a>
+                    <a data-src="${song.url}" href="#">${song.artist} - ${song.title}</a>
                     <form class="stars" action="${rc.getContextPath()}/song/rate">
                         <input type="radio" name="rating" id="star1" value="1">
                         <input type="radio" name="rating" id="star2" value="2">

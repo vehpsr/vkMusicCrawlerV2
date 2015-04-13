@@ -56,7 +56,7 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
                 query.setLong("userId", user.getId());
                 query.setLong("targetId", target.getId());
                 query.addEntity("song", Song.class);
-                query.setFetchSize(limit);
+                query.setMaxResults(limit);
                 return query.list();
             }
         });

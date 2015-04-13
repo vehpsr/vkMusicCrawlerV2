@@ -26,5 +26,7 @@
     <bean id="com.gans.vk.service.AudioDiscoveryService" class="com.gans.vk.service.impl.AudioDiscoveryServiceImpl">
         <property name="songService" ref="com.gans.vk.service.SongService" />
         <property name="vkConnector" ref="com.gans.vk.httpclient.HttpVkConnector" />
+        <property name="vkAudioUrl" value="${vk.audio.url}" />
+        <property name="vkAudioEntityPattern" value="${vk.audio.entityPattern}" />
     </bean>
 </beans>

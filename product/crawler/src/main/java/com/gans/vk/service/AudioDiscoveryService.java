@@ -13,6 +13,7 @@ public interface AudioDiscoveryService {
         private String artist;
         private String title;
         private String url;
+        private String time;
         private String avgArtistRating;
 
         public long getId() {
@@ -44,6 +45,12 @@ public interface AudioDiscoveryService {
         }
         public void setAvgArtistRating(String avgArtistRating) {
             this.avgArtistRating = avgArtistRating;
+        }
+        public String getTime() {
+            return time;
+        }
+        public void setTime(String time) {
+            this.time = time;
         }
     }
 }

@@ -43,11 +43,11 @@ public class CrawlerConfiguration implements ServletContextAware {
         String globalConfigDir = getDir(GLOBAL_CONFIG_HOME_DIR_PROPERTY);
         String localConfigDir = getDir(LOCAL_CONFIG_HOME_DIR_PROPERTY);
 
-        properties.putAll(readProperties(globalConfigDir));
-        properties.putAll(readProperties(localConfigDir)); // override
-
         configureLogger(globalConfigDir);
         configureLogger(localConfigDir);
+
+        properties.putAll(readProperties(globalConfigDir));
+        properties.putAll(readProperties(localConfigDir)); // override
 
         // trace
         for (String key : new TreeSet<String>(properties.stringPropertyNames())) {
