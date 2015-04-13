@@ -12,6 +12,7 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.xml.DOMConfigurator;
 import org.springframework.web.context.ServletContextAware;
 
 public class CrawlerConfiguration implements ServletContextAware {
@@ -19,6 +20,7 @@ public class CrawlerConfiguration implements ServletContextAware {
     private static final Log LOG = LogFactory.getLog(CrawlerConfiguration.class);
     private static final String GLOBAL_CONFIG_HOME_DIR_PROPERTY = "com.gans.vk.config.global.home";
     private static final String LOCAL_CONFIG_HOME_DIR_PROPERTY = "com.gans.vk.config.local.home";
+    private static final String LOG4J_CONFIG_FILE = "log4j.xml";
 
     private Properties _properties;
     private ServletContext _servletContext;
@@ -38,8 +40,14 @@ public class CrawlerConfiguration implements ServletContextAware {
     private Properties initProperties() {
         Properties properties = new Properties();
 
-        properties.putAll(readProperties(getDir(GLOBAL_CONFIG_HOME_DIR_PROPERTY)));
-        properties.putAll(readProperties(getDir(LOCAL_CONFIG_HOME_DIR_PROPERTY))); // override
+        String globalConfigDir = getDir(GLOBAL_CONFIG_HOME_DIR_PROPERTY);
+        String localConfigDir = getDir(LOCAL_CONFIG_HOME_DIR_PROPERTY);
+
+        properties.putAll(readProperties(globalConfigDir));
+        properties.putAll(readProperties(localConfigDir)); // override
+
+        configureLogger(globalConfigDir);
+        configureLogger(localConfigDir);
 
         // trace
         for (String key : new TreeSet<String>(properties.stringPropertyNames())) {
@@ -50,6 +58,13 @@ public class CrawlerConfiguration implements ServletContextAware {
         properties.putAll(System.getProperties());
 
         return properties;
+    }
+
+    private void configureLogger(String globalConfigDir) {
+        File log4j = new File(globalConfigDir, LOG4J_CONFIG_FILE);
+        if (log4j.exists()) {
+            DOMConfigurator.configure(log4j.getPath());
+        }
     }
 
     private String getDir(String property) {
