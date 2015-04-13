@@ -7,7 +7,7 @@ import com.gans.vk.model.impl.User;
 
 public interface SongService {
 
-    List<Song> getAllUnratedSongs(User user, int limit);
+    List<Song> getAllUnratedSongs(User target, User user, int limit);
     Song get(long id);
 
 }

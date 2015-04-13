@@ -7,6 +7,6 @@ import com.gans.vk.model.impl.User;
 
 public interface SongDao extends ModelDao<Song> {
 
-    List<Song> getAllUnratedSongs(User user, int limit);
+    List<Song> getAllUnratedSongs(User target, User user, int limit);
 
 }

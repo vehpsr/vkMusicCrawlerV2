@@ -1,5 +1,6 @@
 package com.gans.vk.dashboard.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletInputStream;
@@ -8,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +27,19 @@ import com.gans.vk.model.impl.Song;
 import com.gans.vk.model.impl.User;
 import com.gans.vk.service.RatingService;
 import com.gans.vk.service.SongService;
+import com.gans.vk.service.UserService;
 
 @Controller
 public class AudioListController {
 
+    private static final Log LOG = LogFactory.getLog(AudioListController.class);
     private static final int MAX_SONGS_ON_PAGE = 100;
 
     @Autowired
     private SongService _songService;
+
+    @Autowired
+    private UserService _userService;
 
     @Autowired
     private RatingService _ratingService;
@@ -39,10 +47,17 @@ public class AudioListController {
     @Autowired
     private SessionManager _sessionManager;
 
-    @RequestMapping(value = "/audio", method = RequestMethod.GET)
-    public String songs(ModelMap model) {
+    @RequestMapping(value = "/audio/{vkId}", method = RequestMethod.GET)
+    public String songs(@PathVariable String vkId, ModelMap model) {
         User user = _sessionManager.getCurrentUser();
-        List<Song> songs = _songService.getAllUnratedSongs(user, MAX_SONGS_ON_PAGE);
+        User target = _userService.getByVkId(vkId);
+        if (target == null) {
+            // TODO error page
+            LOG.warn("Fail to find user with vkId: " + vkId);
+            model.addAttribute("songs", new ArrayList<String>());
+            return "audioList";
+        }
+        List<Song> songs = _songService.getAllUnratedSongs(target, user, MAX_SONGS_ON_PAGE);
         model.addAttribute("songs", songs);
         return "audioList";
     }
@@ -70,6 +85,10 @@ public class AudioListController {
 
     public void setSongService(SongService songService) {
         _songService = songService;
+    }
+
+    public void setUserService(UserService userService) {
+        _userService = userService;
     }
 
     public void setSessionManager(SessionManager sessionManager) {

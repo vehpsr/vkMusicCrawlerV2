@@ -22,30 +22,39 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public List<Song> getAllUnratedSongs(final User user, final int limit) {
+    @SuppressWarnings("unchecked") // TODO performance check
+    public List<Song> getAllUnratedSongs(final User target, final User user, final int limit) {
         final String sql =
                 "SELECT " +
-                "	song.* " +
+                "	targetSongs.* " +
                 "FROM " +
-                "	Song song " +
+                "	(SELECT " +
+                "		song.* " +
+                "	FROM " +
+                "		Song song " +
+                "		JOIN Rating rating ON song.id = rating.song_id " +
+                "		JOIN Users u ON u.id = rating.user_id " +
+                "	WHERE " +
+                "		u.id = :targetId " +
+                "	) as targetSongs " +
                 "WHERE " +
-                "	song.id NOT IN (" +
-                "		SELECT " +
+                "	targetSongs.id NOT IN " +
+                "		(SELECT " +
                 "			song.id " +
                 "		FROM " +
                 "			Song song " +
                 "			JOIN Rating rating ON song.id = rating.song_id " +
                 "			JOIN Users u ON u.id = rating.user_id " +
                 "		WHERE " +
-                "			u.url = :userUrl" +
-                "	)";
+                "			u.id = :userId " +
+                "		)";
 
         Collection<Song> songs = getHibernateTemplate().execute(new HibernateCallback<Collection<Song>>() {
             @Override
             public Collection<Song> doInHibernate(Session session) throws HibernateException, SQLException {
                 SQLQuery query = session.createSQLQuery(sql);
-                query.setString("userUrl", user.getUrl());
+                query.setLong("userId", user.getId());
+                query.setLong("targetId", target.getId());
                 query.addEntity("song", Song.class);
                 query.setFetchSize(limit);
                 return query.list();
