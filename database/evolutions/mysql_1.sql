@@ -2,9 +2,8 @@ create table Song (
     id bigint not null auto_increment,
     artist varchar(50) not null,
     title varchar(70) not null,
-    url varchar(200) not null,
     PRIMARY KEY (id),
-    UNIQUE (url)
+    UNIQUE (artist, title)
 );
 
 create table Users (

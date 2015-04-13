@@ -17,8 +17,8 @@ import org.springframework.web.context.ServletContextAware;
 public class CrawlerConfiguration implements ServletContextAware {
 
     private static final Log LOG = LogFactory.getLog(CrawlerConfiguration.class);
-    private static final String CONFIG_HOME_DIR_PROPERTY = "com.gans.vk.config.home";
-    private static final String CONFIG_HOME_DIR_DEFAULT = "C://local/config/vkCrawler";
+    private static final String GLOBAL_CONFIG_HOME_DIR_PROPERTY = "com.gans.vk.config.global.home";
+    private static final String LOCAL_CONFIG_HOME_DIR_PROPERTY = "com.gans.vk.config.local.home";
 
     private Properties _properties;
     private ServletContext _servletContext;
@@ -38,8 +38,8 @@ public class CrawlerConfiguration implements ServletContextAware {
     private Properties initProperties() {
         Properties properties = new Properties();
 
-        properties.putAll(readProperties(getHome()));
-        properties.putAll(readProperties(CONFIG_HOME_DIR_DEFAULT)); // override
+        properties.putAll(readProperties(getDir(GLOBAL_CONFIG_HOME_DIR_PROPERTY)));
+        properties.putAll(readProperties(getDir(LOCAL_CONFIG_HOME_DIR_PROPERTY))); // override
 
         // trace
         for (String key : new TreeSet<String>(properties.stringPropertyNames())) {
@@ -52,16 +52,16 @@ public class CrawlerConfiguration implements ServletContextAware {
         return properties;
     }
 
-    private String getHome() {
-        String home = System.getProperty(CONFIG_HOME_DIR_PROPERTY);
+    private String getDir(String property) {
+        String home = System.getProperty(property);
         if (home == null) {
             if (_servletContext != null) {
-                home = _servletContext.getInitParameter(CONFIG_HOME_DIR_PROPERTY);
+                home = _servletContext.getInitParameter(property);
             }
         }
         if (home == null) {
-            LOG.warn(MessageFormat.format("Fail to find configuration home directory. To set config directory use {0} property. Using instead default {1}", CONFIG_HOME_DIR_PROPERTY, CONFIG_HOME_DIR_DEFAULT));
-            return CONFIG_HOME_DIR_DEFAULT;
+            LOG.warn(MessageFormat.format("Fail to find configuration home directory. To set config directory use {0} property.", property));
+            return "";
         }
         return home;
     }

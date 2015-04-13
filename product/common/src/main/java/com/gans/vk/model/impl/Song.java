@@ -13,18 +13,16 @@ public class Song extends AbstractModel {
 
     private String _artist;
     private String _title;
-    private String _url;
     private Set<Rating> _ratings;
 
     public Song() {
         _ratings = new HashSet<>();
     }
 
-    public Song(String artist, String title, String url) {
+    public Song(String artist, String title) {
         this();
         _artist = artist;
         _title = title;
-        _url = url;
     }
 
     @OneToMany(mappedBy="song")
@@ -56,11 +54,4 @@ public class Song extends AbstractModel {
         _title = title;
     }
 
-    public String getUrl() {
-        return _url;
-    }
-
-    public void setUrl(String url) {
-        _url = url;
-    }
 }
