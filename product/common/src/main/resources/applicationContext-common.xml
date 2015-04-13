@@ -96,12 +96,4 @@
         <property name="songDao" ref="com.gans.vk.dao.SongDao" />
     </bean>
 
-    <bean id="com.gans.vk.httpclient.HttpVkConnector" class="com.gans.vk.httpclient.HttpVkConnector">
-        <!-- <property name="authCookieDomain" value="${vk.auth.cookieDomain}" /> -->
-        <property name="authLoginUrlPattern" value="${vk.auth.loginUrlPattern}" />
-        <property name="contentType" value="${vk.header.content-type}" />
-        <property name="userAgent" value="${vk.header.user-agent}" />
-        <property name="login" value="${vk.login}" />
-        <property name="pass" value="${vk.pass}" />
-    </bean>
 </beans>

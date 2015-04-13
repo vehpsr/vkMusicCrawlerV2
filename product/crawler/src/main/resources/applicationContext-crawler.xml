@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <import resource="classpath:applicationContext-common.xml"/>
+
+    <bean id="com.gans.vk.httpclient.HttpVkConnector" class="com.gans.vk.httpclient.HttpVkConnector">
+        <property name="authCookieDomain" value="${vk.auth.cookieDomain}" />
+        <property name="authLoginUrlPattern" value="${vk.auth.loginUrlPattern}" />
+        <property name="contentType" value="${vk.header.content-type}" />
+        <property name="userAgent" value="${vk.header.user-agent}" />
+        <property name="login" value="${vk.login}" />
+        <property name="pass" value="${vk.pass}" />
+    </bean>
+
+    <bean id="com.gans.vk.service.AudioDiscoveryService" class="com.gans.vk.service.impl.AudioDiscoveryServiceImpl">
+        <property name="songService" ref="com.gans.vk.service.SongService" />
+        <property name="vkConnector" ref="com.gans.vk.httpclient.HttpVkConnector" />
+    </bean>
+</beans>

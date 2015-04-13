@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONObject;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.gans.vk.dashboard.session.SessionManager;
 import com.gans.vk.model.impl.Song;
 import com.gans.vk.model.impl.User;
+import com.gans.vk.service.AudioDiscoveryService;
+import com.gans.vk.service.AudioDiscoveryService.AudioData;
 import com.gans.vk.service.RatingService;
 import com.gans.vk.service.SongService;
 import com.gans.vk.service.UserService;
@@ -45,6 +48,9 @@ public class AudioListController {
     private RatingService _ratingService;
 
     @Autowired
+    private AudioDiscoveryService _audioDiscovery;
+
+    @Autowired
     private SessionManager _sessionManager;
 
     @RequestMapping(value = "/audio/{vkId}", method = RequestMethod.GET)
@@ -57,7 +63,7 @@ public class AudioListController {
             model.addAttribute("songs", new ArrayList<String>());
             return "audioList";
         }
-        List<Song> songs = _songService.getAllUnratedSongs(target, user, MAX_SONGS_ON_PAGE);
+        List<AudioData> songs = _audioDiscovery.getAllUnratedSongs(target, user, MAX_SONGS_ON_PAGE);
         model.addAttribute("songs", songs);
         return "audioList";
     }
@@ -93,6 +99,10 @@ public class AudioListController {
 
     public void setSessionManager(SessionManager sessionManager) {
         _sessionManager = sessionManager;
+    }
+
+    public void setAudioDiscovery(AudioDiscoveryService audioDiscovery) {
+        _audioDiscovery = audioDiscovery;
     }
 
 }

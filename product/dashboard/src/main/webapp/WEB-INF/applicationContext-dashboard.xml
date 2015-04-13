@@ -6,7 +6,7 @@
            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-    <import resource="classpath:applicationContext-common.xml"/>
+    <import resource="classpath:applicationContext-crawler.xml"/>
 
     <bean id="com.gans.vk.dashboard.session.SessionManager" class="com.gans.vk.dashboard.session.SessionManager">
         <property name="userDao" ref="com.gans.vk.dao.UserDao" />

@@ -36,7 +36,6 @@ import org.apache.http.util.EntityUtils;
 import com.gans.vk.utils.RestUtils;
 
 public class HttpVkConnector {
-
     private static final Log LOG = LogFactory.getLog(HttpVkConnector.class);
 
     private CloseableHttpClient _httpClient = null;
