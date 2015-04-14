@@ -81,6 +81,7 @@
 
     <bean id="com.gans.vk.dao.SongDao" class="com.gans.vk.dao.impl.SongDaoImpl">
         <property name="sessionFactory" ref="sessionFactory" />
+        <property name="randFunc" value="${jdbc.randomFunction}" />
     </bean>
 
     <bean id="com.gans.vk.service.UserService" class="com.gans.vk.service.impl.UserServiceImpl">

@@ -14,7 +14,7 @@ ol.audioList {
     font-size: 0.9em;
     list-style: inside none decimal-leading-zero;
     margin: 0;
-    padding: 0;
+    padding: 75px 0;
     width: 460px;
 }
 
@@ -42,30 +42,58 @@ ol.audioList li {
     border-bottom: 1px solid #ccc;
     cursor: pointer;
     margin: 0;
-    padding: 9px 2px 2px;
+    padding: 2px;
     position: relative;
 }
 
-ol.audioList li.playing a {
+ol.audioList li.playing .songWrap {
     color: #000;
 }
 
-ol.audioList li a {
-    display: block;
-    padding: 0 0 0 20px;
-    text-indent: -3.3ex;
+ol.audioList li .songWrap {
 }
 
-.audioList a {
+.audioList .songWrap {
     color: #888;
-    text-decoration: none;
+}
+
+.songWrap .titleWrap {
+    width: 420px;
+    float: left;
+}
+
+.titleWrap .artist {
+    width: 170px;
+    text-overflow: elipsis;
+    overflow: hidden;
+}
+
+.songWrap .songMeta {
+    width: 60px;
+    display: inline;
 }
 
 .stars {
     display: inline-block;
+    margin: 0;
 }
 
 .stars input {
     margin: 4px 0 0 0;
     cursor: pointer;
+}
+
+#audioPlayer {
+    position: fixed;
+    z-index: 100;
+    background: none repeat scroll 0 0 #f6f6f0;
+    box-shadow: 0 5px 5px 5px #f6f6f0;
+    color: #330;
+}
+
+#audioPlayer .currentSong {
+    margin-top: 5px;
+    width: 460px;
+    height: 20px;
+    overflow: hidden;
 }

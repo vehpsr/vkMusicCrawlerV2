@@ -7,16 +7,17 @@ $(function() {
             if (!next.length)
                 next = $('ol li').first();
             next.addClass('playing').siblings().removeClass('playing');
-            audio.load($('a', next).attr('data-src'));
+            audio.load($('.songWrap', next).attr('data-src'));
             audio.play();
         }
     });
 
     // Load in the first track
     var audio = a[0];
-    first = $('ol a').attr('data-src');
+    var first = $('ol .songWrap').attr('data-src');
     $('ol li').first().addClass('playing');
     audio.load(first);
+    updateCurrentTrackInfo();
     // Load track or pause if already playing
     $('ol li').click(function(e) {
         e.preventDefault();
@@ -28,10 +29,33 @@ $(function() {
             }
         } else {
             $(this).addClass('playing').siblings().removeClass('playing');
-            audio.load($('a', this).attr('data-src'));
+            audio.load($('.songWrap', this).attr('data-src'));
             audio.play();
+            updateCurrentTrackInfo();
         }
     });
+
+    function updateCurrentTrackInfo() {
+        var artistMaxLen = 30;
+        var titleMaxLen = 40;
+        var separator = " - ";
+        var artist = $('ol li.playing .songWrap .artist').text();
+        var title = $('ol li.playing .songWrap .title').text();
+        while (artist.length + title.length + separator.length > artistMaxLen + titleMaxLen) {
+            if (artist.length > artistMaxLen) {
+                artist = artist.substring(0, artistMaxLen);
+                continue;
+            }
+            if (title.length + separator.length > titleMaxLen) {
+                title = title.substring(0, titleMaxLen - separator.length);
+                continue;
+            }
+            break;
+        }
+        console.log(artist);
+        console.log(title);
+        $('#audioPlayer .currentSong').text(artist + separator + title);
+    }
 });
 
 //set up rating system

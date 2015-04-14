@@ -17,6 +17,8 @@ import com.gans.vk.model.impl.User;
 
 public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
 
+    private String _randFunc;
+
     public SongDaoImpl() {
         super(Song.class);
     }
@@ -47,7 +49,9 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
                 "			JOIN Users u ON u.id = rating.user_id " +
                 "		WHERE " +
                 "			u.id = :userId " +
-                "		)";
+                "		) " +
+                "ORDER BY " +
+                "" + _randFunc;
 
         Collection<Song> songs = getHibernateTemplate().execute(new HibernateCallback<Collection<Song>>() {
             @Override
@@ -62,6 +66,10 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
         });
 
         return new ArrayList<Song>(songs);
+    }
+
+    public void setRandFunc(String randFunc) {
+        _randFunc = randFunc;
     }
 
 }

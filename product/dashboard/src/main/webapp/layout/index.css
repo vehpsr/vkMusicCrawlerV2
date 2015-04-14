@@ -1,9 +1,10 @@
 body {
     background: none repeat scroll 0 0 #f6f6f0;
     color: #330;
+    margin: 0;
 }
 
 #wrapper {
-    margin: 40px auto;
+    margin: 0 auto;
     width: 400px;
 }

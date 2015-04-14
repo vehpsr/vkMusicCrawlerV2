@@ -13,11 +13,23 @@
     <script src="${rc.getContextPath()}/resources/js/dashboard/audioList.js" type="text/javascript"></script>
 
     <div id="wrapper">
-        <audio></audio> <!-- audio player container -->
+        <div id="audioPlayer">
+            <div class="currentSong">&nbsp;</div>
+            <audio></audio> <!-- audio player container -->
+        </div>
         <ol class="audioList">
             <#list songs as song>
                 <li data-song-id="${song.id}">
-                    <a data-src="${song.url}" href="#">${song.artist} - ${song.title}</a>
+                    <div data-src="${song.url}" class="songWrap">
+                        <div class="titleWrap">
+                            <span class="artist">${song.artist}</span>
+                            -
+                            <span class="title">${song.title}</span>
+                        </div>
+                        <div class="songMeta">
+                            <span class="time">${song.time}</span>
+                        </div>
+                    </div>
                     <form class="stars" action="${rc.getContextPath()}/song/rate">
                         <input type="radio" name="rating" id="star1" value="1">
                         <input type="radio" name="rating" id="star2" value="2">
