@@ -20,7 +20,7 @@ ol.audioList {
 
 ol.audioList li.playing:before {
     color: #000;
-    content: ">>";
+    content: "♬";
     font-size: 13px;
     height: 14px;
     left: -24px;

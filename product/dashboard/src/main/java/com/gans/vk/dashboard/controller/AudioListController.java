@@ -53,7 +53,7 @@ public class AudioListController {
     private SessionManager _sessionManager;
 
     @RequestMapping(value = "/audio/{vkId}", method = RequestMethod.GET)
-    public String songs(@PathVariable String vkId, ModelMap model) {
+    public String songs(HttpServletRequest req, HttpServletResponse resp, @PathVariable String vkId, ModelMap model) {
         User user = _sessionManager.getCurrentUser();
         User target = _userService.getByVkId(vkId);
         if (target == null) {
@@ -62,6 +62,8 @@ public class AudioListController {
             model.addAttribute("songs", new ArrayList<String>());
             return "audioList";
         }
+        resp.setContentType("text/html;charset=UTF-8");
+
         List<AudioData> songs = _audioDiscovery.getAllUnratedSongs(target, user, MAX_SONGS_ON_PAGE);
         model.addAttribute("songs", songs);
         return "audioList";

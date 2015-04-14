@@ -1,5 +1,6 @@
 <html>
 <head>
+    <meta charset="UTF-8" />
     <title>audio</title>
     <link rel="icon" type="image/png" href="${rc.getContextPath()}/favicon/favicon.ico">
     <link rel="stylesheet" href="${rc.getContextPath()}/resources/layout/index.css" type="text/css"></link>
