@@ -23,10 +23,14 @@
         <property name="pass" value="${vk.pass}" />
     </bean>
 
-    <bean id="com.gans.vk.service.AudioDiscoveryService" class="com.gans.vk.service.impl.AudioDiscoveryServiceImpl">
+    <bean id="com.gans.vk.service.AudioDiscoveryService" class="${audio_discovery_service_id}"> <!-- com.gans.vk.service.impl.AudioDiscoveryServiceImpl"> -->
         <property name="songService" ref="com.gans.vk.service.SongService" />
         <property name="vkConnector" ref="com.gans.vk.httpclient.HttpVkConnector" />
         <property name="vkAudioUrl" value="${vk.audio.url}" />
         <property name="vkAudioEntityPattern" value="${vk.audio.entityPattern}" />
     </bean>
+
+    <!-- <bean id="com.gans.vk.service.AudioDiscoveryDummyLocalService" class="com.gans.vk.service.impl.AudioDiscoveryDummyLocalServiceImpl">
+        <property name="songService" ref="com.gans.vk.service.SongService" />
+    </bean> -->
 </beans>
