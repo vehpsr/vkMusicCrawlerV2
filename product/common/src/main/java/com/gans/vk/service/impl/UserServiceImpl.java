@@ -15,9 +15,19 @@ public class UserServiceImpl implements UserService {
         _userDao = userDao;
     }
 
-	@Override
-	public User getByVkId(String vkId) {
-		return _userDao.getByVkId(vkId);
-	}
+    @Override
+    public User getByVkId(String vkId) {
+        return _userDao.getUserByVkId(vkId);
+    }
+
+    @Override
+    public User getByUrl(String url) {
+        return _userDao.getUserByUrl(url);
+    }
+
+    @Override
+    public void save(User user) {
+        _userDao.save(user);
+    }
 
 }

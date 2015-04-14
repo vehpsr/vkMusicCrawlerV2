@@ -52,8 +52,6 @@ $(function() {
             }
             break;
         }
-        console.log(artist);
-        console.log(title);
         $('#audioPlayer .currentSong').text(artist + separator + title);
     }
 });

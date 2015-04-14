@@ -5,5 +5,7 @@ import com.gans.vk.model.impl.User;
 public interface UserService {
 
     User getByVkId(String vkId);
+    User getByUrl(String url);
+    void save(User user);
 
 }

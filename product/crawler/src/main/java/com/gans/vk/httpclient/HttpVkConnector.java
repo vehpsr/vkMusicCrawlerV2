@@ -33,8 +33,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import com.gans.vk.utils.RestUtils;
-
 public class HttpVkConnector {
     private static final Log LOG = LogFactory.getLog(HttpVkConnector.class);
 
@@ -170,7 +168,6 @@ public class HttpVkConnector {
             if (!result.contains(VK_SECURITY_COOKIE)) {
                 throw new IllegalStateException(MessageFormat.format("Fail to authenticate. Not found secure cookie {0} in response for login {1}", VK_SECURITY_COOKIE, _login));
             }
-            RestUtils.sleep();
             return result;
         } catch (Exception e) {
             if (e instanceof NoSuchAlgorithmException ||

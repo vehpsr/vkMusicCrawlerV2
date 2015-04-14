@@ -5,7 +5,6 @@ import com.gans.vk.model.impl.User;
 public interface UserDao extends ModelDao<User> {
 
     User getUserByUrl(String name);
-
-    User getByVkId(String vkId);
+    User getUserByVkId(String vkId);
 
 }

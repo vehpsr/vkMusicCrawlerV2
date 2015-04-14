@@ -21,7 +21,7 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
     }
 
     @Override
-    public User getByVkId(String vkId) {
+    public User getUserByVkId(String vkId) {
         DetachedCriteria criteria = createCriteria();
         criteria.add(Restrictions.eq("vkId", vkId));
         return findUnique(criteria);
