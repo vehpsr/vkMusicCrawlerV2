@@ -1,8 +1,10 @@
 package com.gans.vk.model.impl;
 
+import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
@@ -11,8 +13,15 @@ import com.gans.vk.model.AbstractModel;
 @Entity
 public class Song extends AbstractModel {
 
+    public static final int ARTIST_MAX_LEN = 50;
+    public static final int TITLE_MAX_LEN = 70;
+
+    @Column(length = ARTIST_MAX_LEN)
     private String _artist;
+
+    @Column(length = TITLE_MAX_LEN)
     private String _title;
+
     private Set<Rating> _ratings;
 
     public Song() {
@@ -52,6 +61,11 @@ public class Song extends AbstractModel {
 
     public void setTitle(String title) {
         _title = title;
+    }
+
+    @Override
+    public String toString() {
+        return MessageFormat.format("{0} {1} - {2}", getId(), _artist, _title);
     }
 
 }

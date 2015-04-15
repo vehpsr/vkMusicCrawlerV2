@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>dashboard</artifactId>
-    <version>v.1.3</version>
+    <version>v.1.4</version>
     <packaging>war</packaging>
 
     <build>

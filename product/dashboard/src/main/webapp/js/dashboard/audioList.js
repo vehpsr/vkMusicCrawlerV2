@@ -1,7 +1,7 @@
 // set up audio player
 $(function() {
     // Setup the player to autoplay the next track
-    var a = audiojs.createAll({
+    var audio = audiojs.createAll({
         trackEnded : function() {
             var next = $('ol li.playing').next();
             if (!next.length)
@@ -10,17 +10,19 @@ $(function() {
             audio.load($('.songWrap', next).attr('data-src'));
             audio.play();
         }
-    });
-
-    // Load in the first track
-    var audio = a[0];
+    })[0];
 
     injectVolumeSlider(audio);
 
+    // Load in the first track
     var first = $('ol .songWrap').attr('data-src');
+    if (!first) {
+        updateStatusPanel('No tracks are avaliable for user with this Id');
+        return;
+    }
     $('ol li').first().addClass('playing');
     audio.load(first);
-    updateCurrentTrackInfo();
+    updateStatusPanel();
     // Load track or pause if already playing
     $('ol li').click(function(e) {
         e.preventDefault();
@@ -34,7 +36,7 @@ $(function() {
             $(this).addClass('playing').siblings().removeClass('playing');
             audio.load($('.songWrap', this).attr('data-src'));
             audio.play();
-            updateCurrentTrackInfo();
+            updateStatusPanel();
         }
     });
 
@@ -48,7 +50,16 @@ $(function() {
         $('#audioPlayer .time').append(slider);
     }
 
-    function updateCurrentTrackInfo() {
+    function updateStatusPanel(errorMsg) {
+        var statusPanel = $('#audioPlayer .currentSong');
+
+        // error
+        if (errorMsg) {
+            statusPanel.html('<span style="color: red">' + errorMsg + '</span>');
+            return;
+        }
+
+        // current track
         var artistMaxLen = 30;
         var titleMaxLen = 40;
         var separator = " - ";
@@ -65,7 +76,7 @@ $(function() {
             }
             break;
         }
-        $('#audioPlayer .currentSong').text(artist + separator + title);
+        statusPanel.text(artist + separator + title);
     }
 });
 
