@@ -51,9 +51,7 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
         if (unratedDbSongs.isEmpty()) {
             return Collections.emptyList();
         }
-        String response = _vkConnector.post(_vkAudioUrl, MessageFormat.format(_vkAudioEntityPattern, target.getVkId()));
-        List<Map<AudioPart, String>> parsedVkSongs = _vkAudioParser.getAudioData(response);
-
+        List<Map<AudioPart, String>> parsedVkSongs = getUserAudioData(target.getVkId());
         return merge(unratedDbSongs, parsedVkSongs);
     }
 
@@ -95,13 +93,14 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
         }
         List<String> messages = new ArrayList<>();
         User user = _userService.getByUrl(url);
-        if (user == null) {
-            messages.add(MessageFormat.format("User with url: {0} does not exists yet", url));
+        if (user == null || StringUtils.isEmpty(user.getVkId())) {
+            messages.add(MessageFormat.format("Discover user info by url: {0}", url));
             user = getUserByUrl(url);
         }
         // if user is invalid by vkId ?
 
         //discover audio data and rate
+        List<Map<AudioPart, String>> parsedVkSongs = getUserAudioData(user.getVkId());
 
         return messages;
     }
@@ -177,6 +176,11 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
             LOG.warn(MessageFormat.format("Request was blocked. Reason: {0}\n{1}", doc.title(), errorMsgContainer.get(0).text()));
             RestUtils.sleep("2x");
         }
+    }
+
+    private List<Map<AudioPart, String>> getUserAudioData(String vkId) {
+        String response = _vkConnector.post(_vkAudioUrl, MessageFormat.format(_vkAudioEntityPattern, vkId));
+        return _vkAudioParser.getAudioData(response);
     }
 
     public void setSongService(SongService songService) {
