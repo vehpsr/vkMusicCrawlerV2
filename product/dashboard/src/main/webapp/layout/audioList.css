@@ -97,3 +97,15 @@ ol.audioList li .songWrap {
     height: 20px;
     overflow: hidden;
 }
+
+#audioPlayer input#volumeSlider {
+    height: 15px;
+    width: 70px;
+    background: -moz-linear-gradient(center top , rgb(68, 68, 68) 0%, rgb(85, 85, 85) 50%, rgb(68, 68, 68) 51%, rgb(68, 68, 68) 100%) repeat scroll 0px 0px rgb(64, 64, 64);
+}
+
+#audioPlayer .time {
+    width: 100px;
+    padding: 0 0 0 10px;
+    line-height: 18px;
+}

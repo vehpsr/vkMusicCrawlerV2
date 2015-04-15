@@ -14,6 +14,9 @@ $(function() {
 
     // Load in the first track
     var audio = a[0];
+
+    injectVolumeSlider(audio);
+
     var first = $('ol .songWrap').attr('data-src');
     $('ol li').first().addClass('playing');
     audio.load(first);
@@ -34,6 +37,16 @@ $(function() {
             updateCurrentTrackInfo();
         }
     });
+
+    function injectVolumeSlider(player) {
+        var slider = $('<input id="volumeSlider" type="range" min="0" max="100" value="100" step="1"/>');
+        slider.on('change mousemove', function() {
+            var value = parseInt(slider.val()) / 100;
+            var volume = value * value;
+            player.setVolume(volume);
+        });
+        $('#audioPlayer .time').append(slider);
+    }
 
     function updateCurrentTrackInfo() {
         var artistMaxLen = 30;
