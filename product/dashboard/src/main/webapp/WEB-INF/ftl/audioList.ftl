@@ -14,7 +14,11 @@
 
     <div id="wrapper">
         <div id="audioPlayer">
-            <div class="currentSong">&nbsp;</div>
+            <div class="currentSong">
+                <span class="currentArtist"></span>
+                &nbsp;&ndash;&nbsp;
+                <span class="currentTitle"></span>
+            </div>
             <audio></audio> <!-- audio player container -->
         </div>
         <ol class="audioList">

@@ -17,7 +17,7 @@ $(function() {
     // Load in the first track
     var first = $('ol .songWrap').attr('data-src');
     if (!first) {
-        updateStatusPanel('No tracks are avaliable for user with this Id');
+        console.log('No tracks are avaliable for user with this Id');
         return;
     }
     $('ol li').first().addClass('playing');
@@ -50,33 +50,24 @@ $(function() {
         $('#audioPlayer .time').append(slider);
     }
 
-    function updateStatusPanel(errorMsg) {
-        var statusPanel = $('#audioPlayer .currentSong');
-
-        // error
-        if (errorMsg) {
-            statusPanel.html('<span style="color: red">' + errorMsg + '</span>');
-            return;
-        }
-
-        // current track
+    function updateStatusPanel() {
         var artistMaxLen = 30;
         var titleMaxLen = 40;
-        var separator = " - ";
         var artist = $('ol li.playing .songWrap .artist').text();
         var title = $('ol li.playing .songWrap .title').text();
-        while (artist.length + title.length + separator.length > artistMaxLen + titleMaxLen) {
+        while (artist.length + title.length > artistMaxLen + titleMaxLen) {
             if (artist.length > artistMaxLen) {
                 artist = artist.substring(0, artistMaxLen);
                 continue;
             }
-            if (title.length + separator.length > titleMaxLen) {
-                title = title.substring(0, titleMaxLen - separator.length);
+            if (title.length > titleMaxLen) {
+                title = title.substring(0, titleMaxLen);
                 continue;
             }
             break;
         }
-        statusPanel.text(artist + separator + title);
+        $('#audioPlayer .currentSong .currentArtist').text(artist);
+        $('#audioPlayer .currentSong .currentTitle').text(title);
     }
 });
 
