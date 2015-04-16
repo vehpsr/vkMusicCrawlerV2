@@ -13,6 +13,9 @@ import com.gans.vk.model.AbstractModel;
 
 public abstract class AbstractModelDao<T extends AbstractModel> extends HibernateDaoSupport implements ModelDao<T> {
 
+    protected static final String MYSQL_VENDOR = "mysql";
+    protected static final String POSTGRES_VENDOR = "postgresql";
+
     protected final Class<T> _entityClass;
 
     public AbstractModelDao(Class<T> entityClass) {

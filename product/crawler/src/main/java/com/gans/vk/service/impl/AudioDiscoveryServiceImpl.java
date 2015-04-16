@@ -1,11 +1,14 @@
 package com.gans.vk.service.impl;
 
 import java.text.MessageFormat;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -51,13 +54,13 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
         if (unratedDbSongs.isEmpty()) {
             return Collections.emptyList();
         }
-        List<Map<AudioPart, String>> parsedVkSongs = getUserAudioData(target.getVkId());
-        return merge(unratedDbSongs, parsedVkSongs);
+        List<Map<AudioPart, String>> audioLib = getUserAudioData(target.getVkId());
+        return merge(unratedDbSongs, audioLib);
     }
 
-    private List<AudioData> merge(List<Song> unratedDbSongs, List<Map<AudioPart, String>> parsedVkSongs) {
+    private List<AudioData> merge(List<Song> unratedDbSongs, List<Map<AudioPart, String>> audioLib) {
         Map<String, Map<AudioPart, String>> hashToSong = new HashMap<>();
-        for(Map<AudioPart, String> vkSong : parsedVkSongs) {
+        for(Map<AudioPart, String> vkSong : audioLib) {
             String hash = hash(vkSong.get(AudioPart.ARTIST), vkSong.get(AudioPart.TITLE));
             hashToSong.put(hash, vkSong);
         }
@@ -99,10 +102,19 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
         }
         // if user is invalid by vkId ?
 
-        //discover audio data and rate
-        List<Map<AudioPart, String>> parsedVkSongs = getUserAudioData(user.getVkId());
+        List<Map<AudioPart, String>> audioLib = getUserAudioData(user.getVkId());
+        List<Entry<String, String>> songData = extractArtistAndTitleData(audioLib);
+        _ratingService.importUserAudioLib(user, songData);
 
         return messages;
+    }
+
+    private List<Entry<String, String>> extractArtistAndTitleData(List<Map<AudioPart, String>> audioLib) {
+        List<Entry<String, String>> result = new ArrayList<>();
+        for (Map<AudioPart, String> audio : audioLib) {
+            result.add(new AbstractMap.SimpleEntry<String, String>(audio.get(AudioPart.ARTIST), audio.get(AudioPart.TIME)));
+        }
+        return result;
     }
 
     private User getUserByUrl(String url) {

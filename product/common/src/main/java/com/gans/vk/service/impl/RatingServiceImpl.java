@@ -1,6 +1,8 @@
 package com.gans.vk.service.impl;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,6 +31,11 @@ public class RatingServiceImpl implements RatingService {
             rating = new Rating(value, user, song);
         }
         _ratingDao.save(rating);
+    }
+
+    @Override
+    public void importUserAudioLib(User user, List<Entry<String, String>> audioLib) {
+        _ratingDao.importUserAudioLib(user, audioLib);
     }
 
     public void setRatingDao(RatingDao ratingDao) {

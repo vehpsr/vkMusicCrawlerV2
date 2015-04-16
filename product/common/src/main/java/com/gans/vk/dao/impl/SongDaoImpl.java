@@ -17,7 +17,7 @@ import com.gans.vk.model.impl.User;
 
 public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
 
-    private String _randFunc;
+    private String _dbVendor;
 
     public SongDaoImpl() {
         super(Song.class);
@@ -26,7 +26,7 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
     @Override
     @SuppressWarnings("unchecked") // TODO performance check
     public List<Song> getAllUnratedSongs(final User target, final User user, final int limit) {
-        final String sql =
+        final StringBuilder sql = new StringBuilder(
                 "SELECT " +
                 "	targetSongs.* " +
                 "FROM " +
@@ -49,14 +49,17 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
                 "			JOIN Users u ON u.id = rating.user_id " +
                 "		WHERE " +
                 "			u.id = :userId " +
-                "		) " +
-                "ORDER BY " +
-                "" + _randFunc;
+                "		) ");
+        if (_dbVendor.equals(MYSQL_VENDOR)) {
+            sql.append("ORDER BY RAND() ");
+        } else if (_dbVendor.equals(POSTGRES_VENDOR)) {
+            sql.append("ORDER BY RANDOM() ");
+        }
 
         Collection<Song> songs = getHibernateTemplate().execute(new HibernateCallback<Collection<Song>>() {
             @Override
             public Collection<Song> doInHibernate(Session session) throws HibernateException, SQLException {
-                SQLQuery query = session.createSQLQuery(sql);
+                SQLQuery query = session.createSQLQuery(sql.toString());
                 query.setLong("userId", user.getId());
                 query.setLong("targetId", target.getId());
                 query.addEntity("song", Song.class);
@@ -68,8 +71,8 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
         return new ArrayList<Song>(songs);
     }
 
-    public void setRandFunc(String randFunc) {
-        _randFunc = randFunc;
+    public void setDbVendor(String dbVendor) {
+        _dbVendor = dbVendor;
     }
 
 }
