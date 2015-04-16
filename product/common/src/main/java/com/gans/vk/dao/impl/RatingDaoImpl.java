@@ -27,8 +27,6 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
 
     private static final Log LOG = LogFactory.getLog(RatingDaoImpl.class);
 
-    private String _dbVendor;
-
     public RatingDaoImpl() {
         super(Rating.class);
     }
@@ -47,24 +45,7 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
         final String sqlInsertSongBatch;
         final String sqlInsertRatingBatch;
 
-        if (_dbVendor.equals(POSTGRES_VENDOR)) {
-            sqlInsertSongBatch =
-                "INSERT INTO Song " +
-                "	(artist, title) " +
-                "SELECT " +
-                "	?, ? " +
-                "WHERE " +
-                "	NOT EXISTS " +
-                "		(SELECT " +
-                "			artist, title " +
-                "		FROM " +
-                "			Song " +
-                "		WHERE " +
-                "			artist = ? " +
-                "			AND title = ? " +
-                "		LIMIT 1) ";
-        } else if (_dbVendor.equals(MYSQL_VENDOR)) { // TODO check if this query will pass on postgres
-            sqlInsertSongBatch =
+        sqlInsertSongBatch =
                 "INSERT INTO Song " +
                 "	(artist, title) " +
                 "SELECT " +
@@ -83,28 +64,10 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
                 "			artist = ? " +
                 "			AND title = ? " +
                 "		LIMIT 1) ";
-        } else {
-            throw new IllegalStateException(MessageFormat.format("Unsupported database vendor: {0}", _dbVendor));
-        }
 
-        if (_dbVendor.equals(POSTGRES_VENDOR)) {
-            sqlInsertRatingBatch =
-                "INSERT INTO Song " +
-                "	(artist, title) " +
-                "SELECT " +
-                "	?, ? " +
-                "WHERE " +
-                "	NOT EXISTS " +
-                "		(SELECT " +
-                "			artist, title " +
-                "		FROM " +
-                "			Song " +
-                "		WHERE " +
-                "			artist = ? " +
-                "			AND title = ? " +
-                "		) LIMIT 1 ";
-        } else if (_dbVendor.equals(MYSQL_VENDOR)) { // TODO check if passes on Postgres
-            sqlInsertRatingBatch =
+
+
+        sqlInsertRatingBatch =
                 "INSERT INTO Rating " +
                 "	(value, date, song_id, user_id) " +
                 "SELECT " +
@@ -123,9 +86,7 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
                 "			user_id = ? " +
                 "			AND song_id = (SELECT id FROM Song WHERE artist = ? AND title = ? LIMIT 1) " +
                 "		LIMIT 1) ";
-        } else {
-            throw new IllegalStateException(MessageFormat.format("Unsupported database vendor: {0}", _dbVendor));
-        }
+
 
         LOG.info(MessageFormat.format("Start imort audio lib for {0}. Total size: {1}", user.getName(), audioLib.size()));
         long start = System.currentTimeMillis();
@@ -186,10 +147,6 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
         });
 
         LOG.info("Import take: " + (System.currentTimeMillis() - start));
-    }
-
-    public void setDbVendor(String dbVendor) {
-        _dbVendor = dbVendor;
     }
 
 }

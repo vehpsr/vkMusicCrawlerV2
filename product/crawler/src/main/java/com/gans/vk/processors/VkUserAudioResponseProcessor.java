@@ -73,6 +73,7 @@ public class VkUserAudioResponseProcessor {
             }
             String result = in.toLowerCase();
             result = result.replaceAll("[^-a-zа-я0-9!@#%&=_,<>{}:;' \"\\+\\*\\?\\$\\.\\(\\)\\[\\]]", "?");
+            result = result.replaceAll("^(?:(?:[^a-zа-я0-9&#;])|(?:&#?\\d{2,7};))+", "");
             boolean hasData = Pattern.compile("[a-zа-я0-9]").matcher(result).find();
             if (!hasData) { // junk
                 return "";
@@ -81,6 +82,7 @@ public class VkUserAudioResponseProcessor {
         }
     }
 
+    // TODO check if response is not from me (as result of invalid vkId)
     public List<Map<AudioPart, String>> getAudioData(String vkId) {
         if (StringUtils.isEmpty(vkId)) {
             return Collections.emptyList();

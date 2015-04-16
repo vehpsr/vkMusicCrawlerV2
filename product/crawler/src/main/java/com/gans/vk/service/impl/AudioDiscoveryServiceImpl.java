@@ -31,8 +31,8 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
     @Autowired private SongService _songService;
     @Autowired private UserService _userService;
     @Autowired private RatingService _ratingService;
-    @Autowired private VkUserAudioResponseProcessor _vkAudioParser;
-    @Autowired private VkUserPageResponseProcessor _vkUserPageParser;
+    @Autowired private VkUserAudioResponseProcessor _vkAudioProcessor;
+    @Autowired private VkUserPageResponseProcessor _vkUserPageProcessor;
 
     @Override
     public List<AudioData> getAllUnratedSongs(User target, User user, int maxSongsOnPage) {
@@ -40,7 +40,7 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
         if (unratedDbSongs.isEmpty()) {
             return Collections.emptyList();
         }
-        List<Map<AudioPart, String>> audioLib = _vkAudioParser.getAudioData(target.getVkId());
+        List<Map<AudioPart, String>> audioLib = _vkAudioProcessor.getAudioData(target.getVkId());
         return merge(unratedDbSongs, audioLib);
     }
 
@@ -86,16 +86,22 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
         if (user != null && StringUtils.isNotEmpty(user.getVkId())) {
             LOG.info(MessageFormat.format("User {0} already exists in system", user));
             return;
+        } else if (user == null) {
+            user = new User();
+            user.setUrl(url);
         }
 
-        Entry<String, String> userData = _vkUserPageParser.getUserByUrl(url);
+        Entry<String, String> userData = _vkUserPageProcessor.getUserByUrl(url);
         user.setName(userData.getKey());
         user.setVkId(userData.getValue());
         _userService.save(user);
 
-        // TODO if user is invalid by vkId ?
+        if (VkUserPageResponseProcessor.hasInvalidUserStatus(user)) {
+            LOG.info(MessageFormat.format("Stop audio discovery fro user {0}", user));
+            return;
+        }
 
-        List<Map<AudioPart, String>> audioLib = _vkAudioParser.getAudioData(user.getVkId());
+        List<Map<AudioPart, String>> audioLib = _vkAudioProcessor.getAudioData(user.getVkId());
         List<Entry<String, String>> songData = extractArtistAndTitleData(audioLib);
         _ratingService.importUserAudioLib(user, songData);
     }
@@ -103,7 +109,7 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
     private List<Entry<String, String>> extractArtistAndTitleData(List<Map<AudioPart, String>> audioLib) {
         List<Entry<String, String>> result = new ArrayList<>();
         for (Map<AudioPart, String> audio : audioLib) {
-            result.add(new AbstractMap.SimpleEntry<String, String>(audio.get(AudioPart.ARTIST), audio.get(AudioPart.TIME)));
+            result.add(new AbstractMap.SimpleEntry<String, String>(audio.get(AudioPart.ARTIST), audio.get(AudioPart.TITLE)));
         }
         return result;
     }
@@ -120,12 +126,12 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
         _ratingService = ratingService;
     }
 
-    public void setVkAudioParser(VkUserAudioResponseProcessor vkAudioParser) {
-        _vkAudioParser = vkAudioParser;
+    public void setVkAudioProcessor(VkUserAudioResponseProcessor vkAudioProcessor) {
+        _vkAudioProcessor = vkAudioProcessor;
     }
 
-    public void setVkUserPageParser(VkUserPageResponseProcessor vkUserPageParser) {
-        _vkUserPageParser = vkUserPageParser;
+    public void setVkUserPageProcessor(VkUserPageResponseProcessor vkUserPageProcessor) {
+        _vkUserPageProcessor = vkUserPageProcessor;
     }
 
 }

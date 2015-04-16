@@ -36,6 +36,11 @@ public class AudioPartTest {
         testArtistAndTitleNormalization("a¶b♪c", "a?b?c");
         testArtistAndTitleNormalization("abc абв 123 !@#$%?(){}[]<>.,+=-_*", "abc абв 123 !@#$%?(){}[]<>.,+=-_*");
         testArtistAndTitleNormalization(" ¶ ♪ ", "");
+        testArtistAndTitleNormalization("&#123;abc", "abc");
+        testArtistAndTitleNormalization("a&#123;bc", "a&#123;bc");
+        testArtistAndTitleNormalization("&#123;&12;abc", "abc");
+        testArtistAndTitleNormalization(" &#123; &12; abc", "abc");
+        testArtistAndTitleNormalization(" :!&#123; ?{}[]()' &12; abc", "abc");
 
         String veryLongString = UUID.randomUUID().toString() + UUID.randomUUID().toString();
         veryLongString += veryLongString + veryLongString + veryLongString;

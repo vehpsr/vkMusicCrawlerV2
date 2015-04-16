@@ -14,6 +14,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gans.vk.httpclient.HttpVkConnector;
+import com.gans.vk.model.impl.User;
 import com.gans.vk.utils.HtmlUtils;
 import com.gans.vk.utils.RestUtils;
 
@@ -31,6 +32,18 @@ public class VkUserPageResponseProcessor {
 
     public enum UserStatus {
         PARSER_ERROR, CLOSED_PAGE, NOT_ENOUGH_AUDIO
+    }
+
+    public static boolean hasInvalidUserStatus(User user) {
+        if (user == null || StringUtils.isEmpty(user.getVkId())) {
+            return true;
+        }
+        for (UserStatus status : UserStatus.values()) {
+            if (user.getVkId().equals(status.name())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Entry<String, String> getUserByUrl(String url) {

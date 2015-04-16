@@ -1,5 +1,6 @@
 package com.gans.vk.model.impl;
 
+import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -70,4 +71,8 @@ public class User extends AbstractModel {
         _vkId = vkId;
     }
 
+    @Override
+    public String toString() {
+        return MessageFormat.format("{0}: {1} {2} {3}", getId(), _name, _url, _vkId);
+    }
 }
