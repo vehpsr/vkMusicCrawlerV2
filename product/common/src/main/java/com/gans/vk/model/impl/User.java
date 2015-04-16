@@ -3,6 +3,7 @@ package com.gans.vk.model.impl;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -13,9 +14,19 @@ import com.gans.vk.model.AbstractModel;
 @Table(name="Users")
 public class User extends AbstractModel {
 
+    public static final int NAME_MAX_LEN = 60;
+    public static final int URL_MAX_LEN = 40;
+    public static final int VK_ID_MAX_LEN = 20;
+
+    @Column(length = NAME_MAX_LEN)
     private String _name;
+
+    @Column(length = URL_MAX_LEN)
     private String _url;
+
+    @Column(length = VK_ID_MAX_LEN)
     private String _vkId;
+
     private Set<Rating> _ratings;
 
     public User() {

@@ -1,6 +1,6 @@
 package com.gans.vk.dashboard.controller;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,8 +21,8 @@ public class DiscoveryController {
 
     @RequestMapping(value = "/discover", method = RequestMethod.GET)
     public String discoveryPage(HttpServletRequest req, HttpServletResponse resp, ModelMap model) {
-        List<String> messages = _audioDiscovery.discoverAudioByUserUrl("");
-        model.addAttribute("messages", messages);
+        _audioDiscovery.discoverAudioByUserUrl("");
+        model.addAttribute("messages", new ArrayList<String>());
         resp.setContentType("text/html;charset=UTF-8");
         return "discover";
     }

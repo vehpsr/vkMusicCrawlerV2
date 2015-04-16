@@ -1,4 +1,4 @@
-package com.gans.vk.parser;
+package com.gans.vk.processors;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -16,16 +16,22 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.gans.vk.httpclient.HttpVkConnector;
 import com.gans.vk.model.impl.Song;
 import com.gans.vk.utils.HtmlUtils;
 import com.gans.vk.utils.TextUtils;
 
-public class VkUserAudioResponseParser {
+public class VkUserAudioResponseProcessor {
 
-    private static final Log LOG = LogFactory.getLog(VkUserAudioResponseParser.class);
-
+    private static final Log LOG = LogFactory.getLog(VkUserAudioResponseProcessor.class);
     private static final String ALL_SONGS_PROPERTY = "all";
+
+    @Autowired
+    private HttpVkConnector _vkConnector;
+    private String _vkAudioUrl;
+    private String _vkAudioEntityPattern;
 
     public enum AudioPart {
         URL(2) {
@@ -75,10 +81,11 @@ public class VkUserAudioResponseParser {
         }
     }
 
-    public List<Map<AudioPart, String>> getAudioData(String response) { // TODO user data; constructor?
-        if (StringUtils.isEmpty(response)) {
+    public List<Map<AudioPart, String>> getAudioData(String vkId) {
+        if (StringUtils.isEmpty(vkId)) {
             return Collections.emptyList();
         }
+        String response = _vkConnector.post(_vkAudioUrl, MessageFormat.format(_vkAudioEntityPattern, vkId));
         String[] jsonCollection = HtmlUtils.sanitizeJson(response);
         if (jsonCollection.length == 0) {
             LOG.error("Audio library discovery fail");
@@ -125,4 +132,15 @@ public class VkUserAudioResponseParser {
         return part.transform(audioData);
     }
 
+    public void setVkConnector(HttpVkConnector vkConnector) {
+        _vkConnector = vkConnector;
+    }
+
+    public void setVkAudioUrl(String vkAudioUrl) {
+        _vkAudioUrl = vkAudioUrl;
+    }
+
+    public void setVkAudioEntityPattern(String vkAudioEntityPattern) {
+        _vkAudioEntityPattern = vkAudioEntityPattern;
+    }
 }

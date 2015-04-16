@@ -23,23 +23,24 @@
         <property name="pass" value="${vk.pass}" />
     </bean>
 
-    <bean id="com.gans.vk.parser.VkUserAudioResponseParser" class="com.gans.vk.parser.VkUserAudioResponseParser">
+    <bean id="com.gans.vk.processors.VkUserAudioResponseProcessor" class="com.gans.vk.processors.VkUserAudioResponseProcessor">
+        <property name="vkConnector" ref="com.gans.vk.httpclient.HttpVkConnector" />
+        <property name="vkAudioUrl" value="${vk.audio.url}" />
+        <property name="vkAudioEntityPattern" value="${vk.audio.entityPattern}" />
     </bean>
 
-    <bean id="com.gans.vk.parser.VkUserPageResponseParser" class="com.gans.vk.parser.VkUserPageResponseParser">
+    <bean id="com.gans.vk.processors.VkUserPageResponseProcessor" class="com.gans.vk.processors.VkUserPageResponseProcessor">
+        <property name="vkConnector" ref="com.gans.vk.httpclient.HttpVkConnector" />
+        <property name="vkDomain" value="${vk.domain}" />
+        <property name="minVkAudioLibSize" value="${crawler.id.minAudioLibrarySize}" />
     </bean>
 
     <bean id="com.gans.vk.service.AudioDiscoveryService" class="${audio_discovery_service_id}"> <!-- com.gans.vk.service.impl.AudioDiscoveryServiceImpl"> -->
         <property name="songService" ref="com.gans.vk.service.SongService" />
         <property name="ratingService" ref="com.gans.vk.service.RatingService" />
         <property name="userService" ref="com.gans.vk.service.UserService" />
-        <property name="vkConnector" ref="com.gans.vk.httpclient.HttpVkConnector" />
-        <property name="vkAudioParser" ref="com.gans.vk.parser.VkUserAudioResponseParser" />
-        <property name="vkUserPageParser" ref="com.gans.vk.parser.VkUserPageResponseParser" />
-        <property name="vkAudioUrl" value="${vk.audio.url}" />
-        <property name="vkAudioEntityPattern" value="${vk.audio.entityPattern}" />
-        <property name="vkDomain" value="${vk.domain}" />
-        <property name="minVkAudioLibSize" value="${crawler.id.minAudioLibrarySize}" />
+        <property name="vkAudioProcessor" ref="com.gans.vk.processors.VkUserAudioResponseProcessor" />
+        <property name="vkUserPageProcessor" ref="com.gans.vk.processors.VkUserPageResponseProcessor" />
     </bean>
 
 </beans>

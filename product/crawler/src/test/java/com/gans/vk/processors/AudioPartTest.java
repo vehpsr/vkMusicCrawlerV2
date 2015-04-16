@@ -1,8 +1,8 @@
-package com.gans.vk.parser;
+package com.gans.vk.processors;
 
-import static com.gans.vk.parser.VkUserAudioResponseParser.AudioPart.ARTIST;
-import static com.gans.vk.parser.VkUserAudioResponseParser.AudioPart.TITLE;
-import static com.gans.vk.parser.VkUserAudioResponseParser.AudioPart.URL;
+import static com.gans.vk.processors.VkUserAudioResponseProcessor.AudioPart.ARTIST;
+import static com.gans.vk.processors.VkUserAudioResponseProcessor.AudioPart.TITLE;
+import static com.gans.vk.processors.VkUserAudioResponseProcessor.AudioPart.URL;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import com.gans.vk.parser.VkUserAudioResponseParser.AudioPart;
+import com.gans.vk.processors.VkUserAudioResponseProcessor.AudioPart;
 
 public class AudioPartTest {
 
