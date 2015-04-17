@@ -27,6 +27,7 @@ public class VkUserAudioResponseProcessor {
 
     private static final Log LOG = LogFactory.getLog(VkUserAudioResponseProcessor.class);
     private static final String ALL_SONGS_PROPERTY = "all";
+    private static final String ID_HOLDER_PROPERTY = "exp";
 
     @Autowired
     private HttpVkConnector _vkConnector;
@@ -90,16 +91,23 @@ public class VkUserAudioResponseProcessor {
         String response = _vkConnector.post(_vkAudioUrl, MessageFormat.format(_vkAudioEntityPattern, vkId));
         String[] jsonCollection = HtmlUtils.sanitizeJson(response);
         if (jsonCollection.length == 0) {
-            LOG.error("Audio library discovery fail");
-            LOG.debug(MessageFormat.format("VK response:\n{0}", TextUtils.shortVersion(response)));
+            LOG.error(MessageFormat.format("Audio library discovery fail for vkId: {0}. VK response:\n{1}", vkId, TextUtils.shortVersion(response)));
             return Collections.emptyList();
         }
 
         JSONParser parser = new JSONParser();
         List<Map<AudioPart, String>> result = new ArrayList<>();
         try {
-            JSONObject json = (JSONObject)parser.parse(jsonCollection[0]);
-            JSONArray allSongs = (JSONArray)json.get(ALL_SONGS_PROPERTY);
+            JSONObject json = (JSONObject) parser.parse(jsonCollection[0]);
+
+            // check if vkId in response is the same as requested
+            JSONObject idHolder = (JSONObject) json.get(ID_HOLDER_PROPERTY);
+            if (idHolder == null || idHolder.get(vkId) == null) {
+                LOG.error(MessageFormat.format("Audio library discovery fail. Expected pade vkId {0}, but was {1}", vkId, idHolder));
+                return Collections.emptyList();
+            }
+
+            JSONArray allSongs = (JSONArray) json.get(ALL_SONGS_PROPERTY);
             @SuppressWarnings("unchecked")
             Iterator<JSONArray> songIterator = allSongs.iterator();
             while (songIterator.hasNext()) {

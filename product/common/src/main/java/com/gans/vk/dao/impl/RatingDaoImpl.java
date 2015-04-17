@@ -102,6 +102,9 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
 
                         Date now = new Date(System.currentTimeMillis());
 
+                        int traceInsertSongCount = 0;
+                        int traceInsertRatingCount = 0;
+
                         for (int i = 0; i < audioLib.size(); i++) {
                             Entry<String, String> song = audioLib.get(i);
                             String artist = song.getKey();
@@ -125,8 +128,13 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
                             if (i % batchSize == 0 && i != 0) {
                                 int[] songCount = insertSongStatement.executeBatch();
                                 int[] ratingCount = insertRatingStatement.executeBatch();
-                                trace("songs", songCount);
-                                trace("ratings", ratingCount);
+                                traceInsertSongCount += sum(songCount);
+                                traceInsertRatingCount += sum(ratingCount);
+                            }
+
+                            if (i % 1000 == 0 && i != 0) {
+                                LOG.info(MessageFormat.format("Inserted {0} new songs from total of {1}", traceInsertSongCount, i));
+                                LOG.info(MessageFormat.format("Rated {0} new songs from total of {1}", traceInsertRatingCount, i));
                             }
                         }
 
@@ -134,19 +142,19 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
                         insertRatingStatement.executeBatch();
                     }
 
-                    private void trace(String entry, int[] batchCount) {
-                        int insertCount = 0;
+                    private int sum(int[] batchCount) {
+                        int sum = 0;
                         for (int count : batchCount) {
-                            insertCount += count;
+                            sum += count;
                         }
-                        LOG.info(MessageFormat.format("{0}: updated {1} from {2}", entry, insertCount, batchCount.length));
+                        return sum;
                     }
                 });
                 return null;
             }
         });
 
-        LOG.info("Import take: " + (System.currentTimeMillis() - start));
+        LOG.info(MessageFormat.format("Import take: {0}ms", System.currentTimeMillis() - start));
     }
 
 }

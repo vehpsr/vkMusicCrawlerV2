@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -19,9 +20,9 @@ public class DiscoveryController {
     @Autowired
     private AudioDiscoveryService _audioDiscovery;
 
-    @RequestMapping(value = "/discover", method = RequestMethod.GET)
-    public String discoveryPage(HttpServletRequest req, HttpServletResponse resp, ModelMap model) {
-        _audioDiscovery.discoverAudioByUserUrl("");
+    @RequestMapping(value = "/discover/{vkUrl}", method = RequestMethod.GET)
+    public String discoveryPage(HttpServletRequest req, HttpServletResponse resp, @PathVariable String vkUrl, ModelMap model) {
+        _audioDiscovery.discoverAudioByUserUrl(vkUrl);
         model.addAttribute("messages", new ArrayList<String>());
         resp.setContentType("text/html;charset=UTF-8");
         return "discover";

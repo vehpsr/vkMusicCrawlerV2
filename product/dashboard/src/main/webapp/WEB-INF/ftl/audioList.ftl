@@ -12,7 +12,7 @@
 
     <script src="${rc.getContextPath()}/resources/js/dashboard/audioList.js" type="text/javascript"></script>
 
-    <div id="wrapper">
+    <div class="wrapper">
         <div id="audioPlayer">
             <div class="currentSong">
                 <span class="currentArtist"></span>

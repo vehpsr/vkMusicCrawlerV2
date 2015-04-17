@@ -5,7 +5,11 @@ body {
     margin: 0;
 }
 
-#wrapper {
+.wrapper {
     margin: 0 auto;
     width: 460px;
+}
+
+.separator {
+    clear: both;
 }

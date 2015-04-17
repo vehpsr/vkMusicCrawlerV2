@@ -1,0 +1,45 @@
+.userTable {
+    width: 400px;
+    padding-top: 20px;
+}
+
+.userTable .userTableHeader .userTableColumn {
+    text-shadow: 1px 1px 0 rgba(100, 100, 100, 0.3);
+}
+
+.userTable .userTableBody {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid #ccc;
+    list-style: decimal-leading-zero outside none;
+    color: #ccc;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.userTable .userTableRow {
+    margin: 4px 0;
+    height: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.userTable .userTableColumn {
+    float: left;
+    height: 24px;
+}
+
+.userTable .userTableColumn a {
+    text-decoration: none;
+    font-size: 14px;
+    color: #000;
+}
+
+.userTable .userTableColumn.userColumn {
+    width: 300px;
+    text-overflow: elipsis;
+    overflow: hidden;
+}
+
+.userTable .userTableColumn.audioColumn {
+    width: 100px;
+}

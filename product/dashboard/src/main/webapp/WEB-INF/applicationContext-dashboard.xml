@@ -12,4 +12,8 @@
         <property name="userDao" ref="com.gans.vk.dao.UserDao" />
         <property name="userUrl" value="${session.login.stub.userUrl}" />
     </bean>
+
+    <bean id="vk.domain" class="java.lang.String">
+        <constructor-arg value="${vk.domain}"/>
+    </bean>
 </beans>
