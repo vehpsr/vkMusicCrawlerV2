@@ -1,6 +1,5 @@
 package com.gans.vk.dao.impl;
 
-import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,12 +45,11 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
             "	(SELECT " +
             "		rating.user_id, count(rating.song_id) as total " +
             "	FROM " +
-            "		Users u " +
-            "		LEFT JOIN Rating rating ON rating.user_id = u.id " +
+            "		Rating rating " +
             "	WHERE " +
-            "		u.id <> :userId " +
+            "		rating.user_id <> :userId " +
             "	GROUP BY " +
-            "		u.id " +
+            "		rating.user_id " +
             "	) AS totalQuery " +
             "	LEFT JOIN " +
             "	(SELECT " +
@@ -85,12 +83,12 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
         List<UserLibData> userData = new ArrayList<>();
         for (Object[] row : resultSet) {
             UserLibData data = new UserLibData();
-            data.setId(((BigInteger)row[0]).longValue());
+            data.setId(((Number)row[0]).longValue());
             data.setName((String)row[1]);
             data.setUrl((String)row[2]);
             data.setVkId((String)row[3]);
-            data.setTotalAudioCount(row[4] == null ? 0 : ((BigInteger)row[4]).intValue());
-            data.setRatedAudioCount(row[5] == null ? 0 : ((BigInteger)row[5]).intValue());
+            data.setTotalAudioCount(row[4] == null ? 0 : ((Number)row[4]).intValue());
+            data.setRatedAudioCount(row[5] == null ? 0 : ((Number)row[5]).intValue());
             userData.add(data);
         }
         return userData;

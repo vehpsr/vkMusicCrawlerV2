@@ -41,6 +41,11 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
 
     @Override
     public void importUserAudioLib(final User user, final List<Entry<String, String>> audioLib) {
+        LOG.info(MessageFormat.format("Start imort audio lib for {0}. Total size: {1}", user.getName(), audioLib.size()));
+        if (audioLib.isEmpty()) {
+            return;
+        }
+
         final int batchSize = 50;
         final String sqlInsertSongBatch;
         final String sqlInsertRatingBatch;
@@ -88,7 +93,6 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
                 "		LIMIT 1) ";
 
 
-        LOG.info(MessageFormat.format("Start imort audio lib for {0}. Total size: {1}", user.getName(), audioLib.size()));
         long start = System.currentTimeMillis();
 
         getHibernateTemplate().execute(new HibernateCallback<Void>() {

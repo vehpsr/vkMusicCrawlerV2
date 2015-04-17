@@ -35,9 +35,8 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
                 "	FROM " +
                 "		Song song " +
                 "		JOIN Rating rating ON song.id = rating.song_id " +
-                "		JOIN Users u ON u.id = rating.user_id " +
                 "	WHERE " +
-                "		u.id = :targetId " +
+                "		rating.user_id = :targetId " +
                 "	) as targetSongs " +
                 "WHERE " +
                 "	targetSongs.id NOT IN " +
@@ -46,9 +45,8 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
                 "		FROM " +
                 "			Song song " +
                 "			JOIN Rating rating ON song.id = rating.song_id " +
-                "			JOIN Users u ON u.id = rating.user_id " +
                 "		WHERE " +
-                "			u.id = :userId " +
+                "			rating.user_id = :userId " +
                 "		) ");
         if (_dbVendor.equals(MYSQL_VENDOR)) {
             sql.append("ORDER BY RAND() ");

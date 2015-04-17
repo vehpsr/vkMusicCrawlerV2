@@ -45,6 +45,9 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
     }
 
     private List<AudioData> merge(List<Song> unratedDbSongs, List<Map<AudioPart, String>> audioLib) {
+        if (audioLib.isEmpty()) {
+            return Collections.emptyList();
+        }
         Map<String, Map<AudioPart, String>> hashToSong = new HashMap<>();
         for(Map<AudioPart, String> vkSong : audioLib) {
             String hash = hash(vkSong.get(AudioPart.ARTIST), vkSong.get(AudioPart.TITLE));

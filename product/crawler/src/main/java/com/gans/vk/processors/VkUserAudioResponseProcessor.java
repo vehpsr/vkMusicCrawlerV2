@@ -4,9 +4,11 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +29,6 @@ public class VkUserAudioResponseProcessor {
 
     private static final Log LOG = LogFactory.getLog(VkUserAudioResponseProcessor.class);
     private static final String ALL_SONGS_PROPERTY = "all";
-    private static final String ID_HOLDER_PROPERTY = "exp";
 
     @Autowired
     private HttpVkConnector _vkConnector;
@@ -83,7 +84,6 @@ public class VkUserAudioResponseProcessor {
         }
     }
 
-    // TODO check if response is not from me (as result of invalid vkId)
     public List<Map<AudioPart, String>> getAudioData(String vkId) {
         if (StringUtils.isEmpty(vkId)) {
             return Collections.emptyList();
@@ -99,15 +99,12 @@ public class VkUserAudioResponseProcessor {
         List<Map<AudioPart, String>> result = new ArrayList<>();
         try {
             JSONObject json = (JSONObject) parser.parse(jsonCollection[0]);
+            JSONArray allSongs = (JSONArray) json.get(ALL_SONGS_PROPERTY);
 
-            // check if vkId in response is the same as requested
-            JSONObject idHolder = (JSONObject) json.get(ID_HOLDER_PROPERTY);
-            if (idHolder == null || idHolder.get(vkId) == null) {
-                LOG.error(MessageFormat.format("Audio library discovery fail. Expected pade vkId {0}, but was {1}", vkId, idHolder));
+            if (!isValidUserLib(allSongs, vkId)) {
                 return Collections.emptyList();
             }
 
-            JSONArray allSongs = (JSONArray) json.get(ALL_SONGS_PROPERTY);
             @SuppressWarnings("unchecked")
             Iterator<JSONArray> songIterator = allSongs.iterator();
             while (songIterator.hasNext()) {
@@ -135,6 +132,22 @@ public class VkUserAudioResponseProcessor {
         }
 
         return result;
+    }
+
+    private boolean isValidUserLib(JSONArray allSongs, String vkId) {
+        Set<String> ids = new HashSet<>();
+        int index = 10;
+        @SuppressWarnings("unchecked")
+        Iterator<JSONArray> songIterator = allSongs.iterator();
+        while (songIterator.hasNext() && index-- > 0) {
+            JSONArray song = songIterator.next();
+            ids.add(song.get(0).toString());
+        }
+        if (!ids.contains(vkId)) {
+            LOG.info(MessageFormat.format("Expected audio lib from {0}, but got {1}", vkId, ids));
+            return false;
+        }
+        return true;
     }
 
     private String extract(JSONArray song, AudioPart part) {
