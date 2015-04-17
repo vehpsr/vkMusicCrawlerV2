@@ -97,3 +97,8 @@ $(function() {
     // deselect all radio buttons
     $('input[type="radio"]').prop('checked', false);
 });
+
+// scroll to top on refresh
+$(function() {
+    $('body').scrollTop(0);
+});

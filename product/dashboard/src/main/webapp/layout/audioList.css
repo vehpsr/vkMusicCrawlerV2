@@ -11,10 +11,10 @@
 ol.audioList {
     border-top: 1px solid #ccc;
     color: #ccc;
-    font-size: 0.9em;
-    list-style: inside none decimal-leading-zero;
+    font-size: 10px;
+    list-style: decimal-leading-zero outside none;
     margin: 0;
-    padding: 75px 0;
+    padding: 75px 0 15px 0;
     width: 460px;
 }
 
@@ -22,15 +22,10 @@ ol.audioList li.playing:before {
     color: #000;
     content: "♬";
     font-size: 13px;
-    height: 14px;
-    left: -24px;
-    line-height: 14px;
-    margin: 0;
-    padding: 3px;
+    left: -16px;
     position: absolute;
     text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
-    top: 9px;
-    width: 14px;
+    top: 16px;
 }
 
 ol.audioList li.playing {
@@ -41,24 +36,22 @@ ol.audioList li.playing {
 ol.audioList li {
     border-bottom: 1px solid #ccc;
     cursor: pointer;
-    margin: 0;
+    margin: 0 0 0 20px;
     padding: 2px;
     position: relative;
+}
+
+ol.audioList .songWrap {
+    color: #888;
+    font-size: 14px;
 }
 
 ol.audioList li.playing .songWrap {
     color: #000;
 }
 
-ol.audioList li .songWrap {
-}
-
-.audioList .songWrap {
-    color: #888;
-}
-
 .songWrap .titleWrap {
-    width: 420px;
+    width: 400px;
     float: left;
 }
 
@@ -71,6 +64,7 @@ ol.audioList li .songWrap {
 .songWrap .songMeta {
     width: 60px;
     display: inline;
+    font-size: 12px;
 }
 
 .stars {
@@ -91,30 +85,32 @@ ol.audioList li .songWrap {
     color: #330;
 }
 
-#audioPlayer .currentSong {
-    margin: 5px 0 3px 3px;
-    width: 460px;
-    height: 20px;
-    overflow: hidden;
-}
-
 #audioPlayer .scrubber {
     cursor: pointer;
-}
-
-#audioPlayer .currentSong .currentArtist {
-    font-weight: bold;
-    color: rgba(3, 3, 0, 0.7);
-}
-
-#audioPlayer input#volumeSlider {
-    height: 15px;
-    width: 70px;
-    background: -moz-linear-gradient(center top , rgb(68, 68, 68) 0%, rgb(85, 85, 85) 50%, rgb(68, 68, 68) 51%, rgb(68, 68, 68) 100%) repeat scroll 0px 0px rgb(64, 64, 64);
 }
 
 #audioPlayer .time {
     width: 100px;
     padding: 0 0 0 10px;
     line-height: 18px;
+}
+
+#audioPlayer input#volumeSlider {
+    height: 15px;
+    width: 70px;
+    cursor: pointer;
+    background: -moz-linear-gradient(center top , rgb(68, 68, 68) 0%, rgb(85, 85, 85) 50%, rgb(68, 68, 68) 51%, rgb(68, 68, 68) 100%) repeat scroll 0px 0px rgb(64, 64, 64);
+}
+
+#audioPlayer .currentSong {
+    margin: 5px 0 3px 3px;
+    width: 460px;
+    height: 24px;
+    overflow: hidden;
+    text-shadow: 1px 1px 0 rgba(100, 100, 100, 0.3);
+}
+
+#audioPlayer .currentSong .currentArtist {
+    font-weight: bold;
+    color: rgba(3, 3, 0, 0.7);
 }
