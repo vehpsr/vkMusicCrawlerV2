@@ -10,48 +10,55 @@ public interface AudioDiscoveryService {
     void discoverAudioByUserUrl(String url);
 
     public static class AudioData {
-        private long id;
-        private String artist;
-        private String title;
-        private String url;
-        private String time;
-        private String avgArtistRating;
+        private long _id;
+        private String _artist;
+        private String _title;
+        private String _url;
+        private String _time;
+        private float _artistAvgRating;
+        private int _artistRateCount;
 
         public long getId() {
-            return id;
+            return _id;
         }
         public void setId(long id) {
-            this.id = id;
+            _id = id;
         }
         public String getArtist() {
-            return artist;
+            return _artist;
         }
         public void setArtist(String artist) {
-            this.artist = artist;
+            _artist = artist;
         }
         public String getTitle() {
-            return title;
+            return _title;
         }
         public void setTitle(String title) {
-            this.title = title;
+            _title = title;
         }
         public String getUrl() {
-            return url;
+            return _url;
         }
         public void setUrl(String url) {
-            this.url = url;
-        }
-        public String getAvgArtistRating() {
-            return avgArtistRating;
-        }
-        public void setAvgArtistRating(String avgArtistRating) {
-            this.avgArtistRating = avgArtistRating;
+            this._url = url;
         }
         public String getTime() {
-            return time;
+            return _time;
         }
         public void setTime(String time) {
-            this.time = time;
+            _time = time;
+        }
+        public float getArtistAvgRating() {
+            return _artistAvgRating;
+        }
+        public void setArtistAvgRating(float artistAvgRating) {
+            _artistAvgRating = artistAvgRating;
+        }
+        public int getArtistRateCount() {
+            return _artistRateCount;
+        }
+        public void setArtistRateCount(int artistRateCount) {
+            _artistRateCount = artistRateCount;
         }
     }
 }

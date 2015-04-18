@@ -76,7 +76,7 @@ public class AudioListController {
         User user = _sessionManager.getCurrentUser();
         Song song = _songService.get(id);
         _ratingService.rate(user, song, rating);
-        return "ok";
+        return "";
     }
 
     // TODO things must be much simpler. find alternative solution

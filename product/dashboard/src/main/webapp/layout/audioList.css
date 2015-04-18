@@ -50,6 +50,11 @@ ol.audioList li.playing .songWrap {
     color: #000;
 }
 
+ol.audioList .artistRatingStats {
+    display: inline;
+    margin-left: 4px;
+}
+
 .songWrap .titleWrap {
     width: 400px;
     float: left;

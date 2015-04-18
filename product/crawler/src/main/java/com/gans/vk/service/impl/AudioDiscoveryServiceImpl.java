@@ -14,14 +14,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.gans.vk.model.impl.Song;
 import com.gans.vk.model.impl.User;
 import com.gans.vk.processors.VkUserAudioResponseProcessor;
-import com.gans.vk.processors.VkUserPageResponseProcessor;
 import com.gans.vk.processors.VkUserAudioResponseProcessor.AudioPart;
+import com.gans.vk.processors.VkUserPageResponseProcessor;
 import com.gans.vk.service.AudioDiscoveryService;
 import com.gans.vk.service.RatingService;
 import com.gans.vk.service.SongService;
+import com.gans.vk.service.SongService.SongData;
 import com.gans.vk.service.UserService;
 
 public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
@@ -36,7 +36,7 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
 
     @Override
     public List<AudioData> getAllUnratedSongs(User target, User user, int maxSongsOnPage) {
-        List<Song> unratedDbSongs = _songService.getAllUnratedSongs(target, user, maxSongsOnPage);
+        List<SongData> unratedDbSongs = _songService.getAllUnratedSongs(target, user, maxSongsOnPage);
         if (unratedDbSongs.isEmpty()) {
             return Collections.emptyList();
         }
@@ -44,7 +44,7 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
         return merge(unratedDbSongs, audioLib);
     }
 
-    private List<AudioData> merge(List<Song> unratedDbSongs, List<Map<AudioPart, String>> audioLib) {
+    private List<AudioData> merge(List<SongData> unratedDbSongs, List<Map<AudioPart, String>> audioLib) {
         if (audioLib.isEmpty()) {
             return Collections.emptyList();
         }
@@ -54,7 +54,7 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
             hashToSong.put(hash, vkSong);
         }
         List<AudioData> result = new ArrayList<>();
-        for (Song song : unratedDbSongs) {
+        for (SongData song : unratedDbSongs) {
             String hash = hash(song.getArtist(), song.getTitle());
             Map<AudioPart, String> vkSong = hashToSong.get(hash);
             if (vkSong == null) {
@@ -63,11 +63,13 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
             }
 
             AudioData audioData = new AudioData();
-            audioData.setId(song.getId());
             audioData.setUrl(vkSong.get(AudioPart.URL));
             audioData.setTime(vkSong.get(AudioPart.TIME));
             audioData.setArtist(vkSong.get(AudioPart.ARTIST));
             audioData.setTitle(vkSong.get(AudioPart.TITLE));
+            audioData.setId(song.getId());
+            audioData.setArtistRateCount(song.getArtistRateCount());
+            audioData.setArtistAvgRating(song.getArtistAvgRating());
             result.add(audioData);
         }
 

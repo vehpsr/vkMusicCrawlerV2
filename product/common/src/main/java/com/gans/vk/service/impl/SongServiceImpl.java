@@ -1,7 +1,12 @@
 package com.gans.vk.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,13 +25,36 @@ public class SongServiceImpl implements SongService {
     private SongDao _songDao;
 
     @Override
-    public List<Song> getAllUnratedSongs(User target, User user, int limit) {
+    public List<SongData> getAllUnratedSongs(User target, User user, int limit) {
         List<Song> unratedSongs = _songDao.getAllUnratedSongs(target, user, limit);
         if (unratedSongs.isEmpty()) {
             LOG.info("Fail to find any unrated songs");
             return Collections.emptyList();
         }
-        return unratedSongs;
+        Set<String> artists = getArtists(unratedSongs);
+        Map<String, Entry<Integer, Float>> artistData = _songDao.getArtistData(artists, user);
+
+        List<SongData> result = new ArrayList<>();
+        for (Song song : unratedSongs) {
+            Entry<Integer, Float> entry = artistData.get(song.getArtist());
+
+            SongData data = new SongData();
+            data.setId(song.getId());
+            data.setArtist(song.getArtist());
+            data.setTitle(song.getTitle());
+            data.setArtistRateCount(entry == null ? 0 : entry.getKey());
+            data.setArtistAvgRating(entry == null ? 0.0f : entry.getValue());
+            result.add(data);
+        }
+        return result;
+    }
+
+    private Set<String> getArtists(List<Song> songs) {
+        Set<String> artists = new HashSet<>();
+        for (Song song : songs) {
+            artists.add(song.getArtist());
+        }
+        return artists;
     }
 
     @Override

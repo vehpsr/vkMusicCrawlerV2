@@ -7,9 +7,9 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.gans.vk.model.impl.Song;
 import com.gans.vk.model.impl.User;
 import com.gans.vk.service.SongService;
+import com.gans.vk.service.SongService.SongData;
 
 public class AudioDiscoveryDummyLocalServiceImpl extends AudioDiscoveryServiceImpl {
 
@@ -26,12 +26,12 @@ public class AudioDiscoveryDummyLocalServiceImpl extends AudioDiscoveryServiceIm
 
     @Override
     public List<AudioData> getAllUnratedSongs(User target, User user, int maxSongsOnPage) {
-        List<Song> unratedSongs = _songService.getAllUnratedSongs(target, user, maxSongsOnPage);
+        List<SongData> unratedSongs = _songService.getAllUnratedSongs(target, user, maxSongsOnPage);
         if (unratedSongs.isEmpty()) {
             return Collections.emptyList();
         }
         List<AudioData> result = new ArrayList<>();
-        for (Song song : unratedSongs) {
+        for (SongData song : unratedSongs) {
             AudioData data = new AudioData();
             data.setArtist(song.getArtist());
             data.setTitle(song.getTitle());

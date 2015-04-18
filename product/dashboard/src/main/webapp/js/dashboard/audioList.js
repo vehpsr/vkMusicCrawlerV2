@@ -74,21 +74,22 @@ $(function() {
 //set up rating system
 $(function() {
     $('ol li .stars').click(function(e) {
-        var songId = $(this).parent('li').data('songId');
         var url = $(this).attr('action');
         var rating = $(this).find('input[type="radio"]:checked').val();
         $.ajax({
-            url: url + "/" + songId,
+            url: url,
             method: 'POST',
             data: JSON.stringify({value: rating}),
             beforeSend: function(xhr) {
                 xhr.setRequestHeader("Accept", "application/json");
                 xhr.setRequestHeader("Content-Type", "application/json");
-            },
-            success: function(d) {
-                console.log(d);
             }
-
+        }).always(function(d) {
+            if (d.status === 200) {
+                return;
+            }
+            console.log(d);
+            alert(d.status + ": " + d.responseText);
         });
 
         e.stopPropagation();
