@@ -42,10 +42,10 @@
                         <input type="radio" name="rating" id="star5" value="5">
                     </form>
                     <#if song.artistRateCount != 0>
-                        <div class="artistRatingStats">
+                        <div class="artistRatingStats artistRate_${(song.artistAvgRating * 2 - 1)?round}">
                             <span class="artistRateCount">${song.artistRateCount}</span>
                             /
-                            <span class="artistAvgRating">${song.artistAvgRating}</span>
+                            <span class="artistAvgRating">${song.artistAvgRating?string["0.#"]}</span>
                         </div>
                     </#if>
                 </li>

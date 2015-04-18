@@ -58,7 +58,7 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
             String hash = hash(song.getArtist(), song.getTitle());
             Map<AudioPart, String> vkSong = hashToSong.get(hash);
             if (vkSong == null) {
-                LOG.warn(MessageFormat.format("Fail to fetch from VK song: {0}", song));
+                LOG.debug(MessageFormat.format("Fail to fetch from VK song: {0}", song));
                 continue;
             }
 

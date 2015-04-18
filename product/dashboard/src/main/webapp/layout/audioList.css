@@ -53,6 +53,44 @@ ol.audioList li.playing .songWrap {
 ol.audioList .artistRatingStats {
     display: inline;
     margin-left: 4px;
+    font-weight: bold;
+    opacity: .85;
+}
+
+.artistRatingStats.artistRate_1 {
+    color: rgb(169,68,66);
+}
+
+.artistRatingStats.artistRate_2 {
+    color: rgb(193,117,81);
+}
+
+.artistRatingStats.artistRate_3 {
+    color: rgb(212,156,94);
+}
+
+.artistRatingStats.artistRate_4 {
+    color: rgb(237,206,94);
+}
+
+.artistRatingStats.artistRate_5 {
+    color: rgb(225, 215, 92);
+}
+
+.artistRatingStats.artistRate_6 {
+    color: rgb(219,219,90);
+}
+
+.artistRatingStats.artistRate_7 {
+    color: rgb(164,184,83);
+}
+
+.artistRatingStats.artistRate_8 {
+    color: rgb(108,148,76);
+}
+
+.artistRatingStats.artistRate_9 {
+    color: rgb(60,118,61);
 }
 
 .songWrap .titleWrap {
