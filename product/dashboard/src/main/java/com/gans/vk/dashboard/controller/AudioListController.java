@@ -3,16 +3,11 @@ package com.gans.vk.dashboard.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -23,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gans.vk.dashboard.session.SessionManager;
+import com.gans.vk.dashboard.util.RequestUtils;
 import com.gans.vk.model.impl.Song;
 import com.gans.vk.model.impl.User;
 import com.gans.vk.service.AudioDiscoveryService;
@@ -72,22 +68,11 @@ public class AudioListController {
     @RequestMapping(value = "/song/rate/{id}", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String rateSong(HttpServletRequest req, HttpServletResponse resp, @PathVariable long id) {
-        int rating = Integer.valueOf(getJsonProperty(req, "value"));
+        int rating = RequestUtils.getJsonProperty(req, "value", Integer.class);
         User user = _sessionManager.getCurrentUser();
         Song song = _songService.get(id);
         _ratingService.rate(user, song, rating);
         return "";
-    }
-
-    // TODO things must be much simpler. find alternative solution
-    private static String getJsonProperty(ServletRequest req, String propertyName) {
-        try (ServletInputStream is = req.getInputStream()) {
-            String body = IOUtils.toString(is);
-            JSONObject obj = (JSONObject) JSONValue.parse(body);
-            return obj.get(propertyName).toString();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void setSongService(SongService songService) {

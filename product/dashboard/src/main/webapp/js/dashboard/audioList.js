@@ -74,8 +74,14 @@ $(function() {
 //set up rating system
 $(function() {
     $('ol li .stars').click(function(e) {
+        e.stopPropagation();
+
         var url = $(this).attr('action');
         var rating = $(this).find('input[type="radio"]:checked').val();
+        if (!rating) {
+            return;
+        }
+
         $.ajax({
             url: url,
             method: 'POST',
@@ -91,8 +97,6 @@ $(function() {
             console.log(d);
             alert(d.status + ": " + d.responseText);
         });
-
-        e.stopPropagation();
     });
 
     // deselect all radio buttons
