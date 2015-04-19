@@ -22,7 +22,7 @@
                             <a href="${vkDomainUrl}${user.url}" target="_blank">${user.name}</a>
                         </div>
                         <div class="userTableColumn audioColumn">
-                            <a href="${rc.getContextPath()}/audio/${user.vkId}">${user.ratedAudioCount}/${user.totalAudioCount}</a>
+                            <a href="${rc.getContextPath()}/audio/${user.vkId}">${user.rating?string["0.###"]} / ${user.ratedAudioCount} / ${user.totalAudioCount}</a>
                         </div>
 
                     </li>

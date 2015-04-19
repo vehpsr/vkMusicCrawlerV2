@@ -35,11 +35,11 @@
 }
 
 .userTable .userTableColumn.userColumn {
-    width: 300px;
+    width: 250px;
     text-overflow: elipsis;
     overflow: hidden;
 }
 
 .userTable .userTableColumn.audioColumn {
-    width: 100px;
+    width: 150px;
 }

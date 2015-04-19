@@ -15,7 +15,7 @@ public interface UserDao extends ModelDao<User> {
         private String _name;
         private String _url;
         private String _vkId;
-        private String _rating;
+        private float _rating;
         private int _ratedAudioCount;
         private int _totalAudioCount;
 
@@ -43,10 +43,10 @@ public interface UserDao extends ModelDao<User> {
         public void setVkId(String vkId) {
             _vkId = vkId;
         }
-        public String getRating() {
+        public float getRating() {
             return _rating;
         }
-        public void setRating(String rating) {
+        public void setRating(float rating) {
             _rating = rating;
         }
         public int getRatedAudioCount() {
