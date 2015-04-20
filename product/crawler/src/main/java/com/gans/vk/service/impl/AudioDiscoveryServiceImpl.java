@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.gans.vk.dao.SongDao.SongData;
 import com.gans.vk.model.impl.User;
 import com.gans.vk.processors.VkUserAudioResponseProcessor;
 import com.gans.vk.processors.VkUserAudioResponseProcessor.AudioPart;
@@ -21,7 +22,6 @@ import com.gans.vk.processors.VkUserPageResponseProcessor;
 import com.gans.vk.service.AudioDiscoveryService;
 import com.gans.vk.service.RatingService;
 import com.gans.vk.service.SongService;
-import com.gans.vk.service.SongService.SongData;
 import com.gans.vk.service.UserService;
 
 public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
@@ -81,17 +81,19 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
     }
 
     @Override
-    public void discoverAudioByUserUrl(String url) {
+    public void discoverAudioByUserUrl(String url, boolean forceUpdate) {
         if (StringUtils.isEmpty(url)) {
             LOG.warn("Audiolibrary discovery fail: provided URL was empty.");
             return;
         }
 
         User user = _userService.getByUrl(url);
-        if (user != null && StringUtils.isNotEmpty(user.getVkId())) {
+        if (!forceUpdate && (user != null && StringUtils.isNotEmpty(user.getVkId()))) {
             LOG.info(MessageFormat.format("User {0} already exists in system", user));
             return;
-        } else if (user == null) {
+        }
+
+        if (user == null) {
             user = new User();
             user.setUrl(url);
         }

@@ -7,9 +7,9 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.gans.vk.dao.SongDao.SongData;
 import com.gans.vk.model.impl.User;
 import com.gans.vk.service.SongService;
-import com.gans.vk.service.SongService.SongData;
 
 public class AudioDiscoveryDummyLocalServiceImpl extends AudioDiscoveryServiceImpl {
 
@@ -38,6 +38,8 @@ public class AudioDiscoveryDummyLocalServiceImpl extends AudioDiscoveryServiceIm
             data.setId(song.getId());
             data.setTime("2:42");
             data.setUrl(randomUrl());
+            data.setArtistAvgRating(song.getArtistAvgRating());
+            data.setArtistRateCount(song.getArtistRateCount());
             result.add(data);
         }
         return result;

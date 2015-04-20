@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -68,7 +69,8 @@ public class AudioListController {
     @RequestMapping(value = "/song/rate/{id}", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String rateSong(HttpServletRequest req, HttpServletResponse resp, @PathVariable long id) {
-        int rating = RequestUtils.getJsonProperty(req, "value", Integer.class);
+        JSONObject json = RequestUtils.getJson(req);
+        int rating = Integer.valueOf((String) json.get("value"));
         User user = _sessionManager.getCurrentUser();
         Song song = _songService.get(id);
         _ratingService.rate(user, song, rating);

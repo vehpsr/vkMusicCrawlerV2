@@ -7,7 +7,7 @@ import com.gans.vk.model.impl.User;
 public interface AudioDiscoveryService {
 
     List<AudioData> getAllUnratedSongs(User target, User user, int maxSongsOnPage);
-    void discoverAudioByUserUrl(String url);
+    void discoverAudioByUserUrl(String url, boolean forceUpdate);
 
     public static class AudioData {
         private long _id;

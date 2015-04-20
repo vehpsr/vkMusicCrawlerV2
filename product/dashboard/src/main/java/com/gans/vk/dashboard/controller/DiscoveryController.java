@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -32,9 +33,10 @@ public class DiscoveryController {
     @RequestMapping(value = "/discover/user", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getUserByVkUrl(HttpServletRequest req, HttpServletResponse resp, ModelMap model) {
-        String vkUrl = RequestUtils.getJsonProperty(req, "url", String.class);
-        //boolean forceUpdate = RequestUtils.getJsonProperty(req, "forceUpdate", Boolean.class);
-        _audioDiscovery.discoverAudioByUserUrl(vkUrl);
+        JSONObject json = RequestUtils.getJson(req);
+        String vkUrl = (String) json.get("url");
+        Boolean forceUpdate = (Boolean) json.get("forceUpdate");
+        _audioDiscovery.discoverAudioByUserUrl(vkUrl, forceUpdate);
         return "";
     }
 

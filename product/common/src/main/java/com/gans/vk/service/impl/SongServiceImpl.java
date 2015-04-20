@@ -1,24 +1,20 @@
 package com.gans.vk.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gans.vk.dao.SongDao;
+import com.gans.vk.dao.SongDao.SongData;
 import com.gans.vk.model.impl.Song;
 import com.gans.vk.model.impl.User;
 import com.gans.vk.service.SongService;
 
 public class SongServiceImpl implements SongService {
 
+    @SuppressWarnings("unused")
     private static final Log LOG = LogFactory.getLog(SongServiceImpl.class);
 
     @Autowired
@@ -26,35 +22,7 @@ public class SongServiceImpl implements SongService {
 
     @Override
     public List<SongData> getAllUnratedSongs(User target, User user, int limit) {
-        List<Song> unratedSongs = _songDao.getAllUnratedSongs(target, user, limit);
-        if (unratedSongs.isEmpty()) {
-            LOG.info("Fail to find any unrated songs");
-            return Collections.emptyList();
-        }
-        Set<String> artists = getArtists(unratedSongs);
-        Map<String, Entry<Integer, Float>> artistData = _songDao.getArtistData(artists, user);
-
-        List<SongData> result = new ArrayList<>();
-        for (Song song : unratedSongs) {
-            Entry<Integer, Float> entry = artistData.get(song.getArtist());
-
-            SongData data = new SongData();
-            data.setId(song.getId());
-            data.setArtist(song.getArtist());
-            data.setTitle(song.getTitle());
-            data.setArtistRateCount(entry == null ? 0 : entry.getKey());
-            data.setArtistAvgRating(entry == null ? 0.0f : entry.getValue());
-            result.add(data);
-        }
-        return result;
-    }
-
-    private Set<String> getArtists(List<Song> songs) {
-        Set<String> artists = new HashSet<>();
-        for (Song song : songs) {
-            artists.add(song.getArtist());
-        }
-        return artists;
+        return _songDao.getAllUnratedSongs(target, user, limit);
     }
 
     @Override
