@@ -103,6 +103,13 @@ $(function() {
     $('input[type="radio"]').prop('checked', false);
 });
 
+function scrollToCurrentSong(e) {
+    $('body').scrollTop($('ol li.playing').first().offset().top - 80);
+
+    e.preventDefault();
+    e.stopPropagation();
+}
+
 // scroll to top on refresh
 $(function() {
     $('body').scrollTop(0);

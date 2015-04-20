@@ -12,6 +12,18 @@
 
     <script src="${rc.getContextPath()}/resources/js/dashboard/audioList.js" type="text/javascript"></script>
 
+    <div class="sidePanel">
+        <div>
+            <a href="${rc.getContextPath()}/">Home</a>
+        </div>
+        <div>
+            <a href="${rc.getContextPath()}/discover">Discover</a>
+        </div>
+        <div>
+            <a href="#" onclick="scrollToCurrentSong(event);">Focus</a>
+        </div>
+    </div>
+
     <div class="wrapper">
         <div id="audioPlayer">
             <div class="currentSong">

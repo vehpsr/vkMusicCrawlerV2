@@ -10,6 +10,16 @@ body {
     width: 460px;
 }
 
+.sidePanel {
+    position: fixed;
+    margin: 10px 0 0 10px;
+}
+
+.sidePanel a {
+    text-decoration: none;
+    color: #000;
+}
+
 .separator {
     clear: both;
 }
