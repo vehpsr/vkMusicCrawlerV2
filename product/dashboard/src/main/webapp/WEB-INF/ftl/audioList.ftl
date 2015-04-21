@@ -46,23 +46,27 @@
                             <span class="time">${song.time}</span>
                         </div>
                     </div>
-                    <form class="stars" action="${rc.getContextPath()}/song/rate/${song.id?c}">
-                        <input type="radio" name="rating" id="star1" value="1">
-                        <input type="radio" name="rating" id="star2" value="2">
-                        <input type="radio" name="rating" id="star3" value="3">
-                        <input type="radio" name="rating" id="star4" value="4">
-                        <input type="radio" name="rating" id="star5" value="5">
-                    </form>
-                    <#if song.artistRateCount != 0>
-                        <div class="artistRatingStats artistRate_${(song.artistAvgRating * 2 - 1)?round}">
-                            <span class="artistRateCount">${song.artistRateCount}</span>
-                            /
-                            <span class="artistAvgRating">${song.artistAvgRating?string["0.#"]}</span>
-                        </div>
-                    </#if>
+                    <@rating song=song />
                 </li>
             </#list>
         </ol>
     </div>
 </body>
 </html>
+
+<#macro rating song>
+    <form class="stars" action="${rc.getContextPath()}/song/rate/${song.id?c}">
+        <input type="radio" name="rating" id="star1" value="1">
+        <input type="radio" name="rating" id="star2" value="2">
+        <input type="radio" name="rating" id="star3" value="3">
+        <input type="radio" name="rating" id="star4" value="4">
+        <input type="radio" name="rating" id="star5" value="5">
+    </form>
+    <#if song.artistRateCount != 0>
+        <div class="artistRatingStats artistRate_${(song.artistAvgRating * 2 - 1)?round}">
+            <span class="artistRateCount">${song.artistRateCount}</span>
+            /
+            <span class="artistAvgRating">${song.artistAvgRating?string["0.#"]}</span>
+        </div>
+    </#if>
+</#macro>
