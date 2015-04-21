@@ -1,7 +1,7 @@
-function fetchUserFromVk() {
-    var form = $('#discoverUserByUrl');
-    var userUrl = form.find('#userVkUrl');
-    var forceUpdate = form.find('#forceUpdate');
+function fetchFromVk(discoveryPanelId) {
+    var form = $('#' + discoveryPanelId);
+    var userUrl = form.find('input[type=text]');
+    var forceUpdate = form.find('input[type=checkbox]');
 
     if (!userUrl) {
         return;

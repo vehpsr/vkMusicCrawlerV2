@@ -35,12 +35,21 @@
         <property name="minVkAudioLibSize" value="${crawler.id.minAudioLibrarySize}" />
     </bean>
 
+    <bean id="com.gans.vk.processors.VkGroupInfoResponseProcessor" class="com.gans.vk.processors.VkGroupInfoResponseProcessor">
+        <property name="vkConnector" ref="com.gans.vk.httpclient.HttpVkConnector" />
+    </bean>
+
     <bean id="com.gans.vk.service.AudioDiscoveryService" class="${audio_discovery_service_id}"> <!-- com.gans.vk.service.impl.AudioDiscoveryServiceImpl"> -->
         <property name="songService" ref="com.gans.vk.service.SongService" />
         <property name="ratingService" ref="com.gans.vk.service.RatingService" />
         <property name="userService" ref="com.gans.vk.service.UserService" />
         <property name="vkAudioProcessor" ref="com.gans.vk.processors.VkUserAudioResponseProcessor" />
         <property name="vkUserPageProcessor" ref="com.gans.vk.processors.VkUserPageResponseProcessor" />
+    </bean>
+
+    <bean id="com.gans.vk.service.GroupDiscoveryService" class="com.gans.vk.service.impl.GroupDiscoveryServiceImpl">
+        <property name="groupService" ref="com.gans.vk.service.GroupService" />
+        <property name="vkGroupProcessor" ref="com.gans.vk.processors.VkGroupInfoResponseProcessor" />
     </bean>
 
 </beans>

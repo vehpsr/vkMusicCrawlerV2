@@ -1,7 +1,15 @@
-.discoverUserByUrl {
+.discoveryPanel {
     padding-top: 10px;
 }
 
-.discoverUserByUrl h3 {
+.discoveryPanel h3 {
     margin: 3px 0;
+}
+
+.discoveryPanel h3 span {
+    text-shadow: 1px 1px 0 rgba(100, 100, 100, 0.8);
+}
+
+.discoveryPanel input[type=button] {
+    margin-top: 3px;
 }

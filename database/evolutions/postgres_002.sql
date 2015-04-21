@@ -8,5 +8,6 @@ create table Groups (
     url varchar(40) not null,
     vkId varchar(20),
     paginationStart int default 0,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE (url)
 );

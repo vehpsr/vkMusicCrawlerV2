@@ -10,18 +10,24 @@
 </head>
 <body>
     <div class="wrapper">
-        <div class="discoverUserByUrl">
-            <h3>Discover user by VK URL</h3>
-            <form id="discoverUserByUrl" action="${rc.getContextPath()}/discover/user">
-                <label for="userVkUrl">User URL:</label>
-                <input id="userVkUrl" />
-                <div class="separator"></div>
-                <label for="forceUpdate">Force update</label>
-                <input id="forceUpdate" type="checkbox" />
-                <div class="separator"></div>
-                <input type="button" value="Get User" onclick="fetchUserFromVk();" />
-            </form>
-        </div>
+        <@discoveryPanel entityName="user" />
+        <@discoveryPanel entityName="group" />
     </div>
 </body>
 </html>
+
+<#macro discoveryPanel entityName>
+    <#local selector="discover${entityName?cap_first}ByUrl" >
+    <div class="discoveryPanel ${selector}">
+        <h3>Discover <span>${entityName?cap_first}</span> by VK URL</h3>
+        <form id="${selector}" action="${rc.getContextPath()}/discover/${entityName}">
+            <label for="${entityName}VkUrl">URL:</label>
+            <input id="${entityName}VkUrl" type="text" />
+            <div class="separator"></div>
+            <label for="force${entityName}Update">Force update</label>
+            <input id="force${entityName}Update" type="checkbox" />
+            <div class="separator"></div>
+            <input type="button" value="Fetch from VK" onclick="fetchFromVk('${selector}');" />
+        </form>
+    </div>
+</#macro>
