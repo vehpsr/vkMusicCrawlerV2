@@ -50,15 +50,7 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
                 "				JOIN Rating rating ON song.id = rating.song_id " +
                 "			WHERE " +
                 "				rating.user_id = :userId " +
-                "			) ");
-        if (_dbVendor.equals(MYSQL_VENDOR)) {
-            sql.append(
-                    "ORDER BY RAND() ");
-        } else if (_dbVendor.equals(POSTGRES_VENDOR)) {
-            sql.append(
-                    "ORDER BY RANDOM() ");
-        }
-        sql.append(
+                "			) " +
                 "	LIMIT :limit " +
                 "	) as targetSongs " +
                 "   LEFT JOIN " +
@@ -72,6 +64,13 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
                 "	GROUP BY " +
                 "		artist " +
                 "	) AS songData ON songData.artist = targetSongs.artist ");
+        if (_dbVendor.equals(MYSQL_VENDOR)) {
+            sql.append(
+                    "ORDER BY RAND() ");
+        } else if (_dbVendor.equals(POSTGRES_VENDOR)) {
+            sql.append(
+                    "ORDER BY RANDOM() ");
+        }
 
         long start = System.currentTimeMillis();
         Collection<Object[]> rows = getHibernateTemplate().execute(new HibernateCallback<Collection<Object[]>>() {
