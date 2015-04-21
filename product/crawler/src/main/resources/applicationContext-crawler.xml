@@ -37,6 +37,7 @@
 
     <bean id="com.gans.vk.processors.VkGroupInfoResponseProcessor" class="com.gans.vk.processors.VkGroupInfoResponseProcessor">
         <property name="vkConnector" ref="com.gans.vk.httpclient.HttpVkConnector" />
+        <property name="vkDomain" value="${vk.domain}" />
     </bean>
 
     <bean id="com.gans.vk.service.AudioDiscoveryService" class="${audio_discovery_service_id}"> <!-- com.gans.vk.service.impl.AudioDiscoveryServiceImpl"> -->

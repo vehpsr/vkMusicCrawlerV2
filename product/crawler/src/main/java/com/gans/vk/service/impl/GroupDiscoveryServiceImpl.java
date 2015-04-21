@@ -1,6 +1,7 @@
 package com.gans.vk.service.impl;
 
 import java.text.MessageFormat;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -37,6 +38,10 @@ public class GroupDiscoveryServiceImpl implements GroupDiscoveryService {
             group.setUrl(vkUrl);
         }
 
+        Entry<String, String> groupInfo = _vkGroupProcessor.getGroupInfo(vkUrl);
+
+        group.setName(groupInfo.getKey());
+        group.setVkId(groupInfo.getValue());
         _groupService.save(group);
     }
 

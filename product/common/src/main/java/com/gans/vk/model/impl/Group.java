@@ -25,7 +25,7 @@ public class Group extends AbstractModel {
     @Column(length = VK_ID_MAX_LEN)
     private String _vkId;
 
-    private int _pagginationStart;
+    private int _paginationStart;
 
     public String getName() {
         return _name;
@@ -51,12 +51,12 @@ public class Group extends AbstractModel {
         _vkId = vkId;
     }
 
-    public int getPagginationStart() {
-        return _pagginationStart;
+    public int getPaginationStart() {
+        return _paginationStart;
     }
 
-    public void setPagginationStart(int pagginationStart) {
-        _pagginationStart = pagginationStart;
+    public void setPaginationStart(int paginationStart) {
+        _paginationStart = paginationStart;
     }
 
     @Override
