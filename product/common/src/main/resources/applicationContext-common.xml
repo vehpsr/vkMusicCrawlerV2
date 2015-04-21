@@ -67,6 +67,7 @@
                 <value>com.gans.vk.model.impl.Song</value>
                 <value>com.gans.vk.model.impl.User</value>
                 <value>com.gans.vk.model.impl.Rating</value>
+                <value>com.gans.vk.model.impl.Group</value>
             </list>
         </property>
     </bean>
@@ -84,6 +85,10 @@
         <property name="dbVendor" value="${jdbc.dbVendor}" />
     </bean>
 
+    <bean id="com.gans.vk.dao.GroupDao" class="com.gans.vk.dao.impl.GroupDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
     <bean id="com.gans.vk.service.UserService" class="com.gans.vk.service.impl.UserServiceImpl">
         <property name="userDao" ref="com.gans.vk.dao.UserDao" />
     </bean>
@@ -95,6 +100,10 @@
 
     <bean id="com.gans.vk.service.SongService" class="com.gans.vk.service.impl.SongServiceImpl">
         <property name="songDao" ref="com.gans.vk.dao.SongDao" />
+    </bean>
+
+    <bean id="com.gans.vk.service.GroupService" class="com.gans.vk.service.impl.GroupServiceImpl">
+        <property name="groupDao" ref="com.gans.vk.dao.GroupDao" />
     </bean>
 
 </beans>
