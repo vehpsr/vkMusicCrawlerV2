@@ -14,6 +14,7 @@ import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gans.vk.httpclient.HttpVkConnector;
+import com.gans.vk.model.impl.Group;
 import com.gans.vk.utils.HtmlUtils;
 
 public class VkGroupInfoResponseProcessor {
@@ -76,6 +77,19 @@ public class VkGroupInfoResponseProcessor {
             return matcher.group(1);
         }
         return "";
+    }
+
+
+    public static boolean hasInvalidGroupStatus(Group group) {
+        if (StringUtils.isEmpty(group.getVkId())) {
+            return true;
+        }
+        for (GroupStatus status : GroupStatus.values()) {
+            if (status.name().equals(group.getVkId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private Entry<String, String> entry(String name, GroupStatus status) {

@@ -1,10 +1,14 @@
 package com.gans.vk.dao.impl;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,6 +17,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.jdbc.Work;
 import org.springframework.orm.hibernate3.HibernateCallback;
 
 import com.gans.vk.dao.AbstractModelDao;
@@ -142,6 +147,86 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
             userData.add(data);
         }
         return userData;
+    }
+
+    @Override
+    public void importUnique(final List<Entry<String, String>> users) {
+        LOG.info(MessageFormat.format("Start group members imort. Total size: {0}", users.size()));
+        if (users.isEmpty()) {
+            return;
+        }
+
+        final int batchSize = 50;
+        final String sqlInsertUsersBatch;
+
+        sqlInsertUsersBatch =
+                "INSERT INTO Users " +
+                "	(name, url) " +
+                "SELECT " +
+                "	* " +
+                "FROM " +
+                "	(SELECT " +
+                "		?, ? " +
+                "	) as tmp " +
+                "WHERE " +
+                "	NOT EXISTS " +
+                "		(SELECT " +
+                "			name, url " +
+                "		FROM " +
+                "			Users " +
+                "		WHERE " +
+                "			url = ? " +
+                "		LIMIT 1) ";
+
+        long start = System.currentTimeMillis();
+
+        getHibernateTemplate().execute(new HibernateCallback<Void>() {
+            @Override
+            public Void doInHibernate(Session session) throws HibernateException, SQLException {
+                session.doWork(new Work() {
+                    @Override
+                    public void execute(Connection connection) throws SQLException {
+                        PreparedStatement insertUsersStatement = connection.prepareStatement(sqlInsertUsersBatch);
+                        int traceInsertUsersCount = 0;
+
+                        for (int i = 0; i < users.size(); i++) {
+                            Entry<String, String> song = users.get(i);
+                            String url = song.getKey();
+                            String name = song.getValue();
+
+                            insertUsersStatement.setString(1, name);
+                            insertUsersStatement.setString(2, url);
+                            insertUsersStatement.setString(3, url);
+                            insertUsersStatement.addBatch();
+
+                            if (i % batchSize == 0 && i != 0) {
+                                int[] usersCount = insertUsersStatement.executeBatch();
+                                traceInsertUsersCount += sum(usersCount);
+                            }
+
+                            if (i % 1000 == 0 && i != 0) {
+                                LOG.info(MessageFormat.format("Inserted {0} new users from total of {1}", traceInsertUsersCount, i));
+                            }
+                        }
+
+                        int[] usersCount = insertUsersStatement.executeBatch();
+                        traceInsertUsersCount += sum(usersCount);
+                        LOG.info(MessageFormat.format("Inserted {0} new users from total of {1}", traceInsertUsersCount, users.size()));
+                    }
+
+                    private int sum(int[] batchCount) {
+                        int sum = 0;
+                        for (int count : batchCount) {
+                            sum += count;
+                        }
+                        return sum;
+                    }
+                });
+                return null;
+            }
+        });
+
+        LOG.info(MessageFormat.format("Import take: {0}ms", System.currentTimeMillis() - start));
     }
 
 }

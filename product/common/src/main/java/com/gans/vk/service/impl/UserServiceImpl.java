@@ -1,6 +1,7 @@
 package com.gans.vk.service.impl;
 
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -36,6 +37,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserLibData> getRecomendedAudioLibsFor(User user) {
         return _userDao.getRecomendedAudioLibsFor(user);
+    }
+
+    @Override
+    public void importUnique(List<Entry<String, String>> users) {
+        _userDao.importUnique(users);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.gans.vk.service.impl;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,15 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gans.vk.model.impl.Group;
 import com.gans.vk.processors.VkGroupInfoResponseProcessor;
+import com.gans.vk.processors.VkGroupMembersResponseProcessor;
 import com.gans.vk.service.GroupDiscoveryService;
 import com.gans.vk.service.GroupService;
+import com.gans.vk.service.UserService;
 
 public class GroupDiscoveryServiceImpl implements GroupDiscoveryService {
 
     private static final Log LOG = LogFactory.getLog(GroupDiscoveryServiceImpl.class);
 
     @Autowired private GroupService _groupService;
+    @Autowired private UserService _userService;
     @Autowired private VkGroupInfoResponseProcessor _vkGroupProcessor;
+    @Autowired private VkGroupMembersResponseProcessor _vkGroupMembersProcessor;
 
     @Override
     public void discoverGroupByUserUrl(String vkUrl, boolean forceUpdate) {
@@ -43,6 +48,14 @@ public class GroupDiscoveryServiceImpl implements GroupDiscoveryService {
         group.setName(groupInfo.getKey());
         group.setVkId(groupInfo.getValue());
         _groupService.save(group);
+
+        if (VkGroupInfoResponseProcessor.hasInvalidGroupStatus(group)) {
+            LOG.info(MessageFormat.format("Fail to discover members of group {0}", group));
+            return;
+        }
+
+        List<Entry<String, String>> users = _vkGroupMembersProcessor.discoverMembersOf(group);
+        _userService.importUnique(users);
     }
 
     public void setGroupService(GroupService groupService) {
@@ -52,5 +65,9 @@ public class GroupDiscoveryServiceImpl implements GroupDiscoveryService {
     public void setVkGroupProcessor(VkGroupInfoResponseProcessor vkGroupProcessor) {
         _vkGroupProcessor = vkGroupProcessor;
     }
+
+	public void setVkGroupMembersProcessor(VkGroupMembersResponseProcessor vkGroupMembersProcessor) {
+		_vkGroupMembersProcessor = vkGroupMembersProcessor;
+	}
 
 }

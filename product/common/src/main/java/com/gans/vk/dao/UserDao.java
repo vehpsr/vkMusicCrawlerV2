@@ -1,6 +1,7 @@
 package com.gans.vk.dao;
 
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.gans.vk.model.impl.User;
 
@@ -9,6 +10,7 @@ public interface UserDao extends ModelDao<User> {
     User getUserByUrl(String name);
     User getUserByVkId(String vkId);
     List<UserLibData> getRecomendedAudioLibsFor(User user);
+    void importUnique(List<Entry<String, String>> users);
 
     public static class UserLibData {
         private long _id;
@@ -62,4 +64,5 @@ public interface UserDao extends ModelDao<User> {
             _totalAudioCount = totalAudioCount;
         }
     }
+
 }

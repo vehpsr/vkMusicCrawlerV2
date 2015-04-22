@@ -61,7 +61,7 @@ public class Group extends AbstractModel {
 
     @Override
     public String toString() {
-        return MessageFormat.format("{0}: {1} {2} {3}", getId(), _name, _url, _vkId);
+        return MessageFormat.format("{0}: {1} {2} {3}, offset: {4}", getId(), _name, _url, _vkId, _paginationStart);
     }
 
 }
