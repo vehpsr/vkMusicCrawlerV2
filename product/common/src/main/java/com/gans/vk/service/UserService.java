@@ -14,5 +14,6 @@ public interface UserService {
     List<UserLibData> getRecomendedAudioLibsFor(User user);
     void importUnique(List<Entry<String, String>> users);
     int getUndiscoveredUsersCount();
+    List<User> getUndiscoveredUsers(int limit);
 
 }

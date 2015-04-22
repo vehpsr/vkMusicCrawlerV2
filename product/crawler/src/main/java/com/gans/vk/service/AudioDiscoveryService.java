@@ -8,6 +8,7 @@ public interface AudioDiscoveryService {
 
     List<AudioData> getAllUnratedSongs(User target, User user, int maxSongsOnPage);
     void discoverAudioByUserUrl(String url, boolean forceUpdate);
+    void discoverNewUsers(int limit);
 
     public static class AudioData {
         private long _id;
@@ -61,4 +62,5 @@ public interface AudioDiscoveryService {
             _artistRateCount = artistRateCount;
         }
     }
+
 }

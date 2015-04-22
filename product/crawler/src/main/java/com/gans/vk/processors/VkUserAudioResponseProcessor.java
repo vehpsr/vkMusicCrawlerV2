@@ -116,7 +116,7 @@ public class VkUserAudioResponseProcessor {
                 String title = extract(song, AudioPart.TITLE);
 
                 if (StringUtils.isEmpty(url) || StringUtils.isEmpty(artist) || StringUtils.isEmpty(title)) {
-                    LOG.info(MessageFormat.format("Reject to process song: {0}", song.toJSONString()));
+                    LOG.debug(MessageFormat.format("Reject to process song: {0}", song.toJSONString()));
                     continue;
                 }
 

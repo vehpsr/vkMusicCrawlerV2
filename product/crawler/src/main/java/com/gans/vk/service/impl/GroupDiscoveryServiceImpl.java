@@ -47,14 +47,18 @@ public class GroupDiscoveryServiceImpl implements GroupDiscoveryService {
 
         group.setName(groupInfo.getKey());
         group.setVkId(groupInfo.getValue());
-        _groupService.save(group);
-
+        if (forceUpdate) {
+        	group.setPaginationStart(0);
+        }
+        
         if (VkGroupInfoResponseProcessor.hasInvalidGroupStatus(group)) {
             LOG.info(MessageFormat.format("Fail to discover members of group {0}", group));
             return;
         }
 
         List<Entry<String, String>> users = _vkGroupMembersProcessor.discoverMembersOf(group);
+        
+        _groupService.save(group);
         _userService.importUnique(users);
     }
 

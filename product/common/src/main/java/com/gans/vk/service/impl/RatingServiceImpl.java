@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gans.vk.dao.RatingDao;
-import com.gans.vk.dao.SongDao;
 import com.gans.vk.model.impl.Rating;
 import com.gans.vk.model.impl.Song;
 import com.gans.vk.model.impl.User;
@@ -17,9 +16,6 @@ public class RatingServiceImpl implements RatingService {
 
     @Autowired
     private RatingDao _ratingDao;
-
-    @Autowired
-    private SongDao _songDao;
 
     @Override
     public void rate(User user, Song song, int value) {
@@ -40,10 +36,6 @@ public class RatingServiceImpl implements RatingService {
 
     public void setRatingDao(RatingDao ratingDao) {
         _ratingDao = ratingDao;
-    }
-
-    public void setSongDao(SongDao songDao) {
-        _songDao = songDao;
     }
 
 }

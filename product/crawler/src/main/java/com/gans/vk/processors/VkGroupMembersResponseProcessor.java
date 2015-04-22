@@ -3,7 +3,6 @@ package com.gans.vk.processors;
 import java.text.MessageFormat;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -42,12 +41,12 @@ public class VkGroupMembersResponseProcessor {
             LinkedList<Entry<String, String>> membersInfo = getMembersInfo(group, offset);
             if (membersInfo.isEmpty()) {
                 LOG.info(MessageFormat.format("Empty members list response on offset {0}", offset));
-                return Collections.emptyList();
+                return result;
             }
 
             if (lastPersonUrl.equals(membersInfo.peekLast().getKey())) {
                 LOG.info(MessageFormat.format("Same subset at offset {0}", offset));
-                return Collections.emptyList();
+                return result;
             } else {
                 lastPersonUrl = membersInfo.peekLast().getKey();
             }

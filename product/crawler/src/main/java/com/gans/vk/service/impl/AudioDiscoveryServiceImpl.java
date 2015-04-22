@@ -98,7 +98,28 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
             user.setUrl(url);
         }
 
-        Entry<String, String> userData = _vkUserPageProcessor.getUserByUrl(url);
+        fetchUserAudioDataFromVk(user);
+    }
+
+    private List<Entry<String, String>> extractArtistAndTitleData(List<Map<AudioPart, String>> audioLib) {
+        List<Entry<String, String>> result = new ArrayList<>();
+        for (Map<AudioPart, String> audio : audioLib) {
+            result.add(new AbstractMap.SimpleEntry<String, String>(audio.get(AudioPart.ARTIST), audio.get(AudioPart.TITLE)));
+        }
+        return result;
+    }
+
+    @Override
+    public void discoverNewUsers(int limit) {
+        List<User> newUsers = _userService.getUndiscoveredUsers(limit);
+        for (User user : newUsers) {
+            fetchUserAudioDataFromVk(user);
+        }
+        LOG.info("New user discovery end");
+    }
+
+    private void fetchUserAudioDataFromVk(User user) {
+        Entry<String, String> userData = _vkUserPageProcessor.getUserByUrl(user.getUrl());
         user.setName(userData.getKey());
         user.setVkId(userData.getValue());
         _userService.save(user);
@@ -111,14 +132,6 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
         List<Map<AudioPart, String>> audioLib = _vkAudioProcessor.getAudioData(user.getVkId());
         List<Entry<String, String>> songData = extractArtistAndTitleData(audioLib);
         _ratingService.importUserAudioLib(user, songData);
-    }
-
-    private List<Entry<String, String>> extractArtistAndTitleData(List<Map<AudioPart, String>> audioLib) {
-        List<Entry<String, String>> result = new ArrayList<>();
-        for (Map<AudioPart, String> audio : audioLib) {
-            result.add(new AbstractMap.SimpleEntry<String, String>(audio.get(AudioPart.ARTIST), audio.get(AudioPart.TITLE)));
-        }
-        return result;
     }
 
     public void setSongService(SongService songService) {

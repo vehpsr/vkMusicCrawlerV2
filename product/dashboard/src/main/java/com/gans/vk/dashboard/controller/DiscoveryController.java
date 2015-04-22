@@ -56,6 +56,7 @@ public class DiscoveryController {
     public String discoverNewUsers(HttpServletRequest req, HttpServletResponse resp) {
         JSONObject json = RequestUtils.getJson(req);
         int count = Integer.valueOf((String) json.get("count"));
+        _audioDiscovery.discoverNewUsers(count);
         return "";
     }
 

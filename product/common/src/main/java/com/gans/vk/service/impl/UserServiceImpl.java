@@ -45,6 +45,11 @@ public class UserServiceImpl implements UserService {
         return _userDao.getUndiscoveredUsersCount();
     }
 
+    @Override
+    public List<User> getUndiscoveredUsers(int limit) {
+        return _userDao.getUndiscoveredUsers(limit);
+    }
+
     public void setUserDao(UserDao userDao) {
         _userDao = userDao;
     }
