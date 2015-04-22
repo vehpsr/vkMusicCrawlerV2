@@ -12,6 +12,14 @@
     <div class="wrapper">
         <@discoveryPanel entityName="user" />
         <@discoveryPanel entityName="group" />
+        <div class="discoveryPanel discoverNewUsers">
+            <h3>There is <span>${undiscoveredUsers}</span> undiscovered users in system</h3>
+            <form id="discoverNewUsers" action="${rc.getContextPath()}/discover/newusers">
+                <label for="discoverUsersCount">Numer of users</label>
+                <input type="number" id="discoverUsersCount" />
+                <input type="button" value="Fetch Users" onclick="fetchUsers('discoverNewUsers');" />
+            </form>
+        </div>
     </div>
 </body>
 </html>

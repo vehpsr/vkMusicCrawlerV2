@@ -1,7 +1,6 @@
 package com.gans.vk.dao.impl;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.MessageFormat;
@@ -16,6 +15,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
 import org.springframework.orm.hibernate3.HibernateCallback;
@@ -227,6 +227,15 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
         });
 
         LOG.info(MessageFormat.format("Import take: {0}ms", System.currentTimeMillis() - start));
+    }
+
+    @Override
+    public int getUndiscoveredUsersCount() {
+        DetachedCriteria criteria = createCriteria();
+        criteria.add(Restrictions.isNull("vkId"));
+        criteria.setProjection(Projections.rowCount());
+        List<?> resultSet = getHibernateTemplate().findByCriteria(criteria);
+        return ((Number)resultSet.get(0)).intValue();
     }
 
 }

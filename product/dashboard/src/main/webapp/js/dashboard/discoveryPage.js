@@ -26,3 +26,22 @@ function fetchFromVk(discoveryPanelId) {
     userUrl.val('');
     forceUpdate.prop('checked', false);
 }
+
+function fetchUsers(selector) {
+    var form = $('#' + selector);
+    var count = form.find('input[type=number]');
+
+    if (!count) {
+        return;
+    }
+
+    $.ajax({
+        url: form.attr('action'),
+        method: 'POST',
+        data: JSON.stringify({'count': count.val()}),
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("Content-Type", "application/json");
+        }
+    })
+}

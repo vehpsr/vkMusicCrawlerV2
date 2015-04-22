@@ -13,5 +13,6 @@ public interface UserService {
     void save(User user);
     List<UserLibData> getRecomendedAudioLibsFor(User user);
     void importUnique(List<Entry<String, String>> users);
+    int getUndiscoveredUsersCount();
 
 }

@@ -15,10 +15,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao _userDao;
 
-    public void setUserDao(UserDao userDao) {
-        _userDao = userDao;
-    }
-
     @Override
     public User getByVkId(String vkId) {
         return _userDao.getUserByVkId(vkId);
@@ -44,4 +40,12 @@ public class UserServiceImpl implements UserService {
         _userDao.importUnique(users);
     }
 
+    @Override
+    public int getUndiscoveredUsersCount() {
+        return _userDao.getUndiscoveredUsersCount();
+    }
+
+    public void setUserDao(UserDao userDao) {
+        _userDao = userDao;
+    }
 }

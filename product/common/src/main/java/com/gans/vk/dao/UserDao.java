@@ -11,6 +11,7 @@ public interface UserDao extends ModelDao<User> {
     User getUserByVkId(String vkId);
     List<UserLibData> getRecomendedAudioLibsFor(User user);
     void importUnique(List<Entry<String, String>> users);
+    int getUndiscoveredUsersCount();
 
     public static class UserLibData {
         private long _id;
