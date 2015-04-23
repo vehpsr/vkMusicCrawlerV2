@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gans.vk.httpclient.HttpVkConnector;
 import com.gans.vk.model.impl.Group;
+import com.gans.vk.model.impl.Group.GroupStatus;
 import com.gans.vk.utils.HtmlUtils;
 
 public class VkGroupInfoResponseProcessor {
@@ -26,10 +27,6 @@ public class VkGroupInfoResponseProcessor {
 
     @Autowired private HttpVkConnector _vkConnector;
     private String _vkDomain;
-
-    enum GroupStatus {
-        NOT_FOUND, PARSER_ERROR
-    }
 
     public Entry<String, String> getGroupInfo(String vkUrl) {
         String html = _vkConnector.get(_vkDomain + vkUrl);
@@ -56,7 +53,7 @@ public class VkGroupInfoResponseProcessor {
 
         Element groupIdContainer = infoContainer.getElementsByClass(GROUP_ID_CONTAINER_CLASS).get(0);
         String id = parseGroupId(groupIdContainer.attr("href"));
-        if (StringUtils.isEmpty(id)) {
+        if (StringUtils.isEmpty(id) || id.length() > Group.VK_ID_MAX_LEN) {
             return entry(name, GroupStatus.PARSER_ERROR);
         }
 
@@ -97,7 +94,7 @@ public class VkGroupInfoResponseProcessor {
     }
 
     private Entry<String, String> entry(String name, String id) {
-        return new AbstractMap.SimpleEntry<String, String>(name, id);
+        return new AbstractMap.SimpleEntry<String, String>(StringUtils.left(name, Group.VK_ID_MAX_LEN), id);
     }
 
     public void setVkConnector(HttpVkConnector vkConnector) {

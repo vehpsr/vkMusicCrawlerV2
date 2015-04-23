@@ -12,6 +12,10 @@ import com.gans.vk.model.AbstractModel;
 @Table(name="Groups")
 public class Group extends AbstractModel {
 
+    public enum GroupStatus {
+        NOT_FOUND, PARSER_ERROR
+    }
+
     public static final int NAME_MAX_LEN = 80;
     public static final int URL_MAX_LEN = 40;
     public static final int VK_ID_MAX_LEN = 20;

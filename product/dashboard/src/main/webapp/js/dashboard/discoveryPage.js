@@ -43,5 +43,7 @@ function fetchUsers(selector) {
             xhr.setRequestHeader("Accept", "application/json");
             xhr.setRequestHeader("Content-Type", "application/json");
         }
-    })
+    });
+
+    count.val('');
 }

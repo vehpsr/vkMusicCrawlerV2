@@ -113,11 +113,67 @@ ol.audioList .artistRatingStats {
 .stars {
     display: inline-block;
     margin: 0;
+    width: 70px;
 }
 
-.stars input {
-    margin: 4px 0 0 0;
+.stars span, .stars label, .stars input {
     cursor: pointer;
+}
+
+.stars input[type=radio]:not(old) {
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    width: 10px;
+    height: 10px;
+}
+
+.stars input[type=radio]:not(old) + label {
+    display: inline-block;
+    margin-left: -15px;
+}
+
+.stars input[type=radio]:not(old) + label > span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 2px;
+    border: 1px solid rgb(192, 192, 192);
+    border-radius: 3px;
+    background: -moz-linear-gradient(rgb(240, 240, 240), rgb(224, 224, 224));
+    vertical-align: bottom;
+}
+
+.stars input[type=radio]:not(old):checked + label.star1 > span {
+    background-image: -moz-linear-gradient(rgb(224, 224, 224), rgb(240, 240, 240));
+}
+
+.stars input[type=radio]:not(old):checked + label > span > span {
+    display: block;
+    width: 6px;
+    height: 6px;
+    margin: 1px;
+    border-radius: 3px;
+}
+
+.stars input[type=radio]:not(old):checked + label.star1 > span > span {
+    background-image: -moz-linear-gradient(rgb(173,72,70), rgb(169,68,66));
+}
+
+.stars input[type=radio]:not(old):checked + label.star2 > span > span {
+    background-image: -moz-linear-gradient(rgb(216,160,100), rgb(212,156,94));
+}
+
+.stars input[type=radio]:not(old):checked + label.star3 > span > span {
+    background-image: -moz-linear-gradient(rgb(229,219,96), rgb(225,215,92));
+}
+
+.stars input[type=radio]:not(old):checked + label.star4 > span > span {
+    background-image: -moz-linear-gradient(rgb(168,188,87), rgb(164,184,83));
+}
+
+.stars input[type=radio]:not(old):checked + label.star5 > span > span {
+    background-image: -moz-linear-gradient(rgb(64,122,65), rgb(60,118,61));
 }
 
 #audioPlayer {

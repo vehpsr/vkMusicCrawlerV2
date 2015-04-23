@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gans.vk.httpclient.HttpVkConnector;
 import com.gans.vk.model.impl.User;
+import com.gans.vk.model.impl.User.UserStatus;
 import com.gans.vk.utils.HtmlUtils;
 import com.gans.vk.utils.RestUtils;
 
@@ -29,10 +30,6 @@ public class VkUserPageResponseProcessor {
     private HttpVkConnector _vkConnector;
     private String _vkDomain;
     private int _minAudioLibSize;
-
-    public enum UserStatus {
-        PARSER_ERROR, CLOSED_PAGE, NOT_ENOUGH_AUDIO
-    }
 
     public static boolean hasInvalidUserStatus(User user) {
         if (user == null || StringUtils.isEmpty(user.getVkId())) {
@@ -70,7 +67,7 @@ public class VkUserPageResponseProcessor {
         }
 
         String id = idLink.replaceAll("\\D", "");
-        if (StringUtils.isEmpty(id)) {
+        if (StringUtils.isEmpty(id) || id.length() > User.VK_ID_MAX_LEN) {
             return entry(name, UserStatus.PARSER_ERROR);
         }
 
@@ -82,7 +79,7 @@ public class VkUserPageResponseProcessor {
     }
 
     private Entry<String, String> entry(String name, String id) {
-        return new AbstractMap.SimpleEntry<String, String>(name, id);
+        return new AbstractMap.SimpleEntry<String, String>(StringUtils.left(name, User.NAME_MAX_LEN), id);
     }
 
     private Document getHtmlPage(String url) {

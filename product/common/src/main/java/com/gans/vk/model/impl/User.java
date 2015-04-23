@@ -1,7 +1,10 @@
 package com.gans.vk.model.impl;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -14,6 +17,18 @@ import com.gans.vk.model.AbstractModel;
 @Entity
 @Table(name="Users")
 public class User extends AbstractModel {
+
+    public enum UserStatus {
+        PARSER_ERROR, CLOSED_PAGE, NOT_ENOUGH_AUDIO;
+
+        public static Collection<String> names() {
+            List<String> names = new ArrayList<>();
+            for (UserStatus status : values()) {
+                names.add(status.name());
+            }
+            return names;
+        }
+    }
 
     public static final int NAME_MAX_LEN = 60;
     public static final int URL_MAX_LEN = 40;

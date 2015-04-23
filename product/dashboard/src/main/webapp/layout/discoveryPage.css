@@ -13,3 +13,7 @@
 .discoveryPanel input[type=button] {
     margin-top: 3px;
 }
+
+.discoverNewUsers input[type=number] {
+    width: 50px;
+}

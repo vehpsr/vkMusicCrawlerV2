@@ -16,7 +16,7 @@
             <h3>There is <span>${undiscoveredUsers}</span> undiscovered users in system</h3>
             <form id="discoverNewUsers" action="${rc.getContextPath()}/discover/newusers">
                 <label for="discoverUsersCount">Numer of users</label>
-                <input type="number" id="discoverUsersCount" />
+                <input type="number" id="discoverUsersCount" min="0" max="100" />
                 <input type="button" value="Fetch Users" onclick="fetchUsers('discoverNewUsers');" />
             </form>
         </div>

@@ -98,7 +98,7 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
             user.setUrl(url);
         }
 
-        fetchUserAudioDataFromVk(user);
+        syncUserAudioData(user);
     }
 
     private List<Entry<String, String>> extractArtistAndTitleData(List<Map<AudioPart, String>> audioLib) {
@@ -113,19 +113,19 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
     public void discoverNewUsers(int limit) {
         List<User> newUsers = _userService.getUndiscoveredUsers(limit);
         for (User user : newUsers) {
-            fetchUserAudioDataFromVk(user);
+            syncUserAudioData(user);
         }
         LOG.info("New user discovery end");
     }
 
-    private void fetchUserAudioDataFromVk(User user) {
+    private void syncUserAudioData(User user) {
         Entry<String, String> userData = _vkUserPageProcessor.getUserByUrl(user.getUrl());
         user.setName(userData.getKey());
         user.setVkId(userData.getValue());
         _userService.save(user);
 
         if (VkUserPageResponseProcessor.hasInvalidUserStatus(user)) {
-            LOG.info(MessageFormat.format("Stop audio discovery fro user {0}", user));
+            LOG.info(MessageFormat.format("Stop audio discovery for user {0}", user));
             return;
         }
 

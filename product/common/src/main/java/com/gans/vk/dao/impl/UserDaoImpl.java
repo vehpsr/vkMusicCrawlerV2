@@ -23,6 +23,7 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import com.gans.vk.dao.AbstractModelDao;
 import com.gans.vk.dao.UserDao;
 import com.gans.vk.model.impl.User;
+import com.gans.vk.model.impl.User.UserStatus;
 
 public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
 
@@ -115,7 +116,7 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
             "	RIGHT JOIN " +
             "	Users u ON u.id = totalCountQuery.user_id " +
             "WHERE " +
-            "	u.id <> :userId " +
+            "	(u.id <> :userId AND u.vkId IS NOT NULL AND u.vkId NOT IN (:userStatus)) " +
             "	AND (totalCountQuery.total IS NOT NULL OR totalCountQuery.total > 0) " +
             "ORDER BY " +
             "	avgRatingQuery.avgRating DESC ";
@@ -127,6 +128,7 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
             public Collection<Object[]> doInHibernate(Session session) throws HibernateException, SQLException {
                 SQLQuery query = session.createSQLQuery(sql);
                 query.setLong("userId", user.getId());
+                query.setParameterList("userStatus", UserStatus.names());
                 query.setMaxResults(20);
                 return query.list();
             }
@@ -240,10 +242,10 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
     @Override
     public List<User> getUndiscoveredUsers(final int limit) {
         return getHibernateTemplate().execute(new HibernateCallback<List<User>>() {
-			@Override
-			@SuppressWarnings("unchecked")
+            @Override
+            @SuppressWarnings("unchecked")
             public List<User> doInHibernate(Session session) throws HibernateException, SQLException {
-            	return getUndiscoveredUsersCriteria().getExecutableCriteria(session).setMaxResults(limit).list();
+                return getUndiscoveredUsersCriteria().getExecutableCriteria(session).setMaxResults(limit).list();
             }
         });
     }

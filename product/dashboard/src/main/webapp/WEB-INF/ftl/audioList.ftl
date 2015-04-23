@@ -56,11 +56,16 @@
 
 <#macro rating song>
     <form class="stars" action="${rc.getContextPath()}/song/rate/${song.id?c}">
-        <input type="radio" name="rating" id="star1" value="1">
-        <input type="radio" name="rating" id="star2" value="2">
-        <input type="radio" name="rating" id="star3" value="3">
-        <input type="radio" name="rating" id="star4" value="4">
-        <input type="radio" name="rating" id="star5" value="5">
+        <input type="radio" name="rating" id="star1_${song.id?c}" value="1">
+        <label for="star1_${song.id?c}" class="star1" ><span><span></span></span></label>
+        <input type="radio" name="rating" id="star2_${song.id?c}" value="2">
+        <label for="star2_${song.id?c}" class="star2" ><span><span></span></span></label>
+        <input type="radio" name="rating" id="star3_${song.id?c}" value="3">
+        <label for="star3_${song.id?c}" class="star3" ><span><span></span></span></label>
+        <input type="radio" name="rating" id="star4_${song.id?c}" value="4">
+        <label for="star4_${song.id?c}" class="star4" ><span><span></span></span></label>
+        <input type="radio" name="rating" id="star5_${song.id?c}" value="5">
+        <label for="star5_${song.id?c}" class="star5" ><span><span></span></span></label>
     </form>
     <#if song.artistRateCount != 0>
         <div class="artistRatingStats artistRate_${(song.artistAvgRating * 2 - 1)?round}">
