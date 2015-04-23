@@ -4,13 +4,19 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.MessageFormat;
+import java.util.AbstractMap;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
@@ -26,6 +32,8 @@ import com.gans.vk.model.impl.User;
 public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao {
 
     private static final Log LOG = LogFactory.getLog(RatingDaoImpl.class);
+
+    private String _dbVendor;
 
     public RatingDaoImpl() {
         super(Rating.class);
@@ -159,6 +167,59 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
         });
 
         LOG.info(MessageFormat.format("Import take: {0}ms", System.currentTimeMillis() - start));
+    }
+
+    public Map<Date, Entry<Integer, Float>> rating(final User user, final User target, final long from, final long to, final int step) {
+        final String dateColumn;
+        if (MYSQL_VENDOR.equals(_dbVendor)) {
+            dateColumn = MessageFormat.format("FROM_UNIXTIME(CEIL(UNIX_TIMESTAMP(ratedByMe.date) / {0}) * {0}) ", String.valueOf(step));
+        } else if (POSTGRES_VENDOR.equals(_dbVendor)) {
+            dateColumn = MessageFormat.format("TO_TIMESTAMP(CEIL(CAST(EXTRACT(EPOCH FROM ratedByMe.date) AS INTEGER) / {0}) * {0}) ", String.valueOf(step));
+        } else {
+            throw new IllegalStateException(MessageFormat.format("Unknown database vendor {0}", _dbVendor));
+        }
+
+        final String sql =
+                "SELECT " +
+                    dateColumn + " as period, COUNT(ratedByMe.value), AVG(ratedByMe.value) " +
+                "FROM " +
+                "	Song song" +
+                "	JOIN Rating ratedByUser ON song.id = ratedByUser.song_id " +
+                "	JOIN Rating ratedByMe ON song.id = ratedByMe.song_id " +
+                "WHERE " +
+                "	ratedByUser.user_id = :targetId " +
+                "	AND ratedByMe.user_id = :userId " +
+                "	AND (ratedByMe.date BETWEEN:from AND :to) " +
+                "GROUP BY " +
+                "	period " +
+                "ORDER BY " +
+                "	period ";
+
+        Collection<Object[]> rows = getHibernateTemplate().execute(new HibernateCallback<Collection<Object[]>>() {
+            @Override
+            @SuppressWarnings("unchecked")
+            public Collection<Object[]> doInHibernate(Session session) throws HibernateException, SQLException {
+                SQLQuery query = session.createSQLQuery(sql);
+                query.setLong("userId", user.getId());
+                query.setLong("targetId", target.getId());
+                query.setDate("from", new Date(from));
+                query.setDate("to", new Date(to));
+                return query.list();
+            }
+        });
+
+        Map<Date, Entry<Integer, Float>> result = new LinkedHashMap<>();
+        for (Object[] row : rows) {
+            Date date = new Date(((Timestamp)row[0]).getTime());
+            int count = ((Number)row[1]).intValue();
+            float avg = ((Number)row[2]).floatValue();
+            result.put(date, new AbstractMap.SimpleEntry<Integer, Float>(count, avg));
+        }
+        return result;
+    }
+
+    public void setDbVendor(String dbVendor) {
+        _dbVendor = dbVendor;
     }
 
 }

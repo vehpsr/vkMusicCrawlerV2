@@ -78,6 +78,7 @@
 
     <bean id="com.gans.vk.dao.RatingDao" class="com.gans.vk.dao.impl.RatingDaoImpl">
         <property name="sessionFactory" ref="sessionFactory" />
+        <property name="dbVendor" value="${jdbc.dbVendor}" />
     </bean>
 
     <bean id="com.gans.vk.dao.SongDao" class="com.gans.vk.dao.impl.SongDaoImpl">
