@@ -59,6 +59,8 @@ public class VkUserPageResponseProcessor {
         int audioCount = extractNumericValue(audios.getElementsByClass(AUDIO_COUNT_COMPONENT_CLASS).text());
         if (audioCount < _minAudioLibSize) {
             return entry(name, UserStatus.NOT_ENOUGH_AUDIO);
+        } else if (audioCount > 10 * 1000) { // fuck hoarders
+            return entry(name, UserStatus.TO_MANY_AUDIO);
         }
 
         String idLink = audios.select(ID_LINK_SELECTOR).attr("href");

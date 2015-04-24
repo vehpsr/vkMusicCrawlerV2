@@ -77,7 +77,7 @@ $(function() {
         e.stopPropagation();
 
         var url = $(this).attr('action');
-        var rating = $(this).find('input[type="radio"]:checked').val();
+        var rating = parseInt($(this).find('input[type="radio"]:checked').val());
         if (!rating) {
             return;
         }
@@ -90,10 +90,7 @@ $(function() {
                 xhr.setRequestHeader("Accept", "application/json");
                 xhr.setRequestHeader("Content-Type", "application/json");
             }
-        }).always(function(d) {
-            if (d.status === 200) {
-                return;
-            }
+        }).fail(function(d) {
             console.log(d);
             alert(d.status + ": " + d.responseText);
         });

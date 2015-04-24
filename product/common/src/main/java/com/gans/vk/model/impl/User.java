@@ -19,7 +19,7 @@ import com.gans.vk.model.AbstractModel;
 public class User extends AbstractModel {
 
     public enum UserStatus {
-        PARSER_ERROR, CLOSED_PAGE, NOT_ENOUGH_AUDIO;
+        PARSER_ERROR, CLOSED_PAGE, NOT_ENOUGH_AUDIO, TO_MANY_AUDIO, RESOLVED;
 
         public static Collection<String> names() {
             List<String> names = new ArrayList<>();

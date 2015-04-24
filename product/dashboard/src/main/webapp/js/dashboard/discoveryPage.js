@@ -15,10 +15,7 @@ function fetchFromVk(discoveryPanelId) {
             xhr.setRequestHeader("Accept", "application/json");
             xhr.setRequestHeader("Content-Type", "application/json");
         }
-    }).always(function(d) {
-        if (d.status === 200) {
-            return;
-        }
+    }).fail(function(d) {
         console.log(d);
         alert(d.status + ": " + d.responseText);
     });

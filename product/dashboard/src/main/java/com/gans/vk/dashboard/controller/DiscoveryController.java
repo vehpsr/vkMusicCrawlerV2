@@ -5,13 +5,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gans.vk.dashboard.controller.model.ResponseStatus;
 import com.gans.vk.dashboard.util.RequestUtils;
 import com.gans.vk.service.AudioDiscoveryService;
 import com.gans.vk.service.GroupDiscoveryService;
@@ -31,33 +31,33 @@ public class DiscoveryController {
         return "discoveryPage";
     }
 
-    @RequestMapping(value = "/discover/user", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/discover/user", method = RequestMethod.POST)
     @ResponseBody
-    public String getUserByVkUrl(HttpServletRequest req, HttpServletResponse resp) {
+    public ResponseStatus getUserByVkUrl(HttpServletRequest req, HttpServletResponse resp) {
         JSONObject json = RequestUtils.getJson(req);
         String vkUrl = (String) json.get("url");
         Boolean forceUpdate = (Boolean) json.get("forceUpdate");
         _audioDiscovery.discoverAudioByUserUrl(vkUrl, forceUpdate);
-        return "";
+        return ResponseStatus.OK;
     }
 
-    @RequestMapping(value = "/discover/group", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/discover/group", method = RequestMethod.POST)
     @ResponseBody
-    public String getGroupByVkUrl(HttpServletRequest req, HttpServletResponse resp) {
+    public ResponseStatus getGroupByVkUrl(HttpServletRequest req, HttpServletResponse resp) {
         JSONObject json = RequestUtils.getJson(req);
         String vkUrl = (String) json.get("url");
         Boolean forceUpdate = (Boolean) json.get("forceUpdate");
         _groupDiscovery.discoverGroupByUserUrl(vkUrl, forceUpdate);
-        return "";
+        return ResponseStatus.OK;
     }
 
-    @RequestMapping(value = "/discover/newusers", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/discover/newusers", method = RequestMethod.POST)
     @ResponseBody
-    public String discoverNewUsers(HttpServletRequest req, HttpServletResponse resp) {
+    public ResponseStatus discoverNewUsers(HttpServletRequest req, HttpServletResponse resp) {
         JSONObject json = RequestUtils.getJson(req);
         int count = Integer.valueOf((String) json.get("count"));
         _audioDiscovery.discoverNewUsers(count);
-        return "";
+        return ResponseStatus.OK;
     }
 
     public void setAudioDiscovery(AudioDiscoveryService audioDiscovery) {

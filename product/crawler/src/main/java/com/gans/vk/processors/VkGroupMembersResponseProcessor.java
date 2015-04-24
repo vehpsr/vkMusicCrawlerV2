@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.gans.vk.httpclient.HttpVkConnector;
 import com.gans.vk.model.impl.Group;
 import com.gans.vk.utils.HtmlUtils;
+import com.gans.vk.utils.RestUtils;
 
 public class VkGroupMembersResponseProcessor {
 
@@ -53,6 +54,7 @@ public class VkGroupMembersResponseProcessor {
 
             result.addAll(membersInfo);
             offset += PEOPLE_ON_PAGE;
+            RestUtils.sleep();
         }
         return result;
     }

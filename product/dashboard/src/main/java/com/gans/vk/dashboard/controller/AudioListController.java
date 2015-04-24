@@ -10,7 +10,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gans.vk.dashboard.controller.model.ResponseStatus;
 import com.gans.vk.dashboard.session.SessionManager;
 import com.gans.vk.dashboard.util.RequestUtils;
 import com.gans.vk.model.impl.Song;
@@ -66,15 +66,15 @@ public class AudioListController {
         return "audioList";
     }
 
-    @RequestMapping(value = "/song/rate/{id}", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/song/rate/{id}", method=RequestMethod.POST)
     @ResponseBody
-    public String rateSong(HttpServletRequest req, HttpServletResponse resp, @PathVariable long id) {
+    public ResponseStatus rateSong(HttpServletRequest req, HttpServletResponse resp, @PathVariable long id) {
         JSONObject json = RequestUtils.getJson(req);
-        int rating = Integer.valueOf((String) json.get("value"));
+        int rating = ((Number) json.get("value")).intValue();
         User user = _sessionManager.getCurrentUser();
         Song song = _songService.get(id);
         _ratingService.rate(user, song, rating);
-        return "";
+        return ResponseStatus.OK;
     }
 
     public void setSongService(SongService songService) {
