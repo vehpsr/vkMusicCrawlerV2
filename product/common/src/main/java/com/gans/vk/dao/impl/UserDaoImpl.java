@@ -233,25 +233,35 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
 
     @Override
     public int getUndiscoveredUsersCount() {
-        DetachedCriteria criteria = getUndiscoveredUsersCriteria();
+        DetachedCriteria criteria = createCriteria();
+        criteria.add(Restrictions.isNull("vkId"));
         criteria.setProjection(Projections.rowCount());
         List<?> resultSet = getHibernateTemplate().findByCriteria(criteria);
         return ((Number)resultSet.get(0)).intValue();
     }
 
     @Override
-    public List<User> getUndiscoveredUsers(final int limit) {
+    public List<User> getUndiscoveredUsers(int limit) {
+        final String sql =
+                "SELECT " +
+                    "u.*" +
+                "FROM " +
+                    "Users u " +
+                "WHERE " +
+                    "u.vkId IS NULL " +
+                "ORDER BY " +
+                    random() +
+                "LIMIT " + limit;
+
         return getHibernateTemplate().execute(new HibernateCallback<List<User>>() {
             @Override
             @SuppressWarnings("unchecked")
             public List<User> doInHibernate(Session session) throws HibernateException, SQLException {
-                return getUndiscoveredUsersCriteria().getExecutableCriteria(session).setMaxResults(limit).list();
+                SQLQuery query = session.createSQLQuery(sql);
+                query.addEntity(User.class);
+                return query.list();
             }
         });
-    }
-
-    private DetachedCriteria getUndiscoveredUsersCriteria() {
-        return createCriteria().add(Restrictions.isNull("vkId"));
     }
 
 }

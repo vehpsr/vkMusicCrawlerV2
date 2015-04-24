@@ -33,8 +33,6 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
 
     private static final Log LOG = LogFactory.getLog(RatingDaoImpl.class);
 
-    private String _dbVendor;
-
     public RatingDaoImpl() {
         super(Rating.class);
     }
@@ -216,10 +214,6 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
             result.put(date, new AbstractMap.SimpleEntry<Integer, Float>(count, avg));
         }
         return result;
-    }
-
-    public void setDbVendor(String dbVendor) {
-        _dbVendor = dbVendor;
     }
 
 }

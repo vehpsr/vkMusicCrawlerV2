@@ -22,8 +22,6 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
 
     private static final Log LOG = LogFactory.getLog(SongDaoImpl.class);
 
-    private String _dbVendor;
-
     public SongDaoImpl() {
         super(Song.class);
     }
@@ -31,7 +29,7 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<SongData> getAllUnratedSongs(final User target, final User user, final int limit) {
-        final StringBuilder sql = new StringBuilder(
+        final String sql =
                 "SELECT " +
                 "	targetSongs.id, targetSongs.artist, targetSongs.title, songData.artistCount, songData.avgArtistRating " +
                 "FROM " +
@@ -63,20 +61,15 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
                 "		rating.user_id = :userId " +
                 "	GROUP BY " +
                 "		artist " +
-                "	) AS songData ON songData.artist = targetSongs.artist ");
-        if (_dbVendor.equals(MYSQL_VENDOR)) {
-            sql.append(
-                    "ORDER BY RAND() ");
-        } else if (_dbVendor.equals(POSTGRES_VENDOR)) {
-            sql.append(
-                    "ORDER BY RANDOM() ");
-        }
+                "	) AS songData ON songData.artist = targetSongs.artist " +
+                "	ORDER BY " +
+                        random();
 
         long start = System.currentTimeMillis();
         Collection<Object[]> rows = getHibernateTemplate().execute(new HibernateCallback<Collection<Object[]>>() {
             @Override
             public Collection<Object[]> doInHibernate(Session session) throws HibernateException, SQLException {
-                SQLQuery query = session.createSQLQuery(sql.toString());
+                SQLQuery query = session.createSQLQuery(sql);
                 query.setLong("userId", user.getId());
                 query.setLong("targetId", target.getId());
                 query.setInteger("limit", limit);
@@ -96,10 +89,6 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
             songs.add(song);
         }
         return songs;
-    }
-
-    public void setDbVendor(String dbVendor) {
-        _dbVendor = dbVendor;
     }
 
 }

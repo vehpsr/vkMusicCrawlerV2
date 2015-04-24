@@ -72,21 +72,23 @@
         </property>
     </bean>
 
-    <bean id="com.gans.vk.dao.UserDao" class="com.gans.vk.dao.impl.UserDaoImpl">
-        <property name="sessionFactory" ref="sessionFactory" />
-    </bean>
-
-    <bean id="com.gans.vk.dao.RatingDao" class="com.gans.vk.dao.impl.RatingDaoImpl">
-        <property name="sessionFactory" ref="sessionFactory" />
+    <bean id="baseDao" abstract="true">
         <property name="dbVendor" value="${jdbc.dbVendor}" />
     </bean>
 
-    <bean id="com.gans.vk.dao.SongDao" class="com.gans.vk.dao.impl.SongDaoImpl">
+    <bean id="com.gans.vk.dao.UserDao" class="com.gans.vk.dao.impl.UserDaoImpl" parent="baseDao" >
         <property name="sessionFactory" ref="sessionFactory" />
-        <property name="dbVendor" value="${jdbc.dbVendor}" />
     </bean>
 
-    <bean id="com.gans.vk.dao.GroupDao" class="com.gans.vk.dao.impl.GroupDaoImpl">
+    <bean id="com.gans.vk.dao.RatingDao" class="com.gans.vk.dao.impl.RatingDaoImpl" parent="baseDao" >
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <bean id="com.gans.vk.dao.SongDao" class="com.gans.vk.dao.impl.SongDaoImpl" parent="baseDao" >
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <bean id="com.gans.vk.dao.GroupDao" class="com.gans.vk.dao.impl.GroupDaoImpl" parent="baseDao" >
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
