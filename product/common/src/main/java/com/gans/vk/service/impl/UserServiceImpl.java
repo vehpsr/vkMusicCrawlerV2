@@ -50,6 +50,11 @@ public class UserServiceImpl implements UserService {
         return _userDao.getUndiscoveredUsers(limit);
     }
 
+    @Override
+    public User get(long id) {
+        return _userDao.get(id);
+    }
+
     public void setUserDao(UserDao userDao) {
         _userDao = userDao;
     }

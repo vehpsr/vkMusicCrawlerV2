@@ -3,9 +3,12 @@
     <meta charset="UTF-8" />
     <title>audio</title>
     <link rel="icon" type="image/png" href="${rc.getContextPath()}/favicon/favicon.ico">
+    <link rel="stylesheet" href="${rc.getContextPath()}/resources/layout/nv.d3.css" type="text/css"></link>
     <link rel="stylesheet" href="${rc.getContextPath()}/resources/layout/index.css" type="text/css"></link>
     <link rel="stylesheet" href="${rc.getContextPath()}/resources/layout/audioList.css" type="text/css"></link>
     <script src="${rc.getContextPath()}/resources/js/jquery-2.1.3.js" type="text/javascript"></script>
+    <script src="${rc.getContextPath()}/resources/js/d3.js" type="text/javascript"></script>
+    <script src="${rc.getContextPath()}/resources/js/nv.d3.js" type="text/javascript"></script>
     <script src="${rc.getContextPath()}/resources/js/audiojs/audio.js" type="text/javascript"></script>
 </head>
 <body>
@@ -13,6 +16,9 @@
     <script src="${rc.getContextPath()}/resources/js/dashboard/audioList.js" type="text/javascript"></script>
 
     <div class="sidePanel">
+        <div><!-- TODO remove hardcode -->
+            <a href="//vk.com/${user.url}" target="_blank">${user.name}</a>
+        </div>
         <div>
             <a href="${rc.getContextPath()}/">Home</a>
         </div>
@@ -21,6 +27,9 @@
         </div>
         <div>
             <a href="#" onclick="scrollToCurrentSong(event);">Focus</a>
+        </div>
+        <div>
+            <a href="#" onclick="createRatingStatsChart(event);">Stats</a>
         </div>
     </div>
 
@@ -50,6 +59,10 @@
                 </li>
             </#list>
         </ol>
+    </div>
+
+    <div id="userStats" style="display:none;" data-action="${rc.getContextPath()}/stats/user/${user.id?c}">
+        <svg></svg>
     </div>
 </body>
 </html>

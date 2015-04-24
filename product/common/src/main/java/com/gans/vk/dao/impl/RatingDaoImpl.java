@@ -167,7 +167,8 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
         LOG.info(MessageFormat.format("Import take: {0}ms", System.currentTimeMillis() - start));
     }
 
-    public Map<Date, Entry<Integer, Float>> rating(final User user, final User target, final long from, final long to, final int step) {
+    @Override
+    public Map<java.util.Date, Entry<Integer, Float>> rating(final User user, final User target, final long from, final long to, final int step) {
         final String dateColumn;
         if (MYSQL_VENDOR.equals(_dbVendor)) {
             dateColumn = MessageFormat.format("FROM_UNIXTIME(CEIL(UNIX_TIMESTAMP(ratedByMe.date) / {0}) * {0}) ", String.valueOf(step));
@@ -206,7 +207,7 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
             }
         });
 
-        Map<Date, Entry<Integer, Float>> result = new LinkedHashMap<>();
+        Map<java.util.Date, Entry<Integer, Float>> result = new LinkedHashMap<>();
         for (Object[] row : rows) {
             Date date = new Date(((Timestamp)row[0]).getTime());
             int count = ((Number)row[1]).intValue();

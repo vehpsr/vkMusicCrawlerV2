@@ -213,3 +213,10 @@ ol.audioList .artistRatingStats {
     font-weight: bold;
     color: rgba(3, 3, 0, 0.7);
 }
+
+#userStats {
+    position: fixed;
+    z-index: 110;
+    width: 500px;
+
+}

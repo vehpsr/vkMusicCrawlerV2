@@ -1,6 +1,8 @@
 package com.gans.vk.dao;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.gans.vk.model.impl.Rating;
@@ -11,5 +13,5 @@ public interface RatingDao extends ModelDao<Rating> {
 
     Rating getBy(User user, Song song);
     void importUserAudioLib(User user, List<Entry<String, String>> audioLib);
-
+    Map<Date, Entry<Integer, Float>> rating(final User user, final User target, final long from, final long to, final int step);
 }

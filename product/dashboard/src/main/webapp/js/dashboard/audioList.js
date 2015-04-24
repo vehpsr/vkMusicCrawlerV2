@@ -111,3 +111,22 @@ function scrollToCurrentSong(e) {
 $(function() {
     $('body').scrollTop(0);
 });
+
+// set up statistic graph
+function createRatingStatsChart(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    $("#userStats").show();
+
+    $.ajax({
+        url: $("#userStats").data("action"),
+        method: 'GET',
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("Content-Type", "application/json");
+        }
+    }).done(function(data) {
+        console.log(data);
+    });
+}
