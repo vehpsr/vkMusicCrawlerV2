@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,7 +35,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public void importUserAudioLib(User user, List<Entry<String, String>> audioLib) {
+    public void importUserAudioLib(User user, Set<Entry<String, String>> audioLib) {
         _ratingDao.importUserAudioLib(user, audioLib);
     }
 

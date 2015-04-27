@@ -9,9 +9,9 @@ import java.text.MessageFormat;
 import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,7 +46,7 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
     }
 
     @Override
-    public void importUserAudioLib(final User user, final List<Entry<String, String>> audioLib) {
+    public void importUserAudioLib(final User user, final Set<Entry<String, String>> audioLib) {
         LOG.info(MessageFormat.format("Start imort audio lib for {0}. Total size: {1}", user.getName(), audioLib.size()));
         if (audioLib.isEmpty()) {
             return;
@@ -63,12 +63,12 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
                 "	* " +
                 "FROM " +
                 "	(SELECT " +
-                "		?, ? " +
-                "	) as tmp " +
+                "		? AS artist, ? AS title " +
+                "	) AS tmp " +
                 "WHERE " +
                 "	NOT EXISTS " +
                 "		(SELECT " +
-                "			artist, title " +
+                "			1 " +
                 "		FROM " +
                 "			Song " +
                 "		WHERE " +
@@ -86,17 +86,7 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
                 "FROM " +
                 "	(SELECT " +
                 "		id FROM Song WHERE artist = ? AND title = ? LIMIT 1 " +
-                "	) as tmp " +
-                "WHERE " +
-                "	NOT EXISTS " +
-                "		(SELECT " +
-                "			1 " +
-                "		FROM " +
-                "			Rating " +
-                "		WHERE " +
-                "			user_id = ? " +
-                "			AND song_id = (SELECT id FROM Song WHERE artist = ? AND title = ? LIMIT 1) " +
-                "		LIMIT 1) ";
+                "	) as tmp ";
 
 
         long start = System.currentTimeMillis();
@@ -114,9 +104,9 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
 
                         int traceInsertSongCount = 0;
                         int traceInsertRatingCount = 0;
+                        int traceCounter = 1;
 
-                        for (int i = 0; i < audioLib.size(); i++) {
-                            Entry<String, String> song = audioLib.get(i);
+                        for (Entry<String, String> song : audioLib) {
                             String artist = song.getKey();
                             String title = song.getValue();
 
@@ -130,22 +120,21 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
                             insertRatingStatement.setLong(2, user.getId());
                             insertRatingStatement.setString(3, artist);
                             insertRatingStatement.setString(4, title);
-                            insertRatingStatement.setLong(5, user.getId());
-                            insertRatingStatement.setString(6, artist);
-                            insertRatingStatement.setString(7, title);
                             insertRatingStatement.addBatch();
 
-                            if (i % batchSize == 0 && i != 0) {
+                            if (traceCounter % batchSize == 0) {
                                 int[] songCount = insertSongStatement.executeBatch();
                                 int[] ratingCount = insertRatingStatement.executeBatch();
                                 traceInsertSongCount += sum(songCount);
                                 traceInsertRatingCount += sum(ratingCount);
                             }
 
-                            if (i % 1000 == 0 && i != 0) {
-                                LOG.info(MessageFormat.format("Inserted {0} new songs from total of {1}", traceInsertSongCount, i));
-                                LOG.info(MessageFormat.format("Rated {0} new songs from total of {1}", traceInsertRatingCount, i));
+                            if (traceCounter % 1000 == 0) {
+                                LOG.info(MessageFormat.format("Inserted {0} new songs from total of {1}", traceInsertSongCount, traceCounter));
+                                LOG.info(MessageFormat.format("Rated {0} new songs from total of {1}", traceInsertRatingCount, traceCounter));
                             }
+
+                            traceCounter++;
                         }
 
                         insertSongStatement.executeBatch();

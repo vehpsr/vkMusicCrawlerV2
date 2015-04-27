@@ -5,9 +5,11 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -101,14 +103,6 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
         syncUserAudioData(user);
     }
 
-    private List<Entry<String, String>> extractArtistAndTitleData(List<Map<AudioPart, String>> audioLib) {
-        List<Entry<String, String>> result = new ArrayList<>();
-        for (Map<AudioPart, String> audio : audioLib) {
-            result.add(new AbstractMap.SimpleEntry<String, String>(audio.get(AudioPart.ARTIST), audio.get(AudioPart.TITLE)));
-        }
-        return result;
-    }
-
     @Override
     public void discoverNewUsers(int limit) {
         List<User> newUsers = _userService.getUndiscoveredUsers(limit);
@@ -130,8 +124,16 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
         }
 
         List<Map<AudioPart, String>> audioLib = _vkAudioProcessor.getAudioData(user.getVkId());
-        List<Entry<String, String>> songData = extractArtistAndTitleData(audioLib);
+        Set<Entry<String, String>> songData = extractArtistAndTitleData(audioLib);
         _ratingService.importUserAudioLib(user, songData);
+    }
+
+    private Set<Entry<String, String>> extractArtistAndTitleData(List<Map<AudioPart, String>> audioLib) {
+        Set<Entry<String, String>> result = new HashSet<>();
+        for (Map<AudioPart, String> audio : audioLib) {
+            result.add(new AbstractMap.SimpleEntry<String, String>(audio.get(AudioPart.ARTIST), audio.get(AudioPart.TITLE)));
+        }
+        return result;
     }
 
     public void setSongService(SongService songService) {
