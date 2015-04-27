@@ -45,8 +45,8 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public List<UserRatingData> rating(User user, User target) {
         Calendar calendar = GregorianCalendar.getInstance();
-        long to = calendar.getTimeInMillis() + SECONDS_PER_DAY;
-        calendar.add(Calendar.DAY_OF_MONTH, -7);
+        long to = calendar.getTimeInMillis();
+        calendar.add(Calendar.DAY_OF_MONTH, -10);
         long from = calendar.getTimeInMillis();
         Map<Date, Entry<Integer, Float>> ratingStats = _ratingDao.rating(user, target, from, to, SECONDS_PER_DAY);
 

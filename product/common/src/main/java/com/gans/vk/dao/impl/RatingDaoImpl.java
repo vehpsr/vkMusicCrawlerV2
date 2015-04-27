@@ -177,7 +177,7 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
                 "WHERE " +
                 "	ratedByUser.user_id = :targetId " +
                 "	AND ratedByMe.user_id = :userId " +
-                "	AND (ratedByMe.date BETWEEN:from AND :to) " +
+                "	AND ratedByMe.date >= :from " +
                 "GROUP BY " +
                 "	period " +
                 "ORDER BY " +
@@ -191,7 +191,7 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
                 query.setLong("userId", user.getId());
                 query.setLong("targetId", target.getId());
                 query.setDate("from", new Date(from));
-                query.setDate("to", new Date(to));
+                //query.setDate("to", new Date(to));
                 return query.list();
             }
         });

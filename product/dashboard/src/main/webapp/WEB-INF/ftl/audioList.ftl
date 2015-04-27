@@ -63,7 +63,12 @@
 
     <div id="userStats" style="display:none;" data-action="${rc.getContextPath()}/stats/user/${user.id?c}">
         <div class="close" onclick="$('#userStats svg').empty(); $('#userStats').hide();" >close</div>
-        <svg></svg>
+        <div id="avgRatingData">
+            <svg></svg>
+        </div>
+        <div id="songsCountData">
+            <svg></svg>
+        </div>
     </div>
 </body>
 </html>

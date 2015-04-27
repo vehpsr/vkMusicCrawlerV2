@@ -45,6 +45,9 @@ public class VkUserPageResponseProcessor {
 
     public Entry<String, String> getUserByUrl(String url) {
         Document page = getHtmlPage(url);
+        if (page == null) {
+            return entry(UserStatus.DELETED.name(), UserStatus.DELETED);
+        }
 
         String name = page.getElementsByTag("title").text();
         if (StringUtils.isEmpty(name)) {
@@ -100,7 +103,7 @@ public class VkUserPageResponseProcessor {
             }
             retryCount--;
         }
-        throw new IllegalStateException(MessageFormat.format("Fail to fetch user data from {0}", url));
+        return null;
     }
 
     private boolean isDdosBlocked(Document page) {

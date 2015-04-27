@@ -127,23 +127,37 @@ function createRatingStatsChart(e) {
             xhr.setRequestHeader("Content-Type", "application/json");
         }
     }).done(function(data) {
-        nv.addGraph(function() {
-              var chart = nv.models.lineChart();
+        var avgRatingData = [];
+        avgRatingData[0] = data[0];
 
-              chart.xAxis
-                  .axisLabel('Time (ms)')
-                  .tickFormat(d3.format(',r'));
+        var songsCountData = [];
+        songsCountData[0] = data[1];
 
-              chart.yAxis
-                  .axisLabel('Voltage (v)')
-                  .tickFormat(d3.format('.02f'));
+        addStatisticsChart(avgRatingData, "avgRatingData");
+        addStatisticsChart(songsCountData, "songsCountData");
+    });
+}
 
-              d3.select('#userStats svg')
-                  .datum(data)
-                  .call(chart);
+function addStatisticsChart(data, selector) {
+    nv.addGraph(function() {
+        var chart = nv.models.lineChart()
+            .margin({top: 10, right: 15, bottom: 25, left: 25})
+            .forceY([1, 5])
+            .showLegend(false);
 
-              nv.utils.windowResize(function() { chart.update() });
-              return chart;
-            });
+        chart.yAxis.axisLabel(data[0].key);
+
+        chart.xAxis.tickFormat(function(d) {
+            return d3.time.format('%d/%m')(new Date(d))
+        });
+
+        d3.select('#userStats #' + selector + ' svg')
+            .datum(data)
+            .call(chart);
+
+        nv.utils.windowResize(function() {
+            chart.update()
+        });
+        return chart;
     });
 }
