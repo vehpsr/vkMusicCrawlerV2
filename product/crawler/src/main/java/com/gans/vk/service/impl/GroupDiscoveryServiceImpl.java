@@ -33,11 +33,6 @@ public class GroupDiscoveryServiceImpl implements GroupDiscoveryService {
         }
 
         Group group = _groupService.gerByUrl(vkUrl);
-        if (!forceUpdate && (group != null && StringUtils.isNotEmpty(group.getUrl()))) {
-            LOG.info(MessageFormat.format("Group with url {0} already exists in system", vkUrl));
-            return;
-        }
-
         if (group == null) {
             group = new Group();
             group.setUrl(vkUrl);
@@ -48,16 +43,16 @@ public class GroupDiscoveryServiceImpl implements GroupDiscoveryService {
         group.setName(groupInfo.getKey());
         group.setVkId(groupInfo.getValue());
         if (forceUpdate) {
-        	group.setPaginationStart(0);
+            group.setPaginationStart(0);
         }
-        
+
         if (VkGroupInfoResponseProcessor.hasInvalidGroupStatus(group)) {
             LOG.info(MessageFormat.format("Fail to discover members of group {0}", group));
             return;
         }
 
         List<Entry<String, String>> users = _vkGroupMembersProcessor.discoverMembersOf(group);
-        
+
         _groupService.save(group);
         _userService.importUnique(users);
     }
@@ -70,8 +65,8 @@ public class GroupDiscoveryServiceImpl implements GroupDiscoveryService {
         _vkGroupProcessor = vkGroupProcessor;
     }
 
-	public void setVkGroupMembersProcessor(VkGroupMembersResponseProcessor vkGroupMembersProcessor) {
-		_vkGroupMembersProcessor = vkGroupMembersProcessor;
-	}
+    public void setVkGroupMembersProcessor(VkGroupMembersResponseProcessor vkGroupMembersProcessor) {
+        _vkGroupMembersProcessor = vkGroupMembersProcessor;
+    }
 
 }

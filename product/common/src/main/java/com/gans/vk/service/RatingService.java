@@ -16,16 +16,7 @@ public interface RatingService {
 
     public static class UserRatingData {
         private String _key;
-        private boolean _bar;
-        private List<Number[]> _values = new ArrayList<>();
-
-        public boolean isBar() {
-            return _bar;
-        }
-
-        public void setBar(boolean bar) {
-            _bar = bar;
-        }
+        private List<Point> _values = new ArrayList<>();
 
         public String getKey() {
             return _key;
@@ -35,13 +26,33 @@ public interface RatingService {
             _key = key;
         }
 
-        public List<Number[]> getValues() {
+        public List<Point> getValues() {
             return _values;
         }
 
-        public void addValue(Number[] value) {
-            _values.add(value);
+        public void addPoint(long x, Number y) {
+            _values.add(new Point(x, y));
         }
+
+    }
+
+    public static class Point {
+
+        private final long _x;
+        private final Number _y;
+
+        public Point(long x, Number y) {
+            _x = x;
+            _y = y;
+        }
+
+		public long getX() {
+			return _x;
+		}
+
+		public Number getY() {
+			return _y;
+		}
 
     }
 }

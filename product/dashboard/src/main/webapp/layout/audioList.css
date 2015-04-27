@@ -218,5 +218,5 @@ ol.audioList .artistRatingStats {
     position: fixed;
     z-index: 110;
     width: 500px;
-
+    bottom: 0;
 }

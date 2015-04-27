@@ -34,7 +34,7 @@ public class VkGroupMembersResponseProcessor {
     public List<Entry<String, String>> discoverMembersOf(Group group) {
         LOG.info(MessageFormat.format("Discover members for group {0}", group));
 
-        int safetyCounter = 1000;
+        int safetyCounter = 100;
         int offset = group.getPaginationStart();
         String lastPersonUrl = "";
         List<Entry<String, String>> result = new ArrayList<>();
@@ -54,6 +54,7 @@ public class VkGroupMembersResponseProcessor {
 
             result.addAll(membersInfo);
             offset += PEOPLE_ON_PAGE;
+            group.setPaginationStart(offset);
             RestUtils.sleep();
         }
         return result;

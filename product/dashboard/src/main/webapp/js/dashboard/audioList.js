@@ -127,6 +127,23 @@ function createRatingStatsChart(e) {
             xhr.setRequestHeader("Content-Type", "application/json");
         }
     }).done(function(data) {
-        console.log(data);
+        nv.addGraph(function() {
+              var chart = nv.models.lineChart();
+
+              chart.xAxis
+                  .axisLabel('Time (ms)')
+                  .tickFormat(d3.format(',r'));
+
+              chart.yAxis
+                  .axisLabel('Voltage (v)')
+                  .tickFormat(d3.format('.02f'));
+
+              d3.select('#userStats svg')
+                  .datum(data)
+                  .call(chart);
+
+              nv.utils.windowResize(function() { chart.update() });
+              return chart;
+            });
     });
 }

@@ -157,7 +157,7 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
     }
 
     @Override
-    public Map<java.util.Date, Entry<Integer, Float>> rating(final User user, final User target, final long from, final long to, final int step) {
+    public Map<java.util.Date, Entry<Integer, Float>> rating(final User user, final User target, final long from, final long to, final long step) {
         final String dateColumn;
         if (MYSQL_VENDOR.equals(_dbVendor)) {
             dateColumn = MessageFormat.format("FROM_UNIXTIME(CEIL(UNIX_TIMESTAMP(ratedByMe.date) / {0}) * {0}) ", String.valueOf(step));
