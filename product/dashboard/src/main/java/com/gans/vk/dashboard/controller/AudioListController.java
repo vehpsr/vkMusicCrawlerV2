@@ -1,6 +1,5 @@
 package com.gans.vk.dashboard.controller;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +25,6 @@ import com.gans.vk.model.impl.User;
 import com.gans.vk.service.AudioDiscoveryService;
 import com.gans.vk.service.AudioDiscoveryService.AudioData;
 import com.gans.vk.service.RatingService;
-import com.gans.vk.service.RatingService.UserRatingData;
 import com.gans.vk.service.SongService;
 import com.gans.vk.service.UserService;
 
@@ -79,17 +77,6 @@ public class AudioListController {
         Song song = _songService.get(id);
         _ratingService.rate(user, song, rating);
         return ResponseStatus.OK;
-    }
-
-    @RequestMapping(value = "/stats/user/{userId}")
-    @ResponseBody
-    public List<UserRatingData> rateSong(@PathVariable long userId) {
-        User currentUser = _sessionManager.getCurrentUser();
-        User target = _userService.get(userId);
-        if (target == null) {
-            throw new IllegalArgumentException(MessageFormat.format("Fail to find User with id {0}", userId));
-        }
-        return _ratingService.rating(currentUser, target);
     }
 
     public void setSongService(SongService songService) {

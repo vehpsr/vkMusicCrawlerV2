@@ -1,0 +1,22 @@
+#userStats {
+    position: fixed;
+    z-index: 110;
+    width: 80%;
+    bottom: 0;
+    background: none repeat scroll 0 0 #f6f6f0;
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 25px;
+}
+
+#userStats #avgRatingData, #userStats #songsCountData {
+    float: left;
+    width: 45%;
+    margin: 2px;
+}
+
+#userStats .close {
+    width: 40px;
+    cursor: pointer;
+    margin-left: 15px;
+    padding-top: 3px;
+}
