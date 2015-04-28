@@ -13,6 +13,7 @@ public interface UserDao extends ModelDao<User> {
     void importUnique(List<Entry<String, String>> users);
     int getUndiscoveredUsersCount();
     List<User> getUndiscoveredUsers(int limit);
+    User getRandomUser();
 
     public static class UserLibData {
         private long _id;
@@ -22,6 +23,15 @@ public interface UserDao extends ModelDao<User> {
         private float _rating;
         private int _ratedAudioCount;
         private int _totalAudioCount;
+
+        public static UserLibData convert(User user) {
+            UserLibData result = new UserLibData();
+            result._id = user.getId();
+            result._name = user.getName();
+            result._url = user.getUrl();
+            result._vkId = user.getVkId();
+            return result;
+        }
 
         public String getName() {
             return _name;

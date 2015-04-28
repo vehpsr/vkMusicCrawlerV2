@@ -33,6 +33,8 @@ public class UserListController {
     public String songs(HttpServletRequest req, HttpServletResponse resp, ModelMap model) {
         User currentUser = _sessionManager.getCurrentUser();
         List<UserLibData> users = _userService.getRecomendedAudioLibsFor(currentUser);
+        User randomUser = _userService.getRandomUser();
+        users.add(UserLibData.convert(randomUser));
         model.addAttribute("users", users);
         model.addAttribute("vkDomainUrl", _vkDomain);
         resp.setContentType("text/html;charset=UTF-8");

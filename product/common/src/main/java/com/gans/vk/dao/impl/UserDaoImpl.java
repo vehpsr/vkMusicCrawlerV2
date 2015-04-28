@@ -264,4 +264,28 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
         });
     }
 
+    @Override
+    public User getRandomUser() {
+        final String sql =
+                "SELECT " +
+                    "* " +
+                "FROM " +
+                    "Users " +
+                "WHERE " +
+                    "vkId IS NOT NULL " +
+                    "AND vkId NOT IN (:userStatus) " +
+                    "AND id >= FLOOR(" + random() + " * (SELECT MAX(id) FROM Users)) " +
+                "LIMIT 1 ";
+
+        return getHibernateTemplate().execute(new HibernateCallback<User>() {
+            @Override
+            public User doInHibernate(Session session) throws HibernateException, SQLException {
+                SQLQuery query = session.createSQLQuery(sql);
+                query.setParameterList("userStatus", UserStatus.names());
+                query.addEntity(User.class);
+                return (User) query.uniqueResult();
+            }
+        });
+    }
+
 }

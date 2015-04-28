@@ -16,5 +16,6 @@ public interface UserService {
     void importUnique(List<Entry<String, String>> users);
     int getUndiscoveredUsersCount();
     List<User> getUndiscoveredUsers(int limit);
+    User getRandomUser();
 
 }

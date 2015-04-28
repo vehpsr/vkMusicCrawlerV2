@@ -57,7 +57,6 @@ public class AudioListController {
             // TODO error page
             LOG.warn("Fail to find user with vkId: " + vkId);
             model.addAttribute("songs", new ArrayList<String>());
-            model.addAttribute("user", user);
             return "audioList";
         }
         resp.setContentType("text/html;charset=UTF-8");

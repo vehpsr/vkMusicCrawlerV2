@@ -7,15 +7,16 @@
     <link rel="stylesheet" href="${rc.getContextPath()}/resources/layout/audioList.css" type="text/css"></link>
     <script src="${rc.getContextPath()}/resources/js/jquery-2.1.3.js" type="text/javascript"></script>
     <script src="${rc.getContextPath()}/resources/js/audiojs/audio.js" type="text/javascript"></script>
+    <script src="${rc.getContextPath()}/resources/js/dashboard/audioList.js" type="text/javascript"></script>
 </head>
 <body>
 
-    <script src="${rc.getContextPath()}/resources/js/dashboard/audioList.js" type="text/javascript"></script>
-
     <div class="sidePanel">
-        <div><!-- TODO remove hardcode -->
-            <a href="//vk.com/${user.url}" target="_blank">${user.name}</a>
-        </div>
+        <#if user?? >
+            <div><!-- TODO remove hardcode -->
+                <a href="//vk.com/${user.url}" target="_blank">${user.name}</a>
+            </div>
+        </#if>
         <div>
             <a href="${rc.getContextPath()}/">Home</a>
         </div>

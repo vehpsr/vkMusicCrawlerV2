@@ -55,6 +55,11 @@ public class UserServiceImpl implements UserService {
         return _userDao.get(id);
     }
 
+    @Override
+    public User getRandomUser() {
+        return _userDao.getRandomUser();
+    }
+
     public void setUserDao(UserDao userDao) {
         _userDao = userDao;
     }
