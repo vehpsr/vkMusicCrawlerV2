@@ -13,5 +13,5 @@ public interface RatingDao extends ModelDao<Rating> {
 
     Rating getBy(User user, Song song);
     void importUserAudioLib(User user, Set<Entry<String, String>> audioLib);
-    Map<Date, Entry<Integer, Float>> rating(User user, User target, long from, long to, long step);
+    Map<Date, Entry<Integer, Float>> rating(User user, long from, long to, long step);
 }

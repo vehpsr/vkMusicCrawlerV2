@@ -157,27 +157,25 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
     }
 
     @Override
-    public Map<java.util.Date, Entry<Integer, Float>> rating(final User user, final User target, final long from, final long to, final long step) {
+    public Map<java.util.Date, Entry<Integer, Float>> rating(final User user, final long from, final long to, final long step) {
         final String dateColumn;
         if (MYSQL_VENDOR.equals(_dbVendor)) {
-            dateColumn = MessageFormat.format("FROM_UNIXTIME(CEIL(UNIX_TIMESTAMP(ratedByMe.date) / {0}) * {0}) ", String.valueOf(step));
+            dateColumn = MessageFormat.format("FROM_UNIXTIME(CEIL(UNIX_TIMESTAMP(date) / {0}) * {0}) ", String.valueOf(step));
         } else if (POSTGRES_VENDOR.equals(_dbVendor)) {
-            dateColumn = MessageFormat.format("TO_TIMESTAMP(CEIL(CAST(EXTRACT(EPOCH FROM ratedByMe.date) AS INTEGER) / {0}) * {0}) ", String.valueOf(step));
+            dateColumn = MessageFormat.format("TO_TIMESTAMP(CEIL(CAST(EXTRACT(EPOCH FROM date) AS INTEGER) / {0}) * {0}) ", String.valueOf(step));
         } else {
             throw new IllegalStateException(MessageFormat.format("Unknown database vendor {0}", _dbVendor));
         }
 
         final String sql =
                 "SELECT " +
-                    dateColumn + " as period, COUNT(ratedByMe.value), AVG(ratedByMe.value) " +
+                    dateColumn + " as period, COUNT(rating.value), AVG(rating.value) " +
                 "FROM " +
                 "	Song song" +
-                "	JOIN Rating ratedByUser ON song.id = ratedByUser.song_id " +
-                "	JOIN Rating ratedByMe ON song.id = ratedByMe.song_id " +
+                "	JOIN Rating rating ON song.id = rating.song_id " +
                 "WHERE " +
-                "	ratedByUser.user_id = :targetId " +
-                "	AND ratedByMe.user_id = :userId " +
-                "	AND ratedByMe.date >= :from " +
+                "	rating.user_id = :userId " +
+                "	AND date >= :from " +
                 "GROUP BY " +
                 "	period " +
                 "ORDER BY " +
@@ -189,7 +187,6 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
             public Collection<Object[]> doInHibernate(Session session) throws HibernateException, SQLException {
                 SQLQuery query = session.createSQLQuery(sql);
                 query.setLong("userId", user.getId());
-                query.setLong("targetId", target.getId());
                 query.setDate("from", new Date(from));
                 //query.setDate("to", new Date(to));
                 return query.list();

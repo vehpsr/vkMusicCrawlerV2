@@ -12,7 +12,7 @@ public interface RatingService {
 
     void rate(User user, Song song, int value);
     void importUserAudioLib(User user, Set<Entry<String, String>> audioLib);
-    List<UserRatingData> rating(final User user, final User target);
+    List<UserRatingData> rating(User user);
 
     public static class UserRatingData {
         private String _key;
@@ -37,7 +37,6 @@ public interface RatingService {
     }
 
     public static class Point {
-
         private final long _x;
         private final Number _y;
 
@@ -46,13 +45,13 @@ public interface RatingService {
             _y = y;
         }
 
-		public long getX() {
-			return _x;
-		}
+        public long getX() {
+            return _x;
+        }
 
-		public Number getY() {
-			return _y;
-		}
+        public Number getY() {
+            return _y;
+        }
 
     }
 }

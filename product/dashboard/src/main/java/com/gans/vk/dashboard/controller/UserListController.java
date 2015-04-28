@@ -34,7 +34,9 @@ public class UserListController {
         User currentUser = _sessionManager.getCurrentUser();
         List<UserLibData> users = _userService.getRecomendedAudioLibsFor(currentUser);
         User randomUser = _userService.getRandomUser();
-        users.add(UserLibData.convert(randomUser));
+        if (randomUser != null) {
+            users.add(UserLibData.convert(randomUser));
+        }
         model.addAttribute("users", users);
         model.addAttribute("vkDomainUrl", _vkDomain);
         resp.setContentType("text/html;charset=UTF-8");

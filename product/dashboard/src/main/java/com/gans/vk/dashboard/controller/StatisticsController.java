@@ -2,11 +2,13 @@ package com.gans.vk.dashboard.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,15 +28,16 @@ public class StatisticsController {
     @Autowired private RatingService _ratingService;
 
     @RequestMapping(value = "/stats", method = RequestMethod.GET)
-    public String statsPage() {
+    public String statsPage(HttpServletRequest req, HttpServletResponse resp) {
+        resp.setContentType("text/html;charset=UTF-8");
         return "stats";
     }
 
-    @RequestMapping(value = "/stats/user/{userId}")
+    @RequestMapping(value = "/stats/rating")
     @ResponseBody
-    public List<UserRatingData> rateSong(@PathVariable long userId) {
+    public List<UserRatingData> rating() {
         User currentUser = _sessionManager.getCurrentUser();
-        return _ratingService.rating(currentUser, null);
+        return _ratingService.rating(currentUser);
     }
 
     public void setSessionManager(SessionManager sessionManager) {

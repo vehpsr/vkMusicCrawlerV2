@@ -1,22 +1,15 @@
-#userStats {
-    position: fixed;
-    z-index: 110;
-    width: 80%;
-    bottom: 0;
-    background: none repeat scroll 0 0 #f6f6f0;
-    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
-    border-radius: 25px;
+.header {
+    margin: 5px 0 5px 15px;
 }
 
-#userStats #avgRatingData, #userStats #songsCountData {
-    float: left;
-    width: 45%;
+.header span {
     margin: 2px;
+    text-decorating: none;
+    color: #000;
 }
 
-#userStats .close {
-    width: 40px;
-    cursor: pointer;
-    margin-left: 15px;
-    padding-top: 3px;
+.metricDiagram {
+    display: inline-block;
+    width: 45%;
+    height: 300px;
 }

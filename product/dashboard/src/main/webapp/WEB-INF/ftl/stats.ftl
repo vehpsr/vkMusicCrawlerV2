@@ -12,14 +12,25 @@
     <script src="${rc.getContextPath()}/resources/js/dashboard/stats.js" type="text/javascript"></script>
 </head>
 <body>
-    <div id="userStats" style="display:none;">
-        <div class="close" onclick="$('#userStats svg').empty(); $('#userStats').hide();" >close</div>
-        <div id="avgRatingData">
-            <svg></svg>
-        </div>
-        <div id="songsCountData">
-            <svg></svg>
-        </div>
+
+    <div id="contstants" style="display:none" data-context-path="${rc.getContextPath()}"></div>
+
+    <div class="header">
+        <span>
+            <a href="${rc.getContextPath()}/">Home</a>
+        </span>
+        |
+        <span>
+            <a href="${rc.getContextPath()}/discover">Discover</a>
+        </span>
     </div>
+
+    <div id="avgRatingDiagram" class="metricDiagram avgRatingDiagram">
+        <svg></svg>
+    </div>
+    <div id="songsCountDiagram" class="metricDiagram songsCountDiagram">
+        <svg></svg>
+    </div>
+    <div class="separator"></div>
 </body>
 </html>

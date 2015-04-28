@@ -22,8 +22,7 @@ public class RatingServiceImpl implements RatingService {
 
     private static final long SECONDS_PER_DAY = DateUtils.MILLIS_PER_DAY / 1000;
 
-    @Autowired
-    private RatingDao _ratingDao;
+    @Autowired private RatingDao _ratingDao;
 
     @Override
     public void rate(User user, Song song, int value) {
@@ -43,12 +42,12 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public List<UserRatingData> rating(User user, User target) {
+    public List<UserRatingData> rating(User user) {
         Calendar calendar = GregorianCalendar.getInstance();
         long to = calendar.getTimeInMillis();
-        calendar.add(Calendar.DAY_OF_MONTH, -10);
+        calendar.add(Calendar.DAY_OF_MONTH, -14);
         long from = calendar.getTimeInMillis();
-        Map<Date, Entry<Integer, Float>> ratingStats = _ratingDao.rating(user, target, from, to, SECONDS_PER_DAY);
+        Map<Date, Entry<Integer, Float>> ratingStats = _ratingDao.rating(user, from, to, SECONDS_PER_DAY);
 
         UserRatingData countData = new UserRatingData();
         countData.setKey("count");
