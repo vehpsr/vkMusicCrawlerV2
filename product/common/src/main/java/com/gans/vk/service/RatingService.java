@@ -12,9 +12,9 @@ public interface RatingService {
 
     void rate(User user, Song song, int value);
     void importUserAudioLib(User user, Set<Entry<String, String>> audioLib);
-    List<UserRatingData> rating(User user);
+    List<RatingData> rating(User user);
 
-    public static class UserRatingData {
+    public static class RatingData {
         private String _key;
         private List<Point> _values = new ArrayList<>();
 

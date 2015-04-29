@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.gans.vk.dashboard.session.SessionManager;
 import com.gans.vk.model.impl.User;
 import com.gans.vk.service.RatingService;
-import com.gans.vk.service.RatingService.UserRatingData;
+import com.gans.vk.service.RatingService.RatingData;
 
 @Controller
 public class StatisticsController {
@@ -35,7 +35,7 @@ public class StatisticsController {
 
     @RequestMapping(value = "/stats/rating")
     @ResponseBody
-    public List<UserRatingData> rating() {
+    public List<RatingData> rating() {
         User currentUser = _sessionManager.getCurrentUser();
         return _ratingService.rating(currentUser);
     }

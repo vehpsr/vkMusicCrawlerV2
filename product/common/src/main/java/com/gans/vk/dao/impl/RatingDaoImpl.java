@@ -8,8 +8,6 @@ import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.AbstractMap;
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -28,6 +26,8 @@ import com.gans.vk.dao.RatingDao;
 import com.gans.vk.model.impl.Rating;
 import com.gans.vk.model.impl.Song;
 import com.gans.vk.model.impl.User;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 
 public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao {
 
@@ -157,7 +157,7 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
     }
 
     @Override
-    public Map<java.util.Date, Entry<Integer, Float>> rating(final User user, final long from, final long to, final long step) {
+    public Multimap<java.util.Date, Entry<Integer, Integer>> rating(final User user, final long from, final long to, final long step) {
         final String dateColumn;
         if (MYSQL_VENDOR.equals(_dbVendor)) {
             dateColumn = MessageFormat.format("FROM_UNIXTIME(CEIL(UNIX_TIMESTAMP(date) / {0}) * {0}) ", String.valueOf(step));
@@ -169,15 +169,14 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
 
         final String sql =
                 "SELECT " +
-                    dateColumn + " as period, COUNT(rating.value), AVG(rating.value) " +
+                    dateColumn + " as period, value, count(value) " +
                 "FROM " +
-                "	Song song" +
-                "	JOIN Rating rating ON song.id = rating.song_id " +
+                "	Rating " +
                 "WHERE " +
-                "	rating.user_id = :userId " +
+                "	user_id = :userId " +
                 "	AND date >= :from " +
                 "GROUP BY " +
-                "	period " +
+                "	period, value " +
                 "ORDER BY " +
                 "	period ";
 
@@ -193,12 +192,13 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
             }
         });
 
-        Map<java.util.Date, Entry<Integer, Float>> result = new LinkedHashMap<>();
+        // Multimap<Date, Entry<RatingValue, Count>>
+        Multimap<java.util.Date, Entry<Integer, Integer>> result = LinkedListMultimap.create();
         for (Object[] row : rows) {
             Date date = new Date(((Timestamp)row[0]).getTime());
-            int count = ((Number)row[1]).intValue();
-            float avg = ((Number)row[2]).floatValue();
-            result.put(date, new AbstractMap.SimpleEntry<Integer, Float>(count, avg));
+            int value = ((Number)row[1]).intValue();
+            int count = ((Number)row[2]).intValue();
+            result.put(date, new AbstractMap.SimpleEntry<Integer, Integer>(value, count));
         }
         return result;
     }
