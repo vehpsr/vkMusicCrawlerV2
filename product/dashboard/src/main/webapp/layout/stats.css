@@ -13,3 +13,7 @@
     width: 90%;
     height: 400px;
 }
+
+#ratingDiagram.metricDiagram .nv-groups rect {
+    fill-opacity: 0.85;
+}
