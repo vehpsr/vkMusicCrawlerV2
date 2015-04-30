@@ -91,6 +91,17 @@ public class RatingServiceImpl implements RatingService {
         return new AbstractMap.SimpleEntry<Map<Long, Float>, List<RatingData>>(avgRatingData, result);
     }
 
+    @Override
+    public List<Entry<String, Integer>> statisticsRatingData(User user) {
+        int ratedByUser = _ratingDao.ratedByUserCount(user);
+        int total = _ratingDao.countAll();
+
+        List<Entry<String, Integer>> result = new ArrayList<>();
+        result.add(new AbstractMap.SimpleEntry<String, Integer>("Total rated", total));
+        result.add(new AbstractMap.SimpleEntry<String, Integer>("Rated by me", ratedByUser));
+        return result;
+    }
+
     public void setRatingDao(RatingDao ratingDao) {
         _ratingDao = ratingDao;
     }

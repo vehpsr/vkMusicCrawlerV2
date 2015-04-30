@@ -14,6 +14,7 @@ public interface UserDao extends ModelDao<User> {
     int getUndiscoveredUsersCount();
     List<User> getUndiscoveredUsers(int limit);
     User getRandomUser();
+    List<Entry<String, Integer>> userStatusStatistics();
 
     public static class UserLibData {
         private long _id;

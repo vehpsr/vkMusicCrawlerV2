@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -86,6 +87,14 @@ public abstract class AbstractModelDao<T extends AbstractModel> extends Hibernat
     @Override
     public void flush() {
         getHibernateTemplate().flush();
+    }
+
+    @Override
+    public int countAll() {
+        DetachedCriteria criteria = createCriteria();
+        criteria.setProjection(Projections.rowCount());
+        List<?> resultSet = getHibernateTemplate().findByCriteria(criteria);
+        return ((Number)resultSet.get(0)).intValue();
     }
 
     protected DetachedCriteria createCriteria() {

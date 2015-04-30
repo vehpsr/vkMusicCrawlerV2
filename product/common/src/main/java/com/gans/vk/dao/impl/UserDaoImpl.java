@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.MessageFormat;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -286,6 +287,35 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
                 return (User) query.uniqueResult();
             }
         });
+    }
+
+    @Override
+    public List<Entry<String, Integer>> userStatusStatistics() {
+        final String sql =
+                "SELECT " +
+                    "vkId, COUNT(vkId) " +
+                "FROM " +
+                    "Users " +
+                "WHERE " +
+                    "vkId IN (:userStatus) " +
+                "GROUP BY " +
+                    "vkId ";
+
+        List<Object[]> rows = getHibernateTemplate().execute(new HibernateCallback<List<Object[]>>() {
+            @Override
+            @SuppressWarnings("unchecked")
+            public List<Object[]> doInHibernate(Session session) throws HibernateException, SQLException {
+                SQLQuery query = session.createSQLQuery(sql);
+                query.setParameterList("userStatus", UserStatus.names());
+                return query.list();
+            }
+        });
+
+        List<Entry<String, Integer>> result = new ArrayList<>();
+        for (Object[] row : rows) {
+            result.add(new AbstractMap.SimpleEntry<String, Integer>(row[0].toString(), ((Number)row[1]).intValue()));
+        }
+        return result;
     }
 
 }

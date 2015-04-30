@@ -16,4 +16,5 @@ public interface ModelDao<T extends Model> {
     void delete(T object);
     void delete(Collection<T> objects);
     void flush();
+    int countAll();
 }

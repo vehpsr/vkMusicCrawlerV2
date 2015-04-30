@@ -1,5 +1,4 @@
-// set up statistic graph
-$(function () {
+function setUpRatingChart() {
     $.ajax({
         url: $("#contstants").data("contextPath") + "/stats/rating",
         method: 'GET',
@@ -10,7 +9,7 @@ $(function () {
     }).done(function(data) {
         addStatisticsChart(data);
     });
-});
+};
 
 function addStatisticsChart(data) {
     nv.addGraph(function() {

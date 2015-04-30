@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.AbstractMap;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -17,6 +18,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
 import org.springframework.orm.hibernate3.HibernateCallback;
@@ -201,6 +203,15 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
             result.put(date, new AbstractMap.SimpleEntry<Integer, Integer>(value, count));
         }
         return result;
+    }
+
+    @Override
+    public int ratedByUserCount(User user) {
+        DetachedCriteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("user.id", user.getId()));
+        criteria.setProjection(Projections.rowCount());
+        List<?> resultSet = getHibernateTemplate().findByCriteria(criteria);
+        return ((Number)resultSet.get(0)).intValue();
     }
 
 }

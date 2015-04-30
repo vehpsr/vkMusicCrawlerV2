@@ -1,5 +1,7 @@
 package com.gans.vk.service.impl;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -58,6 +60,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getRandomUser() {
         return _userDao.getRandomUser();
+    }
+
+    @Override
+    public List<Entry<String, Integer>> statisticsUserData() {
+        int total = _userDao.countAll();
+        int undiscovered = _userDao.getUndiscoveredUsersCount();
+        List<Entry<String, Integer>> userStatusStatistics = _userDao.userStatusStatistics();
+
+        List<Entry<String, Integer>> result = new ArrayList<>();
+        result.add(new AbstractMap.SimpleEntry<String, Integer>("Total Users", total));
+        result.add(new AbstractMap.SimpleEntry<String, Integer>("Undiscovered", undiscovered));
+        result.add(new AbstractMap.SimpleEntry<String, Integer>("Discovered", total - undiscovered));
+        for (Entry<String, Integer> userStatus : userStatusStatistics) {
+            result.add(userStatus);
+        }
+        return result;
     }
 
     public void setUserDao(UserDao userDao) {

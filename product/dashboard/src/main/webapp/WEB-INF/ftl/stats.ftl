@@ -27,7 +27,17 @@
 
     <div id="ratingDiagram" class="metricDiagram ratingDiagram">
         <svg></svg>
+        <script type="text/javascript">
+            setUpRatingChart();
+        </script>
     </div>
-    <div class="separator"></div>
+
+    <div id="systemStats" class="systemData">
+        <ol>
+            <#list systemStats as entry>
+                <li>${entry.key} - ${entry.value}</li>
+            </#list>
+        </ol>
+    </div>
 </body>
 </html>
