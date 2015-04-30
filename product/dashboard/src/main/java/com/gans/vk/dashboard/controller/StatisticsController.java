@@ -1,6 +1,8 @@
 package com.gans.vk.dashboard.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +37,7 @@ public class StatisticsController {
 
     @RequestMapping(value = "/stats/rating")
     @ResponseBody
-    public List<RatingData> rating() {
+    public Entry<Map<Long, Float>, List<RatingData>> rating() {
         User currentUser = _sessionManager.getCurrentUser();
         return _ratingService.rating(currentUser);
     }

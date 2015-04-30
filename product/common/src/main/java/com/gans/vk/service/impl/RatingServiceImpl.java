@@ -1,9 +1,9 @@
 package com.gans.vk.service.impl;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
@@ -46,55 +46,49 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public List<RatingData> rating(User user) {
+    public Entry<Map<Long, Float>, List<RatingData>> rating(User user) {
         Calendar calendar = GregorianCalendar.getInstance();
         long to = calendar.getTimeInMillis();
         calendar.add(Calendar.DAY_OF_MONTH, -14);
         long from = calendar.getTimeInMillis();
         Multimap<Date, Entry<Integer, Integer>> ratingStats = _ratingDao.rating(user, from, to, SECONDS_PER_DAY);
-        if (ratingStats.isEmpty()) {
-            return Collections.emptyList();
-        }
 
-        System.out.println(ratingStats);
-        System.out.println();
+        Map<Long, Float> avgRatingData = new LinkedHashMap<>();
+        Map<Integer, Map<Date, Integer>> countData = new LinkedHashMap<>();
 
-        Map<Integer, Map<Date, Integer>> datum = new LinkedHashMap<>();
         for (int i = 1; i <= 5; i++) {
-            datum.put(i, new LinkedHashMap<Date, Integer>());
+            countData.put(i, new LinkedHashMap<Date, Integer>());
             for (Date date : ratingStats.keySet()) {
-                datum.get(i).put(date, 0);
+                countData.get(i).put(date, 0);
             }
         }
 
         for (Date date : ratingStats.keySet()) {
             Collection<Entry<Integer, Integer>> ratingData = ratingStats.get(date);
+            int totalCount = 0;
+            int totalRating = 0;
             for (Entry<Integer, Integer> entry : ratingData) {
                 int ratingValue = entry.getKey();
                 int count = entry.getValue();
-                datum.get(ratingValue).put(date, count);
+                countData.get(ratingValue).put(date, count);
+
+                totalCount += count;
+                totalRating += count * ratingValue;
             }
+            avgRatingData.put(date.getTime(), (float) totalRating / totalCount);
         }
 
-        System.out.println(datum);
-
         List<RatingData> result = new ArrayList<>();
-
-        RatingData countData = new RatingData();
-        countData.setKey("count");
-
-        RatingData avgRatingData = new RatingData();
-        avgRatingData.setKey("avgRating");
-/*
-        for (Entry<Date, Entry<Integer, Integer>> dataPoint : ratingStats.entrySet()) {
-            Entry<Integer, Float> stats = dataPoint.getValue();
-            countData.addPoint(dataPoint.getKey().getTime(), stats.getKey());
-            avgRatingData.addPoint(dataPoint.getKey().getTime(), stats.getValue());
-        }*/
-
-        result.add(avgRatingData);
-        result.add(countData);
-        return result;
+        for (Integer value : countData.keySet()) {
+            RatingData ratingData = new RatingData();
+            ratingData.setKey("" + value);
+            Map<Date, Integer> dataPoints = countData.get(value);
+            for (Entry<Date, Integer> dataPoint : dataPoints.entrySet()) {
+                ratingData.addPoint(dataPoint.getKey().getTime(), dataPoint.getValue());
+            }
+            result.add(ratingData);
+        }
+        return new AbstractMap.SimpleEntry<Map<Long, Float>, List<RatingData>>(avgRatingData, result);
     }
 
     public void setRatingDao(RatingDao ratingDao) {

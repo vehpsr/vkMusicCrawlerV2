@@ -2,6 +2,7 @@ package com.gans.vk.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -12,7 +13,7 @@ public interface RatingService {
 
     void rate(User user, Song song, int value);
     void importUserAudioLib(User user, Set<Entry<String, String>> audioLib);
-    List<RatingData> rating(User user);
+    Entry<Map<Long, Float>, List<RatingData>> rating(User user);
 
     public static class RatingData {
         private String _key;
@@ -30,7 +31,7 @@ public interface RatingService {
             return _values;
         }
 
-        public void addPoint(long x, Number y) {
+        public void addPoint(long x, int y) {
             _values.add(new Point(x, y));
         }
 
@@ -38,9 +39,9 @@ public interface RatingService {
 
     public static class Point {
         private final long _x;
-        private final Number _y;
+        private final int _y;
 
-        public Point(long x, Number y) {
+        public Point(long x, int y) {
             _x = x;
             _y = y;
         }
@@ -49,7 +50,7 @@ public interface RatingService {
             return _x;
         }
 
-        public Number getY() {
+        public int getY() {
             return _y;
         }
 

@@ -25,10 +25,7 @@
         </span>
     </div>
 
-    <div id="avgRatingDiagram" class="metricDiagram avgRatingDiagram">
-        <svg></svg>
-    </div>
-    <div id="songsCountDiagram" class="metricDiagram songsCountDiagram">
+    <div id="ratingDiagram" class="metricDiagram ratingDiagram">
         <svg></svg>
     </div>
     <div class="separator"></div>
