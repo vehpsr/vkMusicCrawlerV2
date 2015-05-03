@@ -9,6 +9,16 @@
     <script src="${rc.getContextPath()}/resources/js/dashboard/discoveryPage.js" type="text/javascript"></script>
 </head>
 <body>
+    <div class="header">
+        <span>
+            <a href="${rc.getContextPath()}/">Home</a>
+        </span>
+        |
+        <span>
+            <a href="${rc.getContextPath()}/stats">Stats</a>
+        </span>
+    </div>
+
     <div class="wrapper">
         <@discoveryPanel entityName="user" />
         <@discoveryPanel entityName="group" />

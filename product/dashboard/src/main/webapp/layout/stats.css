@@ -1,13 +1,3 @@
-.header {
-    margin: 5px 0 5px 15px;
-}
-
-.header span {
-    margin: 2px;
-    text-decorating: none;
-    color: #000;
-}
-
 .metricDiagram {
     width: 90%;
     height: 400px;

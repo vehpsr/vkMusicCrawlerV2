@@ -8,6 +8,16 @@
     <script src="${rc.getContextPath()}/resources/js/jquery-2.1.3.js" type="text/javascript"></script>
 </head>
 <body>
+    <div class="header">
+        <span>
+            <a href="${rc.getContextPath()}/stats">Stats</a>
+        </span>
+        |
+        <span>
+            <a href="${rc.getContextPath()}/discover">Discover</a>
+        </span>
+    </div>
+
     <div class="wrapper">
         <div class="userTable">
             <div class="userTableHeader">

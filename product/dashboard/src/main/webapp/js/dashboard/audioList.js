@@ -9,6 +9,7 @@ $(function() {
             next.addClass('playing').siblings().removeClass('playing');
             audio.load($('.songWrap', next).attr('data-src'));
             audio.play();
+            updateStatusPanel();
         }
     })[0];
 
