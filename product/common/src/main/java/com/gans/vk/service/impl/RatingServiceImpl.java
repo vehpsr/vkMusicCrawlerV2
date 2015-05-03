@@ -46,12 +46,11 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public Entry<Map<Long, Float>, List<RatingData>> rating(User user) {
+    public Entry<Map<Long, Float>, List<RatingData>> songRating(User user) {
         Calendar calendar = GregorianCalendar.getInstance();
-        long to = calendar.getTimeInMillis();
         calendar.add(Calendar.DAY_OF_MONTH, -14);
         long from = calendar.getTimeInMillis();
-        Multimap<Date, Entry<Integer, Integer>> ratingStats = _ratingDao.rating(user, from, to, SECONDS_PER_DAY);
+        Multimap<Date, Entry<Integer, Integer>> ratingStats = _ratingDao.songRatingInPeriod(user, from, SECONDS_PER_DAY);
 
         Map<Long, Float> avgRatingData = new LinkedHashMap<>();
         Map<Integer, Map<Date, Integer>> countData = new LinkedHashMap<>();

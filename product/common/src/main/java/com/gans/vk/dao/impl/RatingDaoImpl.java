@@ -159,7 +159,7 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
     }
 
     @Override
-    public Multimap<java.util.Date, Entry<Integer, Integer>> rating(final User user, final long from, final long to, final long step) {
+    public Multimap<java.util.Date, Entry<Integer, Integer>> songRatingInPeriod(final User user, final long from, final long step) {
         final String dateColumn;
         if (MYSQL_VENDOR.equals(_dbVendor)) {
             dateColumn = MessageFormat.format("FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(date) / {0}) * {0}) ", String.valueOf(step));
@@ -189,7 +189,6 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
                 SQLQuery query = session.createSQLQuery(sql);
                 query.setLong("userId", user.getId());
                 query.setDate("from", new Date(from));
-                //query.setDate("to", new Date(to));
                 return query.list();
             }
         });

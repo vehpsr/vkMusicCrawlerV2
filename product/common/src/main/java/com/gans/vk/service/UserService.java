@@ -18,5 +18,6 @@ public interface UserService {
     List<User> getUndiscoveredUsers(int limit);
     User getRandomUser();
     List<Entry<String, Integer>> statisticsUserData();
+    void resolve(long userId);
 
 }

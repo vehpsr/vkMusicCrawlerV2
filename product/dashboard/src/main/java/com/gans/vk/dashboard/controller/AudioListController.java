@@ -32,22 +32,13 @@ import com.gans.vk.service.UserService;
 public class AudioListController {
 
     private static final Log LOG = LogFactory.getLog(AudioListController.class);
-    private static final int MAX_SONGS_ON_PAGE = 100;
+    private static final int MAX_SONGS_ON_PAGE = 150;
 
-    @Autowired
-    private SongService _songService;
-
-    @Autowired
-    private UserService _userService;
-
-    @Autowired
-    private RatingService _ratingService;
-
-    @Autowired
-    private AudioDiscoveryService _audioDiscovery;
-
-    @Autowired
-    private SessionManager _sessionManager;
+    @Autowired private SongService _songService;
+    @Autowired private UserService _userService;
+    @Autowired private RatingService _ratingService;
+    @Autowired private AudioDiscoveryService _audioDiscovery;
+    @Autowired private SessionManager _sessionManager;
 
     @RequestMapping(value = "/audio/{vkId}", method = RequestMethod.GET)
     public String songs(HttpServletRequest req, HttpServletResponse resp, @PathVariable String vkId, ModelMap model) {
@@ -76,6 +67,12 @@ public class AudioListController {
         Song song = _songService.get(id);
         _ratingService.rate(user, song, rating);
         return ResponseStatus.OK;
+    }
+
+    @RequestMapping(value = "/user/resolve/{id}", method=RequestMethod.GET)
+    public String resolveUser(@PathVariable long id) {
+        _userService.resolve(id);
+        return "redirect:/";
     }
 
     public void setSongService(SongService songService) {

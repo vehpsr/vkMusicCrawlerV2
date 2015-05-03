@@ -15,7 +15,7 @@ function addStatisticsChart(data) {
     nv.addGraph(function() {
         var colors = ['rgb(169,68,66)','rgb(212,156,94)','rgb(225,215,92)','rgb(164,184,83)','rgb(60,118,61)'];
         var chart = nv.models.multiBarChart()
-            .reduceXTicks(true)
+            .reduceXTicks(false)
             .rotateLabels(0)
             .showControls(false)
             .stacked(true)

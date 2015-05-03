@@ -13,7 +13,7 @@ public interface RatingService {
 
     void rate(User user, Song song, int value);
     void importUserAudioLib(User user, Set<Entry<String, String>> audioLib);
-    Entry<Map<Long, Float>, List<RatingData>> rating(User user);
+    Entry<Map<Long, Float>, List<RatingData>> songRating(User user);
     List<Entry<String, Integer>> statisticsRatingData(User user);
 
     public static class RatingData {

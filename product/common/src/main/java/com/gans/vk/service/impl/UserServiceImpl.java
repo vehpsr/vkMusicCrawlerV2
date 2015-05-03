@@ -5,17 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gans.vk.dao.UserDao;
 import com.gans.vk.dao.UserDao.UserLibData;
 import com.gans.vk.model.impl.User;
+import com.gans.vk.model.impl.User.UserStatus;
 import com.gans.vk.service.UserService;
 
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserDao _userDao;
+    private static final Log LOG = LogFactory.getLog(UserServiceImpl.class);
+
+    @Autowired private UserDao _userDao;
 
     @Override
     public User getByVkId(String vkId) {
@@ -76,6 +80,17 @@ public class UserServiceImpl implements UserService {
             result.add(userStatus);
         }
         return result;
+    }
+
+    @Override
+    public void resolve(long userId) {
+        User user = get(userId);
+        if (user == null) {
+            LOG.error("Fail to find user with Id: " + userId);
+            return;
+        }
+        user.setVkId(UserStatus.RESOLVED.name());
+        _userDao.save(user);
     }
 
     public void setUserDao(UserDao userDao) {

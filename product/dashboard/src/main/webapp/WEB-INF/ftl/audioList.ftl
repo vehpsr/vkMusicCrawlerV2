@@ -16,6 +16,10 @@
             <div><!-- TODO remove hardcode -->
                 <a href="//vk.com/${user.url}" target="_blank">${user.name}</a>
             </div>
+            <div>
+                <a href="${rc.getContextPath()}/user/resolve/${user.id?c}" onclick="return resolveConfirmation();">Resolve AudioLib</a>
+            </div>
+            <div>&nbsp;</div>
         </#if>
         <div>
             <a href="${rc.getContextPath()}/">Home</a>

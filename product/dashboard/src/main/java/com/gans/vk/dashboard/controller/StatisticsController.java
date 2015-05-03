@@ -38,14 +38,14 @@ public class StatisticsController {
     @RequestMapping(value = "/stats", method = RequestMethod.GET)
     public String statsPage(HttpServletRequest req, HttpServletResponse resp, Model model) {
         User user = _sessionManager.getCurrentUser();
+        List<Entry<String, Integer>> systemSongStats = _songService.statisticsSongData();
         List<Entry<String, Integer>> systemRatingStats = _ratingService.statisticsRatingData(user);
         List<Entry<String, Integer>> systemUserStats = _userService.statisticsUserData();
-        List<Entry<String, Integer>> systemSongStats = _songService.statisticsSongData();
 
         List<Entry<String, Integer>> systemStats = new ArrayList<>();
+        systemStats.addAll(systemSongStats);
         systemStats.addAll(systemRatingStats);
         systemStats.addAll(systemUserStats);
-        systemStats.addAll(systemSongStats);
         model.addAttribute("systemStats", systemStats);
 
         resp.setContentType("text/html;charset=UTF-8");
@@ -56,7 +56,7 @@ public class StatisticsController {
     @ResponseBody
     public Entry<Map<Long, Float>, List<RatingData>> rating() {
         User user = _sessionManager.getCurrentUser();
-        return _ratingService.rating(user);
+        return _ratingService.songRating(user);
     }
 
     public void setSessionManager(SessionManager sessionManager) {

@@ -107,6 +107,12 @@ function scrollToCurrentSong(e) {
     e.stopPropagation();
 }
 
+function resolveConfirmation() {
+    var msg = "Are you sure you want to resolve this Audio Library?";
+    var result = confirm(msg);
+    return result;
+}
+
 // scroll to top on refresh
 $(function() {
     $('body').scrollTop(0);
