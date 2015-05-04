@@ -72,7 +72,7 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
                 SQLQuery query = session.createSQLQuery(sql);
                 query.setLong("userId", user.getId());
                 query.setLong("targetId", target.getId());
-                query.setInteger("limit", limit);
+                query.setInteger("limit", limit * 2);
                 return query.list();
             }
         });

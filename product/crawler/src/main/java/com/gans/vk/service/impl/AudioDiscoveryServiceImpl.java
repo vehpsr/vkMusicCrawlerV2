@@ -43,10 +43,28 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
             return Collections.emptyList();
         }
         List<Map<AudioPart, String>> audioLib = _vkAudioProcessor.getAudioData(target.getVkId());
-        return merge(unratedDbSongs, audioLib);
+        Set<String> excludeArtists = getExcludedArtists(unratedDbSongs);
+        return merge(unratedDbSongs, audioLib, excludeArtists, maxSongsOnPage);
     }
 
-    private List<AudioData> merge(List<SongData> unratedDbSongs, List<Map<AudioPart, String>> audioLib) {
+    private Set<String> getExcludedArtists(List<SongData> unratedSongs) {
+        Set<String> artists = new HashSet<>();
+        for (SongData song : unratedSongs) {
+            if (song.getArtistRateCount() == 0) {
+                continue;
+            }
+            if (song.getArtistAvgRating() < 3.51f && song.getArtistRateCount() > 3) {
+                // 1 - 4; 1.5 - 8; 2 - 12; 2.5 - 16; 3 - 20; 3.5 - 24
+                if (song.getArtistRateCount() > 4 + (song.getArtistAvgRating() - 1) * 8) {
+                    artists.add(song.getArtist());
+                }
+            }
+        }
+        LOG.info("Skip: " + artists);
+        return artists;
+    }
+
+    private List<AudioData> merge(List<SongData> unratedDbSongs, List<Map<AudioPart, String>> audioLib, Set<String> excludeArtists, int maxSongsOnPage) {
         if (audioLib.isEmpty()) {
             return Collections.emptyList();
         }
@@ -56,7 +74,13 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
             hashToSong.put(hash, vkSong);
         }
         List<AudioData> result = new ArrayList<>();
-        for (SongData song : unratedDbSongs) {
+        for (int i = 0; i < unratedDbSongs.size() && result.size() < maxSongsOnPage; i++) {
+            SongData song = unratedDbSongs.get(i);
+            if (excludeArtists.contains(song.getArtist())) {
+                LOG.debug("Skip: " + song.toString());
+                continue;
+            }
+
             String hash = hash(song.getArtist(), song.getTitle());
             Map<AudioPart, String> vkSong = hashToSong.get(hash);
             if (vkSong == null) {
