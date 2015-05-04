@@ -56,6 +56,11 @@ $(function() {
         var titleMaxLen = 40;
         var artist = $('ol li.playing .songWrap .artist').text();
         var title = $('ol li.playing .songWrap .title').text();
+
+        var vkRef = $('#songVkRef');
+        vkRefUrl = vkRef.attr('href').split("?")[0];
+        vkRef.attr('href', vkRefUrl + "?q=" + artist + " " + title);
+
         while (artist.length + title.length > artistMaxLen + titleMaxLen) {
             if (artist.length > artistMaxLen) {
                 artist = artist.substring(0, artistMaxLen);

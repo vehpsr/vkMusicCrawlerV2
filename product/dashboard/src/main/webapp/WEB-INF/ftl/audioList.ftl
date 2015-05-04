@@ -30,9 +30,15 @@
         <div>
             <a href="${rc.getContextPath()}/stats">Stats</a>
         </div>
-        <div>
-            <a href="#" onclick="scrollToCurrentSong(event);">Focus</a>
-        </div>
+        <#if user?? >
+            <div>&nbsp;</div>
+            <div>
+                <a id="songVkRef" href="//vk.com/audios${user.vkId}" target="_blank">On VK</a>
+            </div>
+            <div>
+                <a href="#" onclick="scrollToCurrentSong(event);">Focus</a>
+            </div>
+        </#if>
     </div>
 
     <div class="wrapper">
