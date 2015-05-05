@@ -33,18 +33,10 @@
         </script>
     </div>
 
-    <div id="systemStats" class="systemData">
-        <ol>
-            <#list systemStats as entry>
-                <li>${entry.key} - ${entry.value}</li>
-            </#list>
-        </ol>
-    </div>
-
     <div>
-        <div id="treeDemo" style="width: 500px;"></div>
+        <div id="systemStats" class="systemDataTree" ></div>
         <script type="text/javascript">
-            setUpTreeDemo();
+            setUpSystemStatsTable();
         </script>
     </div>
 </body>

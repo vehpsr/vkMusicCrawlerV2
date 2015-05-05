@@ -1,7 +1,6 @@
 package com.gans.vk.dashboard.controller;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,7 +12,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,11 +23,11 @@ import com.gans.vk.service.RatingService;
 import com.gans.vk.service.RatingService.RatingData;
 import com.gans.vk.service.SongService;
 import com.gans.vk.service.UserService;
-import com.gans.vk.service.impl.RatingServiceImpl;
 
 @Controller
 public class StatisticsController {
 
+    @SuppressWarnings("unused")
     private static final Log LOG = LogFactory.getLog(StatisticsController.class);
 
     @Autowired private SessionManager _sessionManager;
@@ -38,24 +36,25 @@ public class StatisticsController {
     @Autowired private UserService _userService;
 
     @RequestMapping(value = "/stats", method = RequestMethod.GET)
-    public String statsPage(HttpServletRequest req, HttpServletResponse resp, Model model) {
-        long start = System.currentTimeMillis();
-
-        User user = _sessionManager.getCurrentUser();
-        List<Entry<String, Integer>> systemSongStats = _songService.statisticsSongData();
-        List<Entry<String, Integer>> systemRatingStats = _ratingService.statisticsRatingData(user);
-        List<Entry<String, Integer>> systemUserStats = _userService.statisticsUserData();
-
-        LOG.info(MessageFormat.format("Fetch statistics take: {0}", System.currentTimeMillis() - start));
-
-        List<Entry<String, Integer>> systemStats = new ArrayList<>();
-        systemStats.addAll(systemSongStats);
-        systemStats.addAll(systemRatingStats);
-        systemStats.addAll(systemUserStats);
-        model.addAttribute("systemStats", systemStats);
-
+    public String statsPage(HttpServletRequest req, HttpServletResponse resp) {
         resp.setContentType("text/html;charset=UTF-8");
         return "stats";
+    }
+
+    @RequestMapping(value = "/stats/system")
+    @ResponseBody
+    public List<StatNode> systemRating() {
+        User user = _sessionManager.getCurrentUser();
+        StatNode systemRatingStats = _ratingService.statisticsRatingData(user);
+        StatNode systemSongStats = _songService.statisticsSongData();
+        StatNode systemUserStats = _userService.statisticsUserData();
+
+        StatNode root = new StatNode("Stats");
+        root.addNode(systemSongStats);
+        root.addNode(systemRatingStats);
+        root.addNode(systemUserStats);
+
+        return Arrays.asList(root);
     }
 
     @RequestMapping(value = "/stats/rating")
@@ -63,15 +62,6 @@ public class StatisticsController {
     public Entry<Map<Long, Float>, List<RatingData>> rating() {
         User user = _sessionManager.getCurrentUser();
         return _ratingService.songRating(user);
-    }
-
-    @RequestMapping(value = "/stats/test")
-    @ResponseBody
-    public StatNode test() {
-        StatNode root = new StatNode("System Stats");
-        StatNode testSN = ((RatingServiceImpl)_ratingService).testSN();
-        root.addNode(testSN);
-        return root;
     }
 
     public void setSessionManager(SessionManager sessionManager) {

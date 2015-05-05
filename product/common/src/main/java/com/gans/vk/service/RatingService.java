@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.gans.vk.json.StatNode;
 import com.gans.vk.model.impl.Song;
 import com.gans.vk.model.impl.User;
 
@@ -14,7 +15,7 @@ public interface RatingService {
     void rate(User user, Song song, int value);
     void importUserAudioLib(User user, Set<Entry<String, String>> audioLib);
     Entry<Map<Long, Float>, List<RatingData>> songRating(User user);
-    List<Entry<String, Integer>> statisticsRatingData(User user);
+    StatNode statisticsRatingData(User user);
 
     public static class RatingData {
         private String _key;

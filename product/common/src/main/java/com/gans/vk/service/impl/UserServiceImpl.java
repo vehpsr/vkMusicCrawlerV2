@@ -1,7 +1,5 @@
 package com.gans.vk.service.impl;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -11,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gans.vk.dao.UserDao;
 import com.gans.vk.dao.UserDao.UserLibData;
+import com.gans.vk.json.StatNode;
 import com.gans.vk.model.impl.User;
 import com.gans.vk.model.impl.User.UserStatus;
 import com.gans.vk.service.UserService;
@@ -67,19 +66,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Entry<String, Integer>> statisticsUserData() {
+    public StatNode statisticsUserData() {
         int total = _userDao.countAll();
         int undiscovered = _userDao.getUndiscoveredUsersCount();
         List<Entry<String, Integer>> userStatusStatistics = _userDao.userStatusStatistics();
 
-        List<Entry<String, Integer>> result = new ArrayList<>();
-        result.add(new AbstractMap.SimpleEntry<String, Integer>("Total Users", total));
-        result.add(new AbstractMap.SimpleEntry<String, Integer>("Undiscovered", undiscovered));
-        result.add(new AbstractMap.SimpleEntry<String, Integer>("Discovered", total - undiscovered));
+        StatNode root = new StatNode("Total Users");
+        root.setVal(total);
+
+        StatNode undiscoveredNode = new StatNode("Undiscovered");
+        undiscoveredNode.setVal(undiscovered);
+        root.addNode(undiscoveredNode);
+
+        StatNode discoveredNode = new StatNode("Discovered");
+        discoveredNode.setVal(total - undiscovered);
+        root.addNode(discoveredNode);
+
         for (Entry<String, Integer> userStatus : userStatusStatistics) {
-            result.add(userStatus);
+            StatNode discoveredSubNode = new StatNode(userStatus.getKey());
+            discoveredSubNode.setVal(userStatus.getValue());
+            discoveredNode.addNode(discoveredSubNode);
         }
-        return result;
+
+        return root;
     }
 
     @Override

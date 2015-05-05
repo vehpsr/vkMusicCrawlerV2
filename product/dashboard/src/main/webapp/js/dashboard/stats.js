@@ -47,37 +47,36 @@ function addStatisticsChart(data) {
     });
 }
 
-function setUpTreeDemo() {
+function setUpSystemStatsTable() {
     $.ajax({
-        url: $("#contstants").data("contextPath") + "/stats/test",
+        url: $("#contstants").data("contextPath") + "/stats/system",
         method: 'GET',
         beforeSend: function(xhr) {
             xhr.setRequestHeader("Accept", "application/json");
             xhr.setRequestHeader("Content-Type", "application/json");
         }
     }).done(function(data) {
-        addTreeDemo(data);
+        addSystemStatsTable(data);
     });
 }
 
-function addTreeDemo(data) {
+function addSystemStatsTable(data) {
     nv.addGraph(function() {
         var chart = nv.models.indentedTree()
         .columns([ {
             key : 'key',
             label : 'Name',
-            showCount : true,
             width : '75%',
             type : 'text'
         }, {
             key : 'val',
-            label : 'Value',
+            label : 'Stat',
             width : '25%',
             type : 'text'
         } ]);
 
-        d3.select('#treeDemo').datum(new Array(data)).call(chart);
+        d3.select('#systemStats').datum(data).call(chart);
 
         return chart;
-        });
+    });
 }

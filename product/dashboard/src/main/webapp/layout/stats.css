@@ -3,6 +3,7 @@
     height: 400px;
 }
 
-#ratingDiagram.metricDiagram .nv-groups rect {
-    fill-opacity: 0.85;
+.systemDataTree {
+    width: 50%;
+    margin-left: 15px;
 }

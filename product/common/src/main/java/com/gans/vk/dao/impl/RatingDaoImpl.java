@@ -213,4 +213,28 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
         return ((Number)resultSet.get(0)).intValue();
     }
 
+    @Override
+    public int importedByUserCount(final User user) {
+        final String sql =
+                "SELECT " +
+                    "MAX(ratingCount) " +
+                "FROM " +
+                "	(SELECT " +
+                "		COUNT(date) as ratingCount " +
+                "	FROM " +
+                "		Rating " +
+                "	WHERE " +
+                "		user_id = :userId" +
+                "	GROUP BY date) AS tmp ";
+
+        return getHibernateTemplate().execute(new HibernateCallback<Integer>() {
+            @Override
+            public Integer doInHibernate(Session session) throws HibernateException, SQLException {
+                SQLQuery query = session.createSQLQuery(sql);
+                query.setLong("userId", user.getId());
+                return ((Number)query.uniqueResult()).intValue();
+            }
+        });
+    }
+
 }

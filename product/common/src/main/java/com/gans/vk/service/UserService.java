@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.gans.vk.dao.UserDao.UserLibData;
+import com.gans.vk.json.StatNode;
 import com.gans.vk.model.impl.User;
 
 public interface UserService {
@@ -17,7 +18,7 @@ public interface UserService {
     int getUndiscoveredUsersCount();
     List<User> getUndiscoveredUsers(int limit);
     User getRandomUser();
-    List<Entry<String, Integer>> statisticsUserData();
+    StatNode statisticsUserData();
     void resolve(long userId);
 
 }

@@ -92,28 +92,27 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public List<Entry<String, Integer>> statisticsRatingData(User user) {
+    public StatNode statisticsRatingData(User user) {
         int ratedByUser = _ratingDao.ratedByUserCount(user);
+        int importedByUser = _ratingDao.importedByUserCount(user);
         int total = _ratingDao.countAll();
 
-        List<Entry<String, Integer>> result = new ArrayList<>();
-        result.add(new AbstractMap.SimpleEntry<String, Integer>("Total rated", total));
-        result.add(new AbstractMap.SimpleEntry<String, Integer>("Rated by me", ratedByUser));
-        return result;
-    }
-
-    public StatNode testSN() {
-        int total = 100;
-        int ratedByUser = 23;
-
-        StatNode root = new StatNode("Total rated");
+        StatNode root = new StatNode("Total Rating");
         root.setVal(total);
 
-        StatNode ratedByMeNode = new StatNode("Rated by me");
+        StatNode ratedByMeNode = new StatNode("By me");
         ratedByMeNode.setVal(ratedByUser);
         root.addNode(ratedByMeNode);
 
-        StatNode ratedByOthersNode = new StatNode("Rated by others");
+        StatNode importedByMeNode = new StatNode("Imported");
+        importedByMeNode.setVal(importedByUser);
+        ratedByMeNode.addNode(importedByMeNode);
+
+        StatNode manuallyRatedByMeNode = new StatNode("Manually");
+        manuallyRatedByMeNode.setVal(ratedByUser - importedByUser);
+        ratedByMeNode.addNode(manuallyRatedByMeNode);
+
+        StatNode ratedByOthersNode = new StatNode("By others");
         ratedByOthersNode.setVal(total - ratedByUser);
         root.addNode(ratedByOthersNode);
 
