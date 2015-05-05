@@ -46,3 +46,38 @@ function addStatisticsChart(data) {
         return chart;
     });
 }
+
+function setUpTreeDemo() {
+    $.ajax({
+        url: $("#contstants").data("contextPath") + "/stats/test",
+        method: 'GET',
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("Content-Type", "application/json");
+        }
+    }).done(function(data) {
+        addTreeDemo(data);
+    });
+}
+
+function addTreeDemo(data) {
+    nv.addGraph(function() {
+        var chart = nv.models.indentedTree()
+        .columns([ {
+            key : 'key',
+            label : 'Name',
+            showCount : true,
+            width : '75%',
+            type : 'text'
+        }, {
+            key : 'val',
+            label : 'Value',
+            width : '25%',
+            type : 'text'
+        } ]);
+
+        d3.select('#treeDemo').datum(new Array(data)).call(chart);
+
+        return chart;
+        });
+}

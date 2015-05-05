@@ -16,6 +16,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gans.vk.dao.RatingDao;
+import com.gans.vk.json.StatNode;
 import com.gans.vk.model.impl.Rating;
 import com.gans.vk.model.impl.Song;
 import com.gans.vk.model.impl.User;
@@ -99,6 +100,24 @@ public class RatingServiceImpl implements RatingService {
         result.add(new AbstractMap.SimpleEntry<String, Integer>("Total rated", total));
         result.add(new AbstractMap.SimpleEntry<String, Integer>("Rated by me", ratedByUser));
         return result;
+    }
+
+    public StatNode testSN() {
+        int total = 100;
+        int ratedByUser = 23;
+
+        StatNode root = new StatNode("Total rated");
+        root.setVal(total);
+
+        StatNode ratedByMeNode = new StatNode("Rated by me");
+        ratedByMeNode.setVal(ratedByUser);
+        root.addNode(ratedByMeNode);
+
+        StatNode ratedByOthersNode = new StatNode("Rated by others");
+        ratedByOthersNode.setVal(total - ratedByUser);
+        root.addNode(ratedByOthersNode);
+
+        return root;
     }
 
     public void setRatingDao(RatingDao ratingDao) {

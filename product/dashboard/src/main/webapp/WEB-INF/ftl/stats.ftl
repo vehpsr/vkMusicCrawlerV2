@@ -9,6 +9,7 @@
     <script src="${rc.getContextPath()}/resources/js/jquery-2.1.3.js" type="text/javascript"></script>
     <script src="${rc.getContextPath()}/resources/js/d3.js" type="text/javascript"></script>
     <script src="${rc.getContextPath()}/resources/js/nv.d3.js" type="text/javascript"></script>
+    <script src="${rc.getContextPath()}/resources/js/nv.d3.patch.js" type="text/javascript"></script>
     <script src="${rc.getContextPath()}/resources/js/dashboard/stats.js" type="text/javascript"></script>
 </head>
 <body>
@@ -38,6 +39,13 @@
                 <li>${entry.key} - ${entry.value}</li>
             </#list>
         </ol>
+    </div>
+
+    <div>
+        <div id="treeDemo" style="width: 500px;"></div>
+        <script type="text/javascript">
+            setUpTreeDemo();
+        </script>
     </div>
 </body>
 </html>
