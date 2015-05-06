@@ -82,11 +82,17 @@ public class UserServiceImpl implements UserService {
         discoveredNode.setVal(total - undiscovered);
         root.addNode(discoveredNode);
 
+        int discoveryFailures = 0;
         for (Entry<String, Integer> userStatus : userStatusStatistics) {
             StatNode discoveredSubNode = new StatNode(userStatus.getKey());
             discoveredSubNode.setVal(userStatus.getValue());
             discoveredNode.addNode(discoveredSubNode);
+            discoveryFailures += userStatus.getValue();
         }
+
+        StatNode discoverySuccessNode = new StatNode("Successful");
+        discoverySuccessNode.setVal(total - undiscovered - discoveryFailures);
+        discoveredNode.addNode(discoverySuccessNode);
 
         return root;
     }

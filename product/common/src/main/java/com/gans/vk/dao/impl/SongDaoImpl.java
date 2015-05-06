@@ -106,23 +106,36 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
                     "GROUP BY " +
                     "	artist " +
                     "HAVING " +
-                    "	AVG(value) > 3.5 " + // TODO switch to avgRating if move from Postgres
+                    "	AVG(value) > 3.5 " +
                     "ORDER BY " +
                     "	ratingCount DESC, avgRating DESC " +
                     "LIMIT 10 ";
         } else if (owner == TopArtistsList.GLOBAL_LIST) {
+            /* query will provide approximate result. performance compromise */
             sql =
                     "SELECT " +
-                    "	artist, COUNT(value) AS ratingCount, COUNT(DISTINCT user_id) AS occurenceCount " +
+                    "	artist, COUNT(*) AS artistCount, COUNT(DISTINCT user_id) AS occurenceCount " +
                     "FROM " +
                     "	Song " +
                     "	JOIN Rating ON song.id = rating.song_id " +
                     "WHERE " +
                     "	user_id <> :userId " +
+                    "	AND artist IN " +
+                    "		(SELECT artist FROM " +
+                    "			(SELECT " +
+                    "				artist, COUNT(*) as artistCount " +
+                    "			FROM " +
+                    "				Song " +
+                    "			GROUP BY " +
+                    "				artist " +
+                    "			ORDER BY " +
+                    "				artistCount DESC " +
+                    "			LIMIT 30) AS tmp " +
+                    "		) " +
                     "GROUP BY " +
                     "	artist " +
                     "ORDER BY " +
-                    "	occurenceCount DESC, ratingCount DESC " +
+                    "	occurenceCount DESC, artistCount DESC " +
                     "LIMIT 10 ";
         } else {
             throw new IllegalArgumentException(MessageFormat.format("Unexpected list type for {0}", owner));
