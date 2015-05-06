@@ -38,6 +38,10 @@
             <div>
                 <a href="#" onclick="scrollToCurrentSong(event);">Focus</a>
             </div>
+            <div>&nbsp;</div>
+            <div>
+                <span>${user.rating?string["0.###"]} / ${user.ratedAudioCount} / ${user.totalAudioCount}</span>
+            </div>
         </#if>
     </div>
 

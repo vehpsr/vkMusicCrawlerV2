@@ -13,7 +13,7 @@ public interface UserService {
     User getByVkId(String vkId);
     User getByUrl(String url);
     void save(User user);
-    List<UserLibData> getRecomendedAudioLibsFor(User user);
+    List<UserLibData> getRecomendedUserLibData(User user, User target);
     void importUnique(List<Entry<String, String>> users);
     int getUndiscoveredUsersCount();
     List<User> getUndiscoveredUsers(int limit);

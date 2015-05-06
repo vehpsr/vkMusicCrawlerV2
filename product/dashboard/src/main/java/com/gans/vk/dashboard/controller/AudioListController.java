@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gans.vk.dao.UserDao.UserLibData;
 import com.gans.vk.dashboard.controller.model.ResponseStatus;
 import com.gans.vk.dashboard.session.SessionManager;
 import com.gans.vk.dashboard.util.RequestUtils;
@@ -45,16 +46,17 @@ public class AudioListController {
         User user = _sessionManager.getCurrentUser();
         User target = _userService.getByVkId(vkId);
         if (target == null) {
-            // TODO error page
             LOG.warn("Fail to find user with vkId: " + vkId);
             model.addAttribute("songs", new ArrayList<String>());
             return "audioList";
         }
-        resp.setContentType("text/html;charset=UTF-8");
 
         List<AudioData> songs = _audioDiscovery.getAllUnratedSongs(target, user, MAX_SONGS_ON_PAGE);
-        model.addAttribute("user", target);
+        List<UserLibData> userLibData = _userService.getRecomendedUserLibData(user, target);
         model.addAttribute("songs", songs);
+        model.addAttribute("user", userLibData.isEmpty() ? null : userLibData.get(0));
+
+        resp.setContentType("text/html;charset=UTF-8");
         return "audioList";
     }
 

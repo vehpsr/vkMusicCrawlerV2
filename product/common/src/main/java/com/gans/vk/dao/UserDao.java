@@ -9,7 +9,7 @@ public interface UserDao extends ModelDao<User> {
 
     User getUserByUrl(String name);
     User getUserByVkId(String vkId);
-    List<UserLibData> getRecomendedAudioLibsFor(User user);
+    List<UserLibData> getRecomendedUserLibData(User user, User target);
     void importUnique(List<Entry<String, String>> users);
     int getUndiscoveredUsersCount();
     List<User> getUndiscoveredUsers(int limit);

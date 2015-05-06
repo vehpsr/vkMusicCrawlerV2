@@ -32,7 +32,7 @@ public class UserListController {
     @RequestMapping(value = "/", method = RequestMethod.GET) // "/users" route in future
     public String songs(HttpServletRequest req, HttpServletResponse resp, ModelMap model) {
         User currentUser = _sessionManager.getCurrentUser();
-        List<UserLibData> users = _userService.getRecomendedAudioLibsFor(currentUser);
+        List<UserLibData> users = _userService.getRecomendedUserLibData(currentUser, null);
         User randomUser = _userService.getRandomUser();
         if (randomUser != null) {
             users.add(UserLibData.convert(randomUser));

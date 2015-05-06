@@ -49,7 +49,13 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
     }
 
     @Override
-    public List<UserLibData> getRecomendedAudioLibsFor(final User user) {
+    public List<UserLibData> getRecomendedUserLibData(final User user, final User target) {
+        final String filterByUser;
+        if (target == null) { // for all
+            filterByUser = "<> :userId ";
+        } else { // get data for specific user
+            filterByUser = "= :targetId ";
+        }
         final String sql =
             "SELECT " +
             "	u.id, u.name, u.url, u.vkId, avgRatingQuery.avgRating, totalCountQuery.total, ratedCountQuery.rated " +
@@ -86,7 +92,7 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
             "				rating.user_id = :userId " +
             "			) AS ratedSongs ON ratedSongs.id = song.id " +
             "		WHERE " +
-            "			rating.user_id <> :userId " +
+            "			rating.user_id " + filterByUser +
             "		) AS aggRatingTable " +
             "	GROUP BY " +
             "		id " +
@@ -99,7 +105,7 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
             "	FROM " +
             "		Rating rating " +
             "	WHERE " +
-            "		rating.user_id <> :userId " +
+            "		rating.user_id " + filterByUser +
             "	GROUP BY " +
             "		rating.user_id " +
             "	) AS totalCountQuery ON totalCountQuery.user_id = avgRatingQuery.id " +
@@ -110,14 +116,14 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
             "		(SELECT song_id FROM Rating WHERE user_id = :userId) AS ratedByUser " +
             "		JOIN Rating rating ON rating.song_id = ratedByUser.song_id " +
             "	WHERE " +
-            "		rating.user_id <> :userId " +
+            "		rating.user_id " + filterByUser +
             "	GROUP BY " +
             "		rating.user_id " +
             "	) AS ratedCountQuery ON totalCountQuery.user_id = ratedCountQuery.user_id " +
             "	RIGHT JOIN " +
             "	Users u ON u.id = totalCountQuery.user_id " +
             "WHERE " +
-            "	(u.id <> :userId AND u.vkId IS NOT NULL AND u.vkId NOT IN (:userStatus)) " +
+            "	(u.id " + filterByUser + "AND u.vkId IS NOT NULL AND u.vkId NOT IN (:userStatus)) " +
             "	AND (totalCountQuery.total IS NOT NULL OR totalCountQuery.total > 0) " +
             "ORDER BY " +
             "	avgRatingQuery.avgRating DESC ";
@@ -129,6 +135,9 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
             public Collection<Object[]> doInHibernate(Session session) throws HibernateException, SQLException {
                 SQLQuery query = session.createSQLQuery(sql);
                 query.setLong("userId", user.getId());
+                if (target != null) {
+                    query.setLong("targetId", target.getId());
+                }
                 query.setParameterList("userStatus", UserStatus.names());
                 query.setMaxResults(20);
                 return query.list();

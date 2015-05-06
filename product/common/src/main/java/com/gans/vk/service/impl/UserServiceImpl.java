@@ -36,8 +36,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserLibData> getRecomendedAudioLibsFor(User user) {
-        return _userDao.getRecomendedAudioLibsFor(user);
+    public List<UserLibData> getRecomendedUserLibData(User user, User target) {
+        return _userDao.getRecomendedUserLibData(user, null);
     }
 
     @Override
