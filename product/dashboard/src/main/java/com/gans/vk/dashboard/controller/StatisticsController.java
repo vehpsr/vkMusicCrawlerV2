@@ -46,13 +46,13 @@ public class StatisticsController {
     public List<StatNode> systemRating() {
         User user = _sessionManager.getCurrentUser();
         StatNode systemRatingStats = _ratingService.statisticsRatingData(user);
-        StatNode systemSongStats = _songService.statisticsSongData();
         StatNode systemUserStats = _userService.statisticsUserData();
+        StatNode systemSongStats = _songService.statisticsSongData(user);
 
         StatNode root = new StatNode("Stats");
-        root.addNode(systemSongStats);
         root.addNode(systemRatingStats);
         root.addNode(systemUserStats);
+        root.addNode(systemSongStats);
 
         return Arrays.asList(root);
     }

@@ -1,5 +1,6 @@
 package com.gans.vk.json;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ public class StatNode {
 
     private final String _key;
     private final List<StatNode> _nodes = new ArrayList<>();
-    private Integer _val;
+    private String _val;
 
     public StatNode(String key) {
         _key = key;
@@ -25,11 +26,15 @@ public class StatNode {
         _nodes.add(node);
     }
 
-    public Integer getVal() {
+    public String getVal() {
         return _val;
     }
 
-    public void setVal(Integer val) {
+    public void setVal(int val) {
+        _val = MessageFormat.format("{0}", val);;
+    }
+
+    public void setVal(String val) {
         _val = val;
     }
 

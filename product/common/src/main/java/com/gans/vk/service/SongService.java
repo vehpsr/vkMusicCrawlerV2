@@ -11,5 +11,5 @@ public interface SongService {
 
     List<SongData> getAllUnratedSongs(User target, User user, int limit);
     Song get(long id);
-    StatNode statisticsSongData();
+    StatNode statisticsSongData(User user);
 }

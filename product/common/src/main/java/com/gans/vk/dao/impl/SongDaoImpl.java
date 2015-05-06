@@ -91,4 +91,62 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
         return songs;
     }
 
+    @Override
+    public List<ArtistData> getTopArtistsData(final User user, TopArtistsList owner) {
+        final String sql;
+        if (owner == TopArtistsList.USER_LIST) {
+            sql =
+                    "SELECT " +
+                    "	artist, COUNT(value) AS ratingCount, AVG(value) AS avgRating " +
+                    "FROM " +
+                    "	Song " +
+                    "	JOIN Rating ON song.id = rating.song_id " +
+                    "WHERE " +
+                    "	user_id = :userId " +
+                    "GROUP BY " +
+                    "	artist " +
+                    "HAVING " +
+                    "	avgRating > 3.5 " +
+                    "ORDER BY " +
+                    "	ratingCount DESC, avgRating DESC " +
+                    "LIMIT 10 ";
+        } else if (owner == TopArtistsList.GLOBAL_LIST) {
+            sql =
+                    "SELECT " +
+                    "	artist, COUNT(value) as ratingCount, COUNT(DISTINCT user_id) AS occurenceCount " +
+                    "FROM " +
+                    "	Song " +
+                    "	JOIN Rating ON song.id = rating.song_id " +
+                    "WHERE " +
+                    "	user_id <> :userId " +
+                    "GROUP BY " +
+                    "	artist " +
+                    "ORDER BY " +
+                    "	occurenceCount DESC, ratingCount DESC " +
+                    "LIMIT 10 ";
+        } else {
+            throw new IllegalArgumentException(MessageFormat.format("Unexpected list type for {0}", owner));
+        }
+
+        Collection<Object[]> rows = getHibernateTemplate().execute(new HibernateCallback<Collection<Object[]>>() {
+            @Override
+            @SuppressWarnings("unchecked")
+            public Collection<Object[]> doInHibernate(Session session) throws HibernateException, SQLException {
+                SQLQuery query = session.createSQLQuery(sql);
+                query.setLong("userId", user.getId());
+                return query.list();
+            }
+        });
+
+        List<ArtistData> result = new ArrayList<>();
+        for (Object[] row : rows) {
+            ArtistData data = new ArtistData();
+            data.setArtist((String)row[0]);
+            data.setArtistCount(((Number)row[1]).intValue());
+            data.setData((Number)row[2]);
+            result.add(data);
+        }
+        return result;
+    }
+
 }
