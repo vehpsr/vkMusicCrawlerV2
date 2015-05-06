@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserLibData> getRecomendedUserLibData(User user, User target) {
-        return _userDao.getRecomendedUserLibData(user, null);
+        return _userDao.getRecomendedUserLibData(user, target);
     }
 
     @Override

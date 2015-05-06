@@ -106,14 +106,14 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
                     "GROUP BY " +
                     "	artist " +
                     "HAVING " +
-                    "	avgRating > 3.5 " +
+                    "	AVG(value) > 3.5 " + // TODO switch to avgRating if move from Postgres
                     "ORDER BY " +
                     "	ratingCount DESC, avgRating DESC " +
                     "LIMIT 10 ";
         } else if (owner == TopArtistsList.GLOBAL_LIST) {
             sql =
                     "SELECT " +
-                    "	artist, COUNT(value) as ratingCount, COUNT(DISTINCT user_id) AS occurenceCount " +
+                    "	artist, COUNT(value) AS ratingCount, COUNT(DISTINCT user_id) AS occurenceCount " +
                     "FROM " +
                     "	Song " +
                     "	JOIN Rating ON song.id = rating.song_id " +
