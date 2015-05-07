@@ -1,5 +1,6 @@
 // set up audio player
 $(function() {
+
     // Setup the player to autoplay the next track
     var audio = audiojs.createAll({
         trackEnded : function() {
@@ -42,13 +43,28 @@ $(function() {
     });
 
     function injectVolumeSlider(player) {
-        var slider = $('<input id="volumeSlider" type="range" min="0" max="100" value="100" step="1"/>');
-        slider.on('change mousemove', function() {
-            var value = parseInt(slider.val()) / 100;
-            var volume = value * value;
-            player.setVolume(volume);
+        var VOLUME_COOKIE = "crawler_volume_value";
+
+        var globalVolume = parseInt(readCookie(VOLUME_COOKIE)) || 100;
+        player.setVolume(convert(globalVolume));
+        var slider = $('<input id="volumeSlider" type="range" min="0" max="100" value="' + globalVolume + '" step="1"/>');
+        slider.on('mousemove', function() {
+            player.setVolume(convert(slider.val()));
+        }).on('mouseup', function() {
+            createCookie(VOLUME_COOKIE, slider.val());
         });
         $('#audioPlayer .time').append(slider);
+
+        function convert(val) {
+            val = parseInt(val) / 100;
+            if (val < 0) {
+                return 0;
+            } else if (val > 1) {
+                return 1;
+            } else {
+                return val * val;
+            }
+        }
     }
 
     function updateStatusPanel() {
@@ -123,3 +139,22 @@ function resolveConfirmation() {
 $(function() {
     $('body').scrollTop(0);
 });
+
+// Utils
+function createCookie(name, value) {
+    var date = new Date();
+    date.setTime(date.getTime() + (30*24*60*60*1000));
+    var expires = "; expires="+date.toGMTString();
+    document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}

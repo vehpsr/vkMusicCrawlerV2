@@ -105,8 +105,7 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
                         Date now = new Date(System.currentTimeMillis());
 
                         int traceInsertSongCount = 0;
-                        int traceInsertRatingCount = 0;
-                        int traceCounter = 1;
+                        int batchCounter = 1;
 
                         for (Entry<String, String> song : audioLib) {
                             String artist = song.getKey();
@@ -124,23 +123,22 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
                             insertRatingStatement.setString(4, title);
                             insertRatingStatement.addBatch();
 
-                            if (traceCounter % batchSize == 0) {
+                            if (batchCounter % batchSize == 0) {
                                 int[] songCount = insertSongStatement.executeBatch();
-                                int[] ratingCount = insertRatingStatement.executeBatch();
                                 traceInsertSongCount += sum(songCount);
-                                traceInsertRatingCount += sum(ratingCount);
+
+                                insertRatingStatement.executeBatch();
                             }
 
-                            if (traceCounter % 1000 == 0) {
-                                LOG.info(MessageFormat.format("Inserted {0} new songs from total of {1}", traceInsertSongCount, traceCounter));
-                                LOG.info(MessageFormat.format("Rated {0} new songs from total of {1}", traceInsertRatingCount, traceCounter));
-                            }
-
-                            traceCounter++;
+                            batchCounter++;
                         }
 
-                        insertSongStatement.executeBatch();
+                        int[] songCount = insertSongStatement.executeBatch();
+                        traceInsertSongCount += sum(songCount);
+
                         insertRatingStatement.executeBatch();
+
+                        LOG.info(MessageFormat.format("Inserted {0} new songs from total of {1}", traceInsertSongCount, audioLib.size()));
                     }
 
                     private int sum(int[] batchCount) {

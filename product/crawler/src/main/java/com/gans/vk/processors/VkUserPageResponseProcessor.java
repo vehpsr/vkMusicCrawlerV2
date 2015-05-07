@@ -88,7 +88,7 @@ public class VkUserPageResponseProcessor {
     }
 
     private Document getHtmlPage(String url) {
-        int retryCount = 3;
+        int retryCount = 1;
         while (retryCount > 0) {
             String vkUserPage = _vkDomain.endsWith("/") ? _vkDomain + url : _vkDomain + "/" + url;
             String html = _vkConnector.get(vkUserPage);
@@ -97,7 +97,7 @@ public class VkUserPageResponseProcessor {
 
             Document page = Jsoup.parse(html);
             if (isDdosBlocked(page)) {
-                RestUtils.sleep((5 - retryCount) + "x");
+                RestUtils.sleep("3x");
             } else {
                 return page;
             }
