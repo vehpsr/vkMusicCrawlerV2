@@ -132,8 +132,11 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
     @Override
     public void discoverNewUsers(int limit) {
         List<User> newUsers = _userService.getUndiscoveredUsers(limit);
-        for (User user : newUsers) {
-            syncUserAudioData(user);
+        for (int i = 0; i < newUsers.size(); i++) {
+            syncUserAudioData(newUsers.get(i));
+            if (i != 0 && i % 10 == 0) {
+                LOG.info("Discovered - " + i);
+            }
         }
         LOG.info("New user discovery end");
     }

@@ -97,7 +97,7 @@ public class VkUserPageResponseProcessor {
 
             Document page = Jsoup.parse(html);
             if (isDdosBlocked(page)) {
-                RestUtils.sleep("3x");
+                RestUtils.sleep("4x");
             } else {
                 return page;
             }
