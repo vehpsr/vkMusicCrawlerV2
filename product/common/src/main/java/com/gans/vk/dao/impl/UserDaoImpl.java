@@ -61,41 +61,40 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
             "	u.id, u.name, u.url, u.vkId, avgRatingQuery.avgRating, totalCountQuery.total, ratedCountQuery.rated " +
             "FROM " +
             "	(SELECT " +
-            "		id, AVG(rating) AS avgRating " +
+            "		user_id, AVG(aggSongRatingTable.rating) AS avgRating " +
             "	FROM " +
             "		(SELECT " +
-            "			rating.user_id AS id, CASE " +
+            "			song.id, CASE " +
             "							WHEN ratedSongs.rating IS NOT NULL THEN ratedSongs.rating " +
             "							WHEN artistRating.rating IS NOT NULL THEN artistRating.rating " +
             "							ELSE 3.1 END AS rating " +
             "		FROM " +
-            "			Rating rating " +
-            "			JOIN Song song ON rating.song_id = song.id " +
+            "			Song song " +
             "			LEFT JOIN " +
             "			(SELECT " +
-            "				artist, AVG(rating.value) AS rating " +
+            "				artist, AVG(value) AS rating " +
             "			FROM " +
             "				Song song " +
             "				JOIN Rating rating ON song.id = rating.song_id " +
             "			WHERE " +
-            "				rating.user_id = :userId " +
+            "				user_id = :userId " +
             "			GROUP BY " +
             "				artist " +
             "			) AS artistRating ON song.artist = artistRating.artist " +
             "			LEFT JOIN " +
             "			(SELECT " +
-            "				song.id, value as rating " +
+            "				song_id, value as rating " +
             "			FROM " +
-            "				Song song " +
-            "				JOIN Rating rating ON song.id = rating.song_id " +
+            "				Rating " +
             "			WHERE " +
-            "				rating.user_id = :userId " +
-            "			) AS ratedSongs ON ratedSongs.id = song.id " +
-            "		WHERE " +
-            "			rating.user_id " + filterByUser +
-            "		) AS aggRatingTable " +
+            "				user_id = :userId " +
+            "			) AS ratedSongs ON ratedSongs.song_id = song.id " +
+            "		) AS aggSongRatingTable " +
+            "		JOIN Rating rating ON aggSongRatingTable.id = rating.song_id " +
+            "	WHERE " +
+            "		user_id " + filterByUser +
             "	GROUP BY " +
-            "		id " +
+            "		user_id " +
             "	ORDER BY " +
             "		avgRating DESC " +
             "	) AS avgRatingQuery " +
@@ -108,7 +107,7 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
             "		rating.user_id " + filterByUser +
             "	GROUP BY " +
             "		rating.user_id " +
-            "	) AS totalCountQuery ON totalCountQuery.user_id = avgRatingQuery.id " +
+            "	) AS totalCountQuery ON totalCountQuery.user_id = avgRatingQuery.user_id " +
             "	LEFT JOIN " +
             "	(SELECT " +
             "		rating.user_id, COUNT(*) AS rated " +
@@ -124,7 +123,6 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
             "	Users u ON u.id = totalCountQuery.user_id " +
             "WHERE " +
             "	(u.id " + filterByUser + "AND u.vkId IS NOT NULL AND u.vkId NOT IN (:userStatus)) " +
-            "	AND (totalCountQuery.total IS NOT NULL OR totalCountQuery.total > 0) " +
             "ORDER BY " +
             "	avgRatingQuery.avgRating DESC ";
 
