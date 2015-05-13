@@ -14,9 +14,6 @@ import com.gans.vk.model.AbstractModel;
 
 public abstract class AbstractModelDao<T extends AbstractModel> extends HibernateDaoSupport implements ModelDao<T> {
 
-    protected static final String MYSQL_VENDOR = "mysql";
-    protected static final String POSTGRES_VENDOR = "postgresql";
-
     protected final Class<T> _entityClass;
     protected String _dbVendor;
 
@@ -123,17 +120,4 @@ public abstract class AbstractModelDao<T extends AbstractModel> extends Hibernat
         return objects.get(0);
     }
 
-    protected String random() {
-        if (_dbVendor.equals(MYSQL_VENDOR)) {
-            return "RAND() ";
-        } else if (_dbVendor.equals(POSTGRES_VENDOR)) {
-            return "RANDOM() ";
-        } else {
-            throw new IllegalStateException(MessageFormat.format("Unsupported database vendor {0}", _dbVendor));
-        }
-    }
-
-    public void setDbVendor(String dbVendor) {
-        _dbVendor = dbVendor;
-    }
 }

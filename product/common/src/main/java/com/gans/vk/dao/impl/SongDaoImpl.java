@@ -63,7 +63,7 @@ public class SongDaoImpl extends AbstractModelDao<Song> implements SongDao {
                 "		artist " +
                 "	) AS songData ON songData.artist = targetSongs.artist " +
                 "	ORDER BY " +
-                        random();
+                "		RAND() ";
 
         long start = System.currentTimeMillis();
         Collection<Object[]> rows = getHibernateTemplate().execute(new HibernateCallback<Collection<Object[]>>() {

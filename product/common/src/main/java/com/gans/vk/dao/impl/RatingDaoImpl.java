@@ -158,14 +158,7 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
 
     @Override
     public Multimap<java.util.Date, Entry<Integer, Integer>> songRatingInPeriod(final User user, final long from, final long step) {
-        final String dateColumn;
-        if (MYSQL_VENDOR.equals(_dbVendor)) {
-            dateColumn = MessageFormat.format("FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(date) / {0}) * {0}) ", String.valueOf(step));
-        } else if (POSTGRES_VENDOR.equals(_dbVendor)) {
-            dateColumn = MessageFormat.format("TO_TIMESTAMP(FLOOR(CAST(EXTRACT(EPOCH FROM date) AS INTEGER) / {0}) * {0}) ", String.valueOf(step));
-        } else {
-            throw new IllegalStateException(MessageFormat.format("Unknown database vendor {0}", _dbVendor));
-        }
+        final String dateColumn = MessageFormat.format("FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(date) / {0}) * {0}) ", String.valueOf(step));
 
         final String sql =
                 "SELECT " +

@@ -54,7 +54,7 @@
     </bean>
 
     <bean id="dataSource" parent="abstractDataSource">
-        <property name="url" value="jdbc:${jdbc.dbVendor}://${jdbc.host}:${jdbc.port}/${jdbc.db}?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8" />
+        <property name="url" value="jdbc:mysql://${jdbc.host}:${jdbc.port}/${jdbc.db}?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8" />
         <property name="username" value="${jdbc.user}" />
         <property name="password" value="${jdbc.pass}" />
     </bean>
@@ -72,23 +72,19 @@
         </property>
     </bean>
 
-    <bean id="baseDao" abstract="true">
-        <property name="dbVendor" value="${jdbc.dbVendor}" />
-    </bean>
-
-    <bean id="com.gans.vk.dao.UserDao" class="com.gans.vk.dao.impl.UserDaoImpl" parent="baseDao" >
+    <bean id="com.gans.vk.dao.UserDao" class="com.gans.vk.dao.impl.UserDaoImpl" >
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
-    <bean id="com.gans.vk.dao.RatingDao" class="com.gans.vk.dao.impl.RatingDaoImpl" parent="baseDao" >
+    <bean id="com.gans.vk.dao.RatingDao" class="com.gans.vk.dao.impl.RatingDaoImpl" >
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
-    <bean id="com.gans.vk.dao.SongDao" class="com.gans.vk.dao.impl.SongDaoImpl" parent="baseDao" >
+    <bean id="com.gans.vk.dao.SongDao" class="com.gans.vk.dao.impl.SongDaoImpl" >
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
-    <bean id="com.gans.vk.dao.GroupDao" class="com.gans.vk.dao.impl.GroupDaoImpl" parent="baseDao" >
+    <bean id="com.gans.vk.dao.GroupDao" class="com.gans.vk.dao.impl.GroupDaoImpl" >
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 

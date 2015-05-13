@@ -258,7 +258,7 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
                 "WHERE " +
                     "u.vkId IS NULL " +
                 "ORDER BY " +
-                    random() +
+                    "RAND() " +
                 "LIMIT " + limit;
 
         return getHibernateTemplate().execute(new HibernateCallback<List<User>>() {
@@ -282,9 +282,9 @@ public class UserDaoImpl extends AbstractModelDao<User> implements UserDao {
                 "WHERE " +
                     "vkId IS NOT NULL " +
                     "AND vkId NOT IN (:userStatus) " +
-                    "AND id >= FLOOR(" + random() + " * (SELECT MAX(id) FROM Users)) " +
+                    "AND id >= FLOOR(RAND() * (SELECT MAX(id) FROM Users)) " +
                 "ORDER BY " +
-                    "id" +
+                    "id " +
                 "LIMIT 1 ";
 
         return getHibernateTemplate().execute(new HibernateCallback<User>() {
