@@ -80,7 +80,7 @@ public class VkUserAudioResponseProcessor {
             if (!hasData) { // junk
                 return "";
             }
-            return StringUtils.left(result, maxLen);
+            return StringUtils.left(result, maxLen).trim();
         }
     }
 
