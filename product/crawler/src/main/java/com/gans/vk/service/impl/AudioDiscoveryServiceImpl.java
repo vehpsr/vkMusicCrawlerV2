@@ -61,7 +61,7 @@ public class AudioDiscoveryServiceImpl implements AudioDiscoveryService {
             }
         }
         if (!artists.isEmpty()) {
-            LOG.info("Skip: " + artists);
+            LOG.info("Skip: " + artists.size());
         }
         return artists;
     }

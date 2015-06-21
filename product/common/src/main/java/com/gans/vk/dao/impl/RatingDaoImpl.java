@@ -54,7 +54,7 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
             return;
         }
 
-        final int batchSize = 50;
+        final int batchSize = 100;
         final String sqlInsertSongBatch;
         final String sqlInsertRatingBatch;
 
@@ -78,8 +78,6 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
                 "			AND title = ? " +
                 "		LIMIT 1) ";
 
-
-
         sqlInsertRatingBatch =
                 "INSERT INTO Rating " +
                 "	(value, date, song_id, user_id) " +
@@ -89,7 +87,6 @@ public class RatingDaoImpl extends AbstractModelDao<Rating> implements RatingDao
                 "	(SELECT " +
                 "		id FROM Song WHERE artist = ? AND title = ? LIMIT 1 " +
                 "	) as tmp ";
-
 
         long start = System.currentTimeMillis();
 
